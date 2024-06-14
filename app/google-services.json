@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "521281776755",
+    "project_id": "online-electronic-gadgets-shop",
+    "storage_bucket": "online-electronic-gadgets-shop.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:521281776755:android:3dd4b9c0a5dccf4ff88e06",
+        "android_client_info": {
+          "package_name": "com.example.onlineelectronicgadget"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6gh2uUyHvLyo8niywWbNMZxORuQRk1H8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
