@@ -11,61 +11,121 @@
 
     <ImageView
         android:layout_width="160dp"
+        android:layout_marginTop="10dp"
         android:layout_height="160dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginBottom="64dp"
         android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
         android:src="@drawable/ic_login_logo" />
 
-    <EditText
-        android:id="@+id/nameEditText"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tlName"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginLeft="16dp"
-        android:paddingLeft="16sp"
-        android:hint="Name"
-        android:textSize="20sp"
-        android:singleLine="true"
-        android:background="@drawable/username" />
+        android:layout_height="wrap_content" >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/nameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="10dp"
+            android:hint="@string/name"
+            android:drawableLeft="@drawable/person_24px"
+            android:textSize="20sp"
+            android:singleLine="true" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/emailEditTextR"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tlEmailR"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginRight="16dp"
         android:layout_marginLeft="16dp"
-        android:paddingLeft="16sp"
-        android:hint="Email"
-        android:textSize="20sp"
-        android:singleLine="true"
-        android:background="@drawable/username" />
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="10dp"
+        android:layout_height="wrap_content" >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/emailEditTextR"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:drawableStart="@drawable/mail_24px"
+            android:textSize="20sp"
+            android:singleLine="true" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/passwordEditTextR"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tlPasswordR"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="24dp"
         android:layout_marginRight="16dp"
-        android:paddingLeft="16sp"
         android:layout_marginLeft="16dp"
-        android:inputType="textPassword"
-        android:hint="Password"
-        android:textSize="20sp"
-        android:singleLine="true"
-        android:background="@drawable/username" />
+        android:layout_marginBottom="10dp"
+        app:passwordToggleEnabled="true"
+        android:layout_height="wrap_content" >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/passwordEditTextR"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:drawableStart="@drawable/lock_24px"
+            android:textSize="20sp"
+            android:singleLine="true" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tlConfirmPassword"
+        android:layout_width="match_parent"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="10dp"
+        app:passwordToggleEnabled="true"
+        android:layout_height="wrap_content" >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/confirmPasswordEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/confirm_password"
+            android:inputType="textPassword"
+            android:drawableStart="@drawable/lock_24px"
+            android:textSize="20sp"
+            android:singleLine="true" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/otpButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="@color/black"
+        android:text="@string/send_otp"
+        android:textSize="20sp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tlOtp"
+        android:layout_width="match_parent"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="10dp"
+        android:layout_height="wrap_content" >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/otpEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/otp"
+            android:inputType="number"
+            android:drawableStart="@drawable/confirmation_number_24px"
+            android:textSize="20sp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/registerButton"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="24dp"
+        android:layout_height="wrap_content"
         android:layout_marginRight="16dp"
         android:layout_marginLeft="16dp"
         android:backgroundTint="@color/black"
-        android:text="Sign In"
+        android:text="@string/sign_in"
         android:textSize="20sp" />
 
     <TextView

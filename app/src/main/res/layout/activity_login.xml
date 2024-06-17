@@ -17,28 +17,38 @@
         android:layout_marginBottom="64dp"
         android:src="@drawable/ic_login_logo" />
 
-    <EditText
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/emailEditText"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:hint="Email"
-        android:paddingLeft="16sp"
-        android:textSize="20sp"
-        android:singleLine="true"
-        android:background="@drawable/username" />
+        android:hint="@string/email"
+        android:textSize="24sp">
 
-    <EditText
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:inputType="textEmailAddress"
+                style="@style/ThemeOverlay.Material3.TextInputEditText"
+                android:drawableLeft="@drawable/mail_24px"
+                android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/passwordEditText"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:hint="Password"
-        android:paddingLeft="16sp"
-        android:textSize="20sp"
-        android:inputType="textPassword"
-        android:singleLine="true"
-        android:background="@drawable/username" />
+        app:passwordToggleEnabled="true"
+        android:hint="@string/password"
+        android:textSize="24sp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            style="@style/ThemeOverlay.Material3.TextInputEditText"
+            android:drawableStart="@drawable/lock_24px"
+            android:inputType="textPassword"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/loginButton"
@@ -46,14 +56,14 @@
         android:layout_height="50dp"
         android:layout_margin="24dp"
         android:backgroundTint="@color/black"
-        android:text="Login"
+        android:text="@string/login"
         android:textSize="20sp" />
 
     <TextView
         android:id="@+id/registerLink"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Don't Have An Account? Register"
+        android:text="@string/register_link"
         android:textColor="@color/white"
         android:clickable="true"
         android:layout_marginTop="24dp"

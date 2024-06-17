@@ -41,6 +41,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-database-ktx")
     implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("org.apache.commons:commons-email:1.5")
 }
 
 // Apply the Google Services plugin
