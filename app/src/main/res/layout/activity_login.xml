@@ -18,7 +18,7 @@
         android:src="@drawable/ic_login_logo" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/emailEditText"
+        android:id="@+id/tlEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
@@ -26,6 +26,7 @@
         android:textSize="24sp">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etEmail"
                 android:layout_width="match_parent"
                 android:inputType="textEmailAddress"
                 style="@style/ThemeOverlay.Material3.TextInputEditText"
@@ -34,7 +35,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/passwordEditText"
+        android:id="@+id/tlPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
@@ -43,6 +44,7 @@
         android:textSize="24sp">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etPassword"
             android:layout_width="match_parent"
             style="@style/ThemeOverlay.Material3.TextInputEditText"
             android:drawableStart="@drawable/lock_24px"

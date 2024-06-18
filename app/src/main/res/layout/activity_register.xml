@@ -14,7 +14,7 @@
         android:layout_marginTop="10dp"
         android:layout_height="160dp"
         android:layout_gravity="center"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="50dp"
         android:src="@drawable/ic_login_logo" />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -88,34 +88,6 @@
             android:drawableStart="@drawable/lock_24px"
             android:textSize="20sp"
             android:singleLine="true" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <Button
-        android:id="@+id/otpButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginBottom="10dp"
-        android:backgroundTint="@color/black"
-        android:text="@string/send_otp"
-        android:textSize="20sp" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tlOtp"
-        android:layout_width="match_parent"
-        android:layout_marginRight="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginBottom="10dp"
-        android:layout_height="wrap_content" >
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/otpEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/otp"
-            android:inputType="number"
-            android:drawableStart="@drawable/confirmation_number_24px"
-            android:textSize="20sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button

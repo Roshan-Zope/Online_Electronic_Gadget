@@ -1,5 +1,6 @@
 package com.example.onlineelectronicgadget.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,15 +26,12 @@ public class RegisterActivity extends AppCompatActivity {
     private TextInputLayout tlEmailR;
     private TextInputLayout tlPasswordR;
     private TextInputLayout tlConfirmPassword;
-    private TextInputLayout tlOtp;
     private TextInputEditText nameEditText;
     private TextInputEditText emailEditTextR;
     private TextInputEditText passwordEditTextR;
     private TextInputEditText confirmPasswordEditText;
-    private TextInputEditText otpEditText;
     private TextView loginLink;
     private Button registerButton;
-    private Button otpButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,40 +45,46 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         loginLink.setOnClickListener(v -> {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-            finish();
+            changeActivity(RegisterActivity.this, LoginActivity.class);
+            Log.d("myTag", "to login activity");
         });
 
+    }
+
+    private void changeActivity(Context context, Class<?> cls) {
+        Intent intent = new Intent(context, cls);
+        startActivity(intent);
+        finish();
     }
 
     private boolean validateData() {
         List<Boolean> check = new ArrayList<>();
 
-        if (nameEditText.getText().toString().trim().equals("")) {
+        if (nameEditText.getText().toString().trim().isEmpty()) {
             check.add(false);
             tlName.setError("Invalid name");
         } else check.add(true);
 
-        if (emailEditTextR.getText().toString().trim().equals("")) {
+        if (emailEditTextR.getText().toString().trim().isEmpty()) {
             check.add(false);
             tlEmailR.setError("Invalid Email");
         } else check.add(true);
 
-        if (passwordEditTextR.getText().toString().trim().equals("") && passwordEditTextR.getText().toString().trim().length() < 6) {
+        if (passwordEditTextR.getText().toString().trim().isEmpty() && passwordEditTextR.getText().toString().trim().length() < 6) {
             check.add(false);
             tlPasswordR.setError("Invalid password. Password should be of 6 character");
         } else check.add(true);
 
-        if (confirmPasswordEditText.getText().toString().trim().equals("") && confirmPasswordEditText.getText().toString().trim().equals(passwordEditTextR.getText().toString().trim())) {
+        if (confirmPasswordEditText.getText().toString().trim().isEmpty()) {
             check.add(false);
-            tlConfirmPassword.setError("Password doesn't match");
-        } else check.add(true);
-
-        if (otpEditText.getText().toString().trim().equals("")) {
-            check.add(false);
-            tlOtp.setError("please enter otp");
-        } else check.add(true);
+            tlConfirmPassword.setError("Confirm password");
+        } else {
+            if (confirmPasswordEditText.getText().toString().trim().equals(passwordEditTextR.getText().toString().trim())) check.add(true);
+            else {
+                check.add(false);
+                tlConfirmPassword.setError("password mismatch");
+            }
+        }
 
         return !check.contains(false);
     }
@@ -91,7 +95,21 @@ public class RegisterActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         Log.d("myTag", "Registration successful");
                         Toast.makeText(RegisterActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
-                        saveUser(username, email, password);
+
+                        mAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(this, t -> {
+                            if (t.isSuccessful()) {
+                                Log.d("myTag", "Email Verification sent");
+                                Toast.makeText(RegisterActivity.this, "Verify your email", Toast.LENGTH_SHORT).show();
+
+                                saveUser(username, email, password);
+
+                                changeActivity(RegisterActivity.this, LoginActivity.class);
+                            }
+                            else {
+                                Log.d("myTag", "Email verification failed");
+                                Toast.makeText(RegisterActivity.this, "Failed to send verification email", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     } else {
                         Log.d("myTag", "Registration failed");
                         Toast.makeText(RegisterActivity.this, "Registration failed", Toast.LENGTH_SHORT).show();
@@ -105,9 +123,11 @@ public class RegisterActivity extends AppCompatActivity {
         mDatabase.child("users").child(username).setValue(user)
                 .addOnSuccessListener(e -> {
                     Log.d("myTag", "user saved");
+                    System.out.println("user saved");
                     Toast.makeText(RegisterActivity.this, "user saved", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> {
+                    System.out.println("user saved failed");
                     Log.d("myTag", "user saved failed");
                     Toast.makeText(RegisterActivity.this, "user saved failed", Toast.LENGTH_SHORT).show();
                 });
@@ -126,9 +146,6 @@ public class RegisterActivity extends AppCompatActivity {
         tlEmailR = findViewById(R.id.tlEmailR);
         tlPasswordR = findViewById(R.id.tlPasswordR);
         tlConfirmPassword = findViewById(R.id.tlConfirmPassword);
-        tlOtp = findViewById(R.id.tlOtp);
         confirmPasswordEditText = findViewById(R.id.confirmPasswordEditText);
-        otpEditText = findViewById(R.id.otpEditText);
-        otpButton = findViewById(R.id.otpButton);
     }
 }
