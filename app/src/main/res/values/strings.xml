@@ -10,4 +10,10 @@
     <string name="sign_in">Sign in</string>
     <string name="send_otp">Send OTP</string>
     <string name="otp">OTP</string>
+    <string name="account_circle">Account</string>
+    <string name="shopping_cart">Cart</string>
+    <string name="search_bar">Search</string>
+    <string name="home_option">Home</string>
+    <string name="search_here">Search here!</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

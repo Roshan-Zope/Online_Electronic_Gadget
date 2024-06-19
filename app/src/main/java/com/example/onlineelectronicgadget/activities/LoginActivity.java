@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.makeText(LoginActivity.this, "Authentication failed", Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            Log.d("myTag", "Email is bot verified");
+                            Log.d("myTag", "Email is not verified");
                             Toast.makeText(LoginActivity.this, "Please verify your email first", Toast.LENGTH_SHORT).show();
                         }
                     });

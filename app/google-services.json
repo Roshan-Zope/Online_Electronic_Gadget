@@ -1,13 +1,14 @@
 {
   "project_info": {
-    "project_number": "521281776755",
-    "project_id": "online-electronic-gadgets-shop",
-    "storage_bucket": "online-electronic-gadgets-shop.appspot.com"
+    "project_number": "264290153486",
+    "firebase_url": "https://online-store-af493-default-rtdb.firebaseio.com",
+    "project_id": "online-store-af493",
+    "storage_bucket": "online-store-af493.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:521281776755:android:3dd4b9c0a5dccf4ff88e06",
+        "mobilesdk_app_id": "1:264290153486:android:6d0c59feca02ce347c785f",
         "android_client_info": {
           "package_name": "com.example.onlineelectronicgadget"
         }
@@ -15,7 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyC6gh2uUyHvLyo8niywWbNMZxORuQRk1H8"
+          "current_key": "AIzaSyAToqHM3bOivF8fbvAr9BY5GebzWrvrrOQ"
         }
       ],
       "services": {
