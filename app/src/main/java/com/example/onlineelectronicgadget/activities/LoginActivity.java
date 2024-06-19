@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,7 +12,6 @@ import com.example.onlineelectronicgadget.R;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,9 +31,7 @@ public class LoginActivity extends AppCompatActivity {
         initComponent();
         Log.d("myTag", "in login activity");
 
-        loginButton.setOnClickListener(v -> {
-            login(etEmail.getText().toString(), etPassword.getText().toString());
-        });
+        loginButton.setOnClickListener(v -> login(etEmail.getText().toString(), etPassword.getText().toString()));
 
         registerLink.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);

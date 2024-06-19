@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     tools:context="fragments.CartFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:id="@+id/cartFragment"
         android:background="#FFC107"

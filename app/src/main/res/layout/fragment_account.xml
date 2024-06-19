@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     tools:context="fragments.AccountFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:id="@+id/accountFragment"
         android:background="#009688"
