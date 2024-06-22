@@ -3,21 +3,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:visibility="visible"
     tools:actionBarNavMode="list"
     tools:context=".fragments.SearchFragment">
 
-    <com.google.android.material.search.SearchBar
-        android:id="@+id/searchBar"
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/search_here" />
+        android:queryHint="@string/search_here"
+        android:background="@drawable/search_view_bg"
+        android:iconifiedByDefault="false"
+        android:layout_margin="8dp"
+        app:queryHint="Search here" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_recyclerView"
+        android:layout_margin="8dp"
         android:visibility="gone"
-        android:layout_margin="16dp"
-        android:layout_below="@+id/searchBar"
+        android:layout_below="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

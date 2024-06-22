@@ -3,6 +3,7 @@ package com.example.onlineelectronicgadget.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,9 +11,15 @@ import java.util.List;
 
 public class SearchSuggestionsAdapter extends RecyclerView.Adapter<SearchSuggestionsAdapter.ViewHolder> {
     private List<String> suggestionList;
+    private OnSuggestionClickListener listener;
 
-    public SearchSuggestionsAdapter(List<String> suggestionList) {
+    public SearchSuggestionsAdapter(List<String> suggestionList, OnSuggestionClickListener listener) {
         this.suggestionList = suggestionList;
+        this.listener = listener;
+    }
+
+    public interface OnSuggestionClickListener {
+        void onSuggestionClick(String suggestion);
     }
 
     @NonNull
@@ -26,9 +33,7 @@ public class SearchSuggestionsAdapter extends RecyclerView.Adapter<SearchSuggest
     public void onBindViewHolder(@NonNull SearchSuggestionsAdapter.ViewHolder holder, int position) {
         String suggestion = suggestionList.get(position);
         holder.textView.setText(suggestion);
-        holder.itemView.setOnClickListener(v -> {
-
-        });
+        holder.itemView.setOnClickListener(v -> listener.onSuggestionClick(suggestion));
     }
 
     @Override
