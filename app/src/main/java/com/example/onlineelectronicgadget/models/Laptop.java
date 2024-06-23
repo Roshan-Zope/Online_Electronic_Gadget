@@ -1,5 +1,7 @@
 package com.example.onlineelectronicgadget.models;
 
+import java.util.List;
+
 public class Laptop extends Product {
     private String processor;
     private String ram;
@@ -14,8 +16,8 @@ public class Laptop extends Product {
     private String color;
     private String warranty;
 
-    public Laptop(int id, String brand, String model, long price, String description, int[] imagesId,
-                  int stocks, double rating, String[] reviews, String processor, String ram, String storage,
+    public Laptop(int id, String brand, String model, long price, String description, List<String> imagesId,
+                  int stocks, double rating, List<String> reviews, String processor, String ram, String storage,
                   String graphics, String display, String os, String batteryLife, double weight,
                   String dimension, String color, String ports, String warranty) {
         super(id, brand, model, price, description, imagesId, stocks, rating, reviews);

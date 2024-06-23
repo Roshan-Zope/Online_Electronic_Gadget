@@ -1,6 +1,7 @@
 package com.example.onlineelectronicgadget.models;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class Product {
     private int id;
@@ -8,13 +9,13 @@ public class Product {
     private String model;
     private long price;
     private String description;
-    private int[] imagesId;
+    private List<String> imagesId;
     private int stocks;
     private double rating;
-    private String[] reviews;
+    private List<String> reviews;
 
-    public Product(int id, String brand, String model, long price, String description, int[] imagesId,
-                   int stocks, double rating, String[] reviews) {
+    public Product(int id, String brand, String model, long price, String description, List<String> imagesId,
+                   int stocks, double rating, List<String> reviews) {
         this.id = id;
         this.brand = brand;
         this.model = model;
@@ -26,11 +27,11 @@ public class Product {
         this.reviews = reviews;
     }
 
-    public String[] getReviews() {
+    public List<String> getReviews() {
         return reviews;
     }
 
-    public void setReviews(String[] reviews) {
+    public void setReviews(List<String> reviews) {
         this.reviews = reviews;
     }
 
@@ -50,11 +51,11 @@ public class Product {
         this.stocks = stocks;
     }
 
-    public int[] getImagesId() {
+    public List<String> getImagesId() {
         return imagesId;
     }
 
-    public void setImagesId(int[] imagesId) {
+    public void setImagesId(List<String> imagesId) {
         this.imagesId = imagesId;
     }
 
@@ -106,10 +107,10 @@ public class Product {
                 ", model='" + model + '\'' +
                 ", price=" + price +
                 ", description='" + description + '\'' +
-                ", imagesId=" + Arrays.toString(imagesId) +
+                ", imagesId=" + imagesId +
                 ", stocks=" + stocks +
                 ", rating=" + rating +
-                ", reviews=" + Arrays.toString(reviews) +
+                ", reviews=" + reviews +
                 '}';
     }
 }

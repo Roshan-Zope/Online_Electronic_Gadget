@@ -26,5 +26,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
+    <FrameLayout
+        android:layout_margin="8dp"
+        android:id="@+id/fragment_layout1"
+        android:layout_below="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
 
 </RelativeLayout>

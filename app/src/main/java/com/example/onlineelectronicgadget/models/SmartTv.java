@@ -1,5 +1,7 @@
 package com.example.onlineelectronicgadget.models;
 
+import java.util.List;
+
 public class SmartTv extends Product {
     private String screenSize;
     private String resolution;
@@ -14,8 +16,8 @@ public class SmartTv extends Product {
     private String color;
     private String warranty;
 
-    public SmartTv(int id, String brand, String model, long price, String description, int[] imagesId,
-                   int stocks, double rating, String[] reviews, String screenSize, String resolution,
+    public SmartTv(int id, String brand, String model, long price, String description, List<String> imagesId,
+                   int stocks, double rating, List<String> reviews, String screenSize, String resolution,
                    String displayTechnology, String os, String ports, String connectivity, String smartFeatures,
                    String sound, double weight, String dimension, String color, String warranty) {
         super(id, brand, model, price, description, imagesId, stocks, rating, reviews);

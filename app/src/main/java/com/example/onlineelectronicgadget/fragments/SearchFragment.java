@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,7 +22,10 @@ import android.widget.Toast;
 
 import com.example.onlineelectronicgadget.R;
 import com.example.onlineelectronicgadget.activities.MainActivity;
+import com.example.onlineelectronicgadget.adapters.ProductListAdapter;
 import com.example.onlineelectronicgadget.adapters.SearchSuggestionsAdapter;
+import com.example.onlineelectronicgadget.models.Laptop;
+import com.example.onlineelectronicgadget.models.Product;
 import com.google.android.material.search.SearchBar;
 
 import java.util.ArrayList;
@@ -35,7 +40,9 @@ public class SearchFragment extends Fragment {
     private SearchView searchView;
     private RecyclerView search_recyclerView;
     private SearchSuggestionsAdapter adapter;
+    private ProductListAdapter productListAdapter;
     private List<String> suggestionList;
+    private List<Product> productList;
         
     public SearchFragment() {
         // Required empty public constructor
@@ -64,6 +71,7 @@ public class SearchFragment extends Fragment {
         searchView = view.findViewById(R.id.searchView);
         search_recyclerView = view.findViewById(R.id.search_recyclerView);
         suggestionList = new ArrayList<>();
+        productList = new ArrayList<>();
         Log.d("myTag", "search fragment component initialize");
     }
 
@@ -73,6 +81,7 @@ public class SearchFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         initComponent(view);
         populateList();
+        populateProductList();
         Log.d("myTag", "onCreateView_searchFragment");
         // Inflate the layout for this fragment
         return view;
@@ -84,6 +93,20 @@ public class SearchFragment extends Fragment {
         suggestionList.add("Smart Tv's");
         suggestionList.add("Tablets");;
         Log.d("myTag", "list populated");
+    }
+
+    private void populateProductList() {
+        Product product = new Laptop(0, "lenovo", null, 60000,
+                "Product Description goes here. This is a detailed description of the " +
+                        "product, its features, and benefits.", null, 0, 0.0,
+                null, null, null, null, null, null, null,
+                null, 0.0, null, null, null, null
+        );
+        productList.add(product);
+        productList.add(product);
+        productList.add(product);
+        productList.add(product);
+        productList.add(product);
     }
 
     @Override
@@ -101,15 +124,30 @@ public class SearchFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                search_recyclerView.setAdapter(productListAdapter);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                search_recyclerView.setAdapter(adapter);
                 filterSuggestions(newText);
                 return true;
             }
         });
+
+        productListAdapter = new ProductListAdapter(productList, product -> {
+            loadFragment(new ProductViewFragment(product));
+        });
+
+    }
+
+    private void loadFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_layout, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     private void filterSuggestions(String string) {

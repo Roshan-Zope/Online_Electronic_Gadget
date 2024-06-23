@@ -1,5 +1,7 @@
 package com.example.onlineelectronicgadget.models;
 
+import java.util.List;
+
 public class SmartWatches extends Product {
     private String processor;
     private String ram;
@@ -15,8 +17,8 @@ public class SmartWatches extends Product {
     private String waterResistance;
     private String warranty;
 
-    public SmartWatches(int id, String brand, String model, long price, String description, int[] imagesId,
-                        int stocks, double rating, String[] reviews, String processor, String ram,
+    public SmartWatches(int id, String brand, String model, long price, String description, List<String> imagesId,
+                        int stocks, double rating, List<String> reviews, String processor, String ram,
                         String storage, String display, String os, String batteryLife, double weight,
                         String dimension, String color, String connectivity, String sensor, String waterResistance, String warranty) {
         super(id, brand, model, price, description, imagesId, stocks, rating, reviews);
