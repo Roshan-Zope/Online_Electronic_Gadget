@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +17,10 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.example.onlineelectronicgadget.R;
+import com.example.onlineelectronicgadget.adapters.ReviewListAdapter;
+import com.example.onlineelectronicgadget.database.DatabaseHelper;
 import com.example.onlineelectronicgadget.models.Laptop;
 import com.example.onlineelectronicgadget.models.Product;
 import com.example.onlineelectronicgadget.models.SmartTv;
@@ -56,6 +59,7 @@ public class ProductViewFragment extends Fragment {
     private TextView spec17;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
+    private ReviewListAdapter adapter;
     private TextInputLayout el_review;
     private TextInputEditText et_review;
     private ImageView sendButton;
@@ -64,6 +68,7 @@ public class ProductViewFragment extends Fragment {
     private Product product;
     private List<String> imageUrls;
     private int currentIdx = 0;
+    private DatabaseHelper db;
 
     public ProductViewFragment() {
         // Required empty public constructor
@@ -97,7 +102,17 @@ public class ProductViewFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_product_view, container, false);
         initComponent(view);
         loadImages();
-        // Inflate the layout for this fragment
+
+
+        sendButton.setOnClickListener(v -> {
+            if (!String.valueOf(et_review.getText()).trim().isEmpty()) {
+                db.saveReview(String.valueOf(et_review.getText()).trim(), product.getId());
+                et_review.setText("");
+            } else {
+                el_review.setError("Enter valid review");
+            }
+        });
+
         return view;
     }
 
@@ -149,6 +164,7 @@ public class ProductViewFragment extends Fragment {
         sendButton = view.findViewById(R.id.sendButton);
         addToCartButton = view.findViewById(R.id.addToCartButton);
         buyNowButton = view.findViewById(R.id.buyNowButton);
+        db = new DatabaseHelper();
         
         prevButton.setOnClickListener(v -> showPrevImage());
         nextButton.setOnClickListener(v -> showNextImage());
@@ -178,10 +194,6 @@ public class ProductViewFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         fillView();
-
-        prevButton.setOnClickListener(v -> {
-
-        });
     }
 
     private void fillView() {
@@ -194,6 +206,9 @@ public class ProductViewFragment extends Fragment {
         spec2.setVisibility(View.VISIBLE);
         spec3.setText("Stocks: " + product.getStocks());
         spec3.setVisibility(View.VISIBLE);
+        Log.d("myTag", product.getReviews().toString());
+        adapter = new ReviewListAdapter(product.getReviews());
+        recyclerView.setAdapter(adapter);
 
         if (product instanceof Laptop) fillLaptop();
         else if (product instanceof Tablets) fillTab();

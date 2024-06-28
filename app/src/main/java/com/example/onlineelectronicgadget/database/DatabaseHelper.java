@@ -3,9 +3,13 @@ package com.example.onlineelectronicgadget.database;
 import com.example.onlineelectronicgadget.models.Laptop;
 import com.example.onlineelectronicgadget.models.Product;
 import android.util.Log;
+import android.widget.Toast;
+
 import com.example.onlineelectronicgadget.models.SmartTv;
 import com.example.onlineelectronicgadget.models.SmartWatches;
 import com.example.onlineelectronicgadget.models.Tablets;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -17,6 +21,17 @@ import java.util.Map;
 
 public class DatabaseHelper {
     private final FirebaseFirestore firestore;
+
+    public void saveReview(String review, String id) {
+        DocumentReference document = firestore.collection("products").document(id);
+
+        document.update("reviews", FieldValue.arrayUnion(review))
+                .addOnCompleteListener(task -> {
+                    Log.d("myTag", "review added");
+                }).addOnFailureListener(e -> {
+                    Log.d("myTag", "" + e.getMessage());
+                });
+    }
 
     public interface Callback {
         void onComplete(List<Product> list);
@@ -69,6 +84,7 @@ public class DatabaseHelper {
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Product product = documentToProduct(document);
                     if (product != null) productList.add(product);
+                    Log.d("myTag", product.toString());
                 }
                 callback.onComplete(productList);
             } else {
