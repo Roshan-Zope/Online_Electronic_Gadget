@@ -9,19 +9,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.onlineelectronicgadget.R;
-import com.example.onlineelectronicgadget.models.User;
+import com.example.onlineelectronicgadget.authentication.Auth;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RegisterActivity extends AppCompatActivity {
-    private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
+    private Auth auth;
     private TextInputLayout tlName;
     private TextInputLayout tlEmailR;
     private TextInputLayout tlPasswordR;
@@ -90,53 +86,11 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registerUser(String username, String email, String password) {
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, task -> {
-                    if (task.isSuccessful()) {
-                        Log.d("myTag", "Registration successful");
-                        Toast.makeText(RegisterActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
-
-                        mAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(this, t -> {
-                            if (t.isSuccessful()) {
-                                Log.d("myTag", "Email Verification sent");
-                                Toast.makeText(RegisterActivity.this, "Verify your email", Toast.LENGTH_SHORT).show();
-
-                                saveUser(username, email, password);
-
-                                changeActivity(RegisterActivity.this, LoginActivity.class);
-                            }
-                            else {
-                                Log.d("myTag", "Email verification failed");
-                                Toast.makeText(RegisterActivity.this, "Failed to send verification email", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    } else {
-                        Log.d("myTag", "Registration failed");
-                        Toast.makeText(RegisterActivity.this, "Registration failed", Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
-    private void saveUser(String username, String email, String password) {
-        User user = new User(username, email, password);
-
-        mDatabase.child("users").child(username).setValue(user)
-                .addOnSuccessListener(e -> {
-                    Log.d("myTag", "user saved");
-                    System.out.println("user saved");
-                    Toast.makeText(RegisterActivity.this, "user saved", Toast.LENGTH_SHORT).show();
-                })
-                .addOnFailureListener(e -> {
-                    System.out.println("user saved failed");
-                    Log.d("myTag", "user saved failed");
-                    Toast.makeText(RegisterActivity.this, "user saved failed", Toast.LENGTH_SHORT).show();
-                });
-
+        auth.registerUser(username, email, password);
     }
 
     private void initComponent() {
-        mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        auth = new Auth(this);
         nameEditText = findViewById(R.id.nameEditText);
         emailEditTextR = findViewById(R.id.emailEditTextR);
         passwordEditTextR = findViewById(R.id.passwordEditTextR);

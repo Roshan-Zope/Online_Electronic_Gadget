@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.onlineelectronicgadget.R;
+import com.example.onlineelectronicgadget.authentication.Auth;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
-    private FirebaseAuth mAuth;
+    private Auth auth;
     private TextInputLayout tlEmail;
     private TextInputLayout tlPassword;
     private TextInputEditText etEmail;
@@ -41,33 +42,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login(String email, String password) {
-        if (validateData()) {
-            mAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, task -> {
-                        if (mAuth.getCurrentUser().isEmailVerified()) {
-                            if (task.isSuccessful()) {
-                                Log.d("myTag", "Authentication successful");
-                                Toast.makeText(LoginActivity.this, "Authentication successful", Toast.LENGTH_SHORT).show();
-                                changeActivity(LoginActivity.this, MainActivity.class);
-                            } else {
-                                Log.d("myTag", "Authentication failed");
-                                Toast.makeText(LoginActivity.this, "Authentication failed", Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Log.d("myTag", "Email is not verified");
-                            Toast.makeText(LoginActivity.this, "Please verify your email first", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        }
+        auth.login(email, password);
     }
 
-    private void changeActivity(Context context, Class<?> cls) {
-        Intent intent = new Intent(context, cls);
-        startActivity(intent);
-        finish();
-    }
-
-    private boolean validateData() {
+    public boolean validateData() {
         List<Boolean> check = new ArrayList<>();
 
         if (etEmail.getText().toString().trim().isEmpty()) {
@@ -84,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initComponent() {
-        mAuth = FirebaseAuth.getInstance();
+        auth = new Auth(this);
         tlEmail = findViewById(R.id.tlEmail);
         tlPassword = findViewById(R.id.tlPassword);
         etEmail = findViewById(R.id.etEmail);

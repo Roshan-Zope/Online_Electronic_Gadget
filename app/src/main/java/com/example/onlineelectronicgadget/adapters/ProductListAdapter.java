@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.onlineelectronicgadget.R;
 import com.example.onlineelectronicgadget.models.Product;
 
@@ -37,10 +38,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     @Override
     public void onBindViewHolder(@NonNull ProductListAdapter.ViewHolder holder, int position) {
         holder.productImage.setImageResource(R.drawable.ic_launcher_foreground);
-        holder.productName.setText(productList.get(position).getBrand());
-        holder.productPrice.setText(String.valueOf(productList.get(position).getPrice()));
-        holder.productDescription.setText(productList.get(position).getDescription());
-        holder.itemView.setOnClickListener(v -> listener.onProductClick(productList.get(position)));
+        holder.bind(productList.get(position), listener);
+
     }
 
     @Override
@@ -60,6 +59,24 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             productName = itemView.findViewById(R.id.productName);
             productPrice = itemView.findViewById(R.id.productPrice);
             productDescription = itemView.findViewById(R.id.productDescription);
+        }
+
+        public void bind(Product product, OnProductClickListener listener) {
+            productName.setText(product.getBrand());
+            productPrice.setText(String.valueOf(product.getPrice()));
+            productDescription.setText(product.getDescription());
+            if (product.getImagesId() != null && !product.getImagesId().isEmpty()) {
+                Glide.with(itemView.getContext())
+                        .load(product.getImagesId().get(0))
+                        .placeholder(R.drawable.ic_launcher_foreground)
+                        .into(productImage);
+            } else {
+                Glide.with(itemView.getContext())
+                        .load(R.drawable.ic_launcher_foreground)
+                        .placeholder(R.drawable.ic_launcher_foreground)
+                        .into(productImage);
+            }
+            itemView.setOnClickListener(v -> listener.onProductClick(product));
         }
     }
 }

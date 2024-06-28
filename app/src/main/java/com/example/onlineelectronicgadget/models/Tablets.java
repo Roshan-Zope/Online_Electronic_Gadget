@@ -17,11 +17,13 @@ public class Tablets extends Product{
     private String camera;
     private String connectivity;
 
-    public Tablets(int id, String brand, String model, long price, String description, List<String> imagesId,
-                   int stocks, double rating, List<String> reviews, String processor, String ram,
+    public Tablets () {}
+
+    public Tablets(String id, String brand, String model, long price, String description, List<String> imagesId,
+                   int stocks, double rating, List<String> reviews, String category, String processor, String ram,
                    String storage, String display, String os, String batteryLife, double weight,
                    String dimension, String color, String ports, String warranty, String camera, String connectivity) {
-        super(id, brand, model, price, description, imagesId, stocks, rating, reviews);
+        super(id, brand, model, price, description, imagesId, stocks, rating, reviews, category);
         this.processor = processor;
         this.ram = ram;
         this.storage = storage;
@@ -143,7 +145,7 @@ public class Tablets extends Product{
 
     @Override
     public String toString() {
-        return "Tablets{" +
+        return super.toString() + "Tablets{" +
                 "processor='" + processor + '\'' +
                 ", ram='" + ram + '\'' +
                 ", storage='" + storage + '\'' +

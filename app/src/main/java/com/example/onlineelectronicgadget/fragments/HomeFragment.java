@@ -5,18 +5,49 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextClock;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.onlineelectronicgadget.R;
+import com.example.onlineelectronicgadget.database.DatabaseHelper;
+import com.example.onlineelectronicgadget.models.Product;
 
-public class HomeFragment extends Fragment {
+import java.util.HashMap;
+
+public class HomeFragment extends Fragment implements View.OnClickListener {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private String mParam1;
     private String mParam2;
+    private ImageView laptopImage;
+    private ImageView tabImage;
+    private ImageView watchImage;
+    private ImageView tvImage;
+    private TextView laptopName;
+    private TextView tabName;
+    private TextView watchName;
+    private TextView tvName;
+    private TextView laptopDesc;
+    private TextView tabDesc;
+    private TextView watchDesc;
+    private TextView tvDesc;
+    private Product laptop;
+    private Product tv;
+    private Product watch;
+    private Product tablet;
+    private DatabaseHelper db;
+    private ProgressBar progressBar;
+    private LinearLayout linearLayout;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -43,12 +74,103 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        initComponent(view);
+
+        return view;
+    }
+
+    private void initComponent(View view) {
+        laptopImage = view.findViewById(R.id.laptopImage);
+        tabImage = view.findViewById(R.id.tabImage);
+        watchImage = view.findViewById(R.id.watchImage);
+        tvImage = view.findViewById(R.id.tvImage);
+        laptopName = view.findViewById(R.id.laptopName);
+        tabName = view.findViewById(R.id.tabName);
+        watchName = view.findViewById(R.id.watchName);
+        tvName = view.findViewById(R.id.tvName);
+        laptopDesc = view.findViewById(R.id.laptopDesc);
+        tabDesc = view.findViewById(R.id.tabDesc);
+        watchDesc = view.findViewById(R.id.watchDesc);
+        tvDesc = view.findViewById(R.id.tvDesc);
+        db = new DatabaseHelper();
+        progressBar = view.findViewById(R.id.progressBar);
+        linearLayout = view.findViewById(R.id.linearLayout);
+
+        laptopImage.setOnClickListener(this);
+        tvImage.setOnClickListener(this);
+        tabImage.setOnClickListener(this);
+        watchImage.setOnClickListener(this);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        linearLayout.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+        loadProduct(() -> {
+            progressBar.setVisibility(View.GONE);
+            linearLayout.setVisibility(View.VISIBLE);
+        });
+    }
+
+    @Override
+    public void onClick(View v) {
+        Product clickedProduct = null;
+
+        int id = v.getId();
+        if (id == R.id.laptopImage) clickedProduct = laptop;
+        else if (id == R.id.tabImage) clickedProduct = tablet;
+        else if (id == R.id.watchImage) clickedProduct = watch;
+        else if (id == R.id.tvImage) clickedProduct = tv;
+
+        if (clickedProduct != null) {
+            loadFragment(new ProductViewFragment(clickedProduct));
+        }
+    }
+
+    private void loadProduct(Runnable onComplete) {
+        populateGrid("laptop", laptopImage, laptopName, laptopDesc, onComplete);
+        populateGrid("tablet", tabImage, tabName, tabDesc, onComplete);
+        populateGrid("tv", tvImage, tvName, tvDesc, onComplete);
+        populateGrid("watch", watchImage, watchName, watchDesc, onComplete);
+    }
+
+    private void populateGrid(String category, ImageView imageView, TextView tv_name, TextView tv_desc, Runnable onComplete) {
+        db.search(new HashMap<String, Object>(){{
+            put("category", category);
+        }}, list -> {
+            if (list != null & !list.isEmpty()) {
+                Product product = list.get(0);
+
+                if (category.equals("laptop")) laptop = product;
+                else if (category.equals("watch")) watch = product;
+                else if (category.equals("tv")) tv = product;
+                else if (category.equals("tablet")) tablet = product;
+
+                if (product.getImagesId() != null && !product.getImagesId().isEmpty()) {
+                    Glide.with(getContext())
+                            .load(product.getImagesId().get(0))
+                            .placeholder(R.drawable.laptop)
+                            .into(imageView);
+                } else {
+                    Glide.with(getContext())
+                            .load(R.drawable.ic_launcher_foreground)
+                            .placeholder(R.drawable.laptop)
+                            .into(imageView);
+                }
+                tv_name.setText(list.get(0).getBrand() + " " + list.get(0).getModel());
+                tv_desc.setText(list.get(0).getDescription());
+            }
+        });
+        onComplete.run();
+    }
+
+    private void loadFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_layout, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 }

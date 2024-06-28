@@ -16,11 +16,11 @@ public class Laptop extends Product {
     private String color;
     private String warranty;
 
-    public Laptop(int id, String brand, String model, long price, String description, List<String> imagesId,
-                  int stocks, double rating, List<String> reviews, String processor, String ram, String storage,
+    public Laptop(String id, String brand, String model, long price, String description, List<String> imagesId,
+                  int stocks, double rating, List<String> reviews, String category, String processor, String ram, String storage,
                   String graphics, String display, String os, String batteryLife, double weight,
                   String dimension, String color, String ports, String warranty) {
-        super(id, brand, model, price, description, imagesId, stocks, rating, reviews);
+        super(id, brand, model, price, description, imagesId, stocks, rating, reviews, category);
         this.processor = processor;
         this.ram = ram;
         this.storage = storage;
@@ -33,6 +33,9 @@ public class Laptop extends Product {
         this.color = color;
         this.ports = ports;
         this.warranty = warranty;
+    }
+
+    public Laptop() {
     }
 
     public String getProcessor() {
@@ -133,7 +136,7 @@ public class Laptop extends Product {
 
     @Override
     public String toString() {
-        return "Laptop{" +
+        return super.toString() + "Laptop{" +
                 "processor='" + processor + '\'' +
                 ", ram='" + ram + '\'' +
                 ", storage='" + storage + '\'' +
@@ -141,10 +144,10 @@ public class Laptop extends Product {
                 ", display='" + display + '\'' +
                 ", os='" + os + '\'' +
                 ", batteryLife='" + batteryLife + '\'' +
+                ", ports='" + ports + '\'' +
                 ", weight=" + weight +
                 ", dimension='" + dimension + '\'' +
                 ", color='" + color + '\'' +
-                ", ports='" + ports + '\'' +
                 ", warranty='" + warranty + '\'' +
                 '}';
     }

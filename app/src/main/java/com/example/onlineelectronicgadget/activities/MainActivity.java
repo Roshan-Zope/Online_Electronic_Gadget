@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.example.onlineelectronicgadget.R;
+import com.example.onlineelectronicgadget.authentication.Auth;
 import com.example.onlineelectronicgadget.fragments.AccountFragment;
 import com.example.onlineelectronicgadget.fragments.CartFragment;
 import com.example.onlineelectronicgadget.fragments.HomeFragment;
@@ -21,7 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
-    private FirebaseAuth mAuth;
+    private Auth auth;
     private BottomNavigationView bottomNavigationView;
 
     @Override
@@ -31,15 +32,7 @@ public class MainActivity extends AppCompatActivity {
         FirebaseApp.initializeApp(this);
         initComponent();
         loadFragment(new HomeFragment());
-
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null) Log.d("myTag", "user successfully login");
-        else {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-            finish();
-        }
-
+        auth.authenticate();
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -70,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initComponent() {
-        mAuth = FirebaseAuth.getInstance();
+        auth = new Auth(this);
         bottomNavigationView = findViewById(R.id.navigation_layout);
     }
 }

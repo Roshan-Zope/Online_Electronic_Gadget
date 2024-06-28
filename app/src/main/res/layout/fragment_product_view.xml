@@ -32,6 +32,7 @@
                     android:id="@+id/prevButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:layout_margin="8dp"
@@ -39,6 +40,7 @@
                     app:srcCompat="@drawable/arrow_back_24px" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:backgroundTint="@color/white"
                     android:id="@+id/nextButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -77,6 +79,181 @@
                 android:text="@string/product_desc"
                 android:textSize="16sp" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/spec"
+                android:layout_marginTop="16dp"
+                android:textSize="16sp"
+                android:id="@+id/spec1"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/spec"
+                android:layout_marginTop="16dp"
+                android:textSize="16sp"
+                android:id="@+id/spec2"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/spec"
+                android:layout_marginTop="16dp"
+                android:textSize="16sp"
+                android:id="@+id/spec3"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/spec"
+                android:layout_marginTop="16dp"
+                android:textSize="16sp"
+                android:id="@+id/spec4"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/spec"
+                android:layout_marginTop="16dp"
+                android:textSize="16sp"
+                android:id="@+id/spec5"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/spec"
+                android:layout_marginTop="16dp"
+                android:textSize="16sp"
+                android:id="@+id/spec6"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/spec"
+                android:layout_marginTop="16dp"
+                android:textSize="16sp"
+                android:id="@+id/spec7"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/spec"
+                android:layout_marginTop="16dp"
+                android:textSize="16sp"
+                android:id="@+id/spec8"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/spec"
+                android:layout_marginTop="16dp"
+                android:textSize="16sp"
+                android:id="@+id/spec9"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/spec"
+                android:layout_marginTop="16dp"
+                android:textSize="16sp"
+                android:id="@+id/spec10"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/spec"
+                android:layout_marginTop="16dp"
+                android:textSize="16sp"
+                android:id="@+id/spec11"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/spec"
+                android:layout_marginTop="16dp"
+                android:textSize="16sp"
+                android:id="@+id/spec12"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/spec"
+                android:layout_marginTop="16dp"
+                android:textSize="16sp"
+                android:id="@+id/spec13"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/spec"
+                android:layout_marginTop="16dp"
+                android:textSize="16sp"
+                android:id="@+id/spec14"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/spec"
+                android:layout_marginTop="16dp"
+                android:textSize="16sp"
+                android:id="@+id/spec15"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/spec"
+                android:layout_marginTop="16dp"
+                android:textSize="16sp"
+                android:id="@+id/spec16"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/spec"
+                android:layout_marginTop="16dp"
+                android:textSize="16sp"
+                android:id="@+id/spec17"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/reviewsRecycler"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/el_review"
+                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_review"
+                        android:textSize="16sp"
+                        android:inputType="textMultiLine"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+
+                        android:hint="@string/review"/>
+
+                    <ImageView
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginTop="8dp"
+                        android:id="@+id/sendButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@android:drawable/ic_menu_send" />
+
+                </LinearLayout>
+            </com.google.android.material.textfield.TextInputLayout>
+
         </LinearLayout>
     </ScrollView>
 
@@ -96,7 +273,7 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginRight="10dp"
             android:text="@string/add_to_cart"
             android:backgroundTint="@android:color/holo_blue_dark"
             android:textColor="@android:color/white" />

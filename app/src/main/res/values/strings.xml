@@ -24,4 +24,10 @@
     <string name="next_button_desc">Next Button</string>
     <string name="prev_button_desc">Prev Button</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="laptop">Laptop</string>
+    <string name="tablet">Tablet</string>
+    <string name="watch">Smart Watch</string>
+    <string name="spec">Specification</string>
+    <string name="tv">Smart Tv</string>
+    <string name="review">Give your honest review here!</string>
 </resources>

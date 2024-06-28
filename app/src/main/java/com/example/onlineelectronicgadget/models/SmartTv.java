@@ -16,11 +16,13 @@ public class SmartTv extends Product {
     private String color;
     private String warranty;
 
-    public SmartTv(int id, String brand, String model, long price, String description, List<String> imagesId,
-                   int stocks, double rating, List<String> reviews, String screenSize, String resolution,
+    public SmartTv() {}
+
+    public SmartTv(String id, String brand, String model, long price, String description, List<String> imagesId,
+                   int stocks, double rating, List<String> reviews, String category, String screenSize, String resolution,
                    String displayTechnology, String os, String ports, String connectivity, String smartFeatures,
                    String sound, double weight, String dimension, String color, String warranty) {
-        super(id, brand, model, price, description, imagesId, stocks, rating, reviews);
+        super(id, brand, model, price, description, imagesId, stocks, rating, reviews, category);
         this.screenSize = screenSize;
         this.resolution = resolution;
         this.displayTechnology = displayTechnology;
@@ -133,7 +135,7 @@ public class SmartTv extends Product {
 
     @Override
     public String toString() {
-        return "SmartTv{" +
+        return super.toString() + "SmartTv{" +
                 "screenSize='" + screenSize + '\'' +
                 ", resolution='" + resolution + '\'' +
                 ", displayTechnology='" + displayTechnology + '\'' +

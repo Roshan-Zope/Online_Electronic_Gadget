@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Product {
-    private int id;
+    private String id;
     private String brand;
     private String model;
     private long price;
@@ -13,9 +13,10 @@ public class Product {
     private int stocks;
     private double rating;
     private List<String> reviews;
+    private String category;
 
-    public Product(int id, String brand, String model, long price, String description, List<String> imagesId,
-                   int stocks, double rating, List<String> reviews) {
+    public Product(String id, String brand, String model, long price, String description, List<String> imagesId,
+                   int stocks, double rating, List<String> reviews, String category) {
         this.id = id;
         this.brand = brand;
         this.model = model;
@@ -25,62 +26,18 @@ public class Product {
         this.stocks = stocks;
         this.rating = rating;
         this.reviews = reviews;
+        this.category = category;
     }
 
-    public List<String> getReviews() {
-        return reviews;
+    public Product() {
     }
 
-    public void setReviews(List<String> reviews) {
-        this.reviews = reviews;
+    public String getId() {
+        return id;
     }
 
-    public double getRating() {
-        return rating;
-    }
-
-    public void setRating(double rating) {
-        this.rating = rating;
-    }
-
-    public int getStocks() {
-        return stocks;
-    }
-
-    public void setStocks(int stocks) {
-        this.stocks = stocks;
-    }
-
-    public List<String> getImagesId() {
-        return imagesId;
-    }
-
-    public void setImagesId(List<String> imagesId) {
-        this.imagesId = imagesId;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public long getPrice() {
-        return price;
-    }
-
-    public void setPrice(long price) {
-        this.price = price;
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getBrand() {
@@ -91,12 +48,68 @@ public class Product {
         this.brand = brand;
     }
 
-    public int getId() {
-        return id;
+    public String getModel() {
+        return model;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public long getPrice() {
+        return price;
+    }
+
+    public void setPrice(long price) {
+        this.price = price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public List<String> getImagesId() {
+        return imagesId;
+    }
+
+    public void setImagesId(List<String> imagesId) {
+        this.imagesId = imagesId;
+    }
+
+    public int getStocks() {
+        return stocks;
+    }
+
+    public void setStocks(int stocks) {
+        this.stocks = stocks;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public List<String> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<String> reviews) {
+        this.reviews = reviews;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     @Override
@@ -111,6 +124,7 @@ public class Product {
                 ", stocks=" + stocks +
                 ", rating=" + rating +
                 ", reviews=" + reviews +
+                ", category='" + category + '\'' +
                 '}';
     }
 }
