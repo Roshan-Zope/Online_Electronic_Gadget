@@ -1,18 +1,15 @@
 package com.example.onlineelectronicgadget.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.onlineelectronicgadget.R;
 import com.example.onlineelectronicgadget.authentication.Auth;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +29,10 @@ public class LoginActivity extends AppCompatActivity {
         initComponent();
         Log.d("myTag", "in login activity");
 
-        loginButton.setOnClickListener(v -> login(etEmail.getText().toString(), etPassword.getText().toString()));
+        loginButton.setOnClickListener(v -> {
+            if (validateData()) login(String.valueOf(etEmail.getText()), String.valueOf(etPassword.getText()));
+            else Log.d("myTag", "invalid data");
+        });
 
         registerLink.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
@@ -48,12 +48,12 @@ public class LoginActivity extends AppCompatActivity {
     public boolean validateData() {
         List<Boolean> check = new ArrayList<>();
 
-        if (etEmail.getText().toString().trim().isEmpty()) {
+        if (String.valueOf(etEmail.getText()).trim().isEmpty()) {
             check.add(false);
             tlEmail.setError("Invalid Email");
         } else check.add(true);
 
-        if (etPassword.getText().toString().trim().isEmpty()) {
+        if (String.valueOf(etPassword.getText()).trim().isEmpty()) {
             check.add(false);
             tlPassword.setError("Please enter password");
         } else check.add(true);
@@ -69,5 +69,6 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         loginButton = findViewById(R.id.loginButton);
         registerLink = findViewById(R.id.registerLink);
+
     }
 }

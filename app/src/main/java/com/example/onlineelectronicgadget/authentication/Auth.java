@@ -17,13 +17,11 @@ public class Auth {
     private DatabaseHelper db;
     private FirebaseAuth mAuth;
     private Context context;
-    private LoginActivity loginActivity;
 
     public Auth(Context context) {
         this.context = context;
         mAuth = FirebaseAuth.getInstance();
         db = new DatabaseHelper();
-        loginActivity = new LoginActivity();
     }
 
     public void authenticate() {
@@ -66,7 +64,6 @@ public class Auth {
 
     public void login(String email, String password) {
         Log.d("myTag", "in Auth class => login()");
-        if (loginActivity.validateData()) {
             mAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener((Activity) context, task -> {
                         if (mAuth.getCurrentUser().isEmailVerified()) {
@@ -83,7 +80,6 @@ public class Auth {
                             Toast.makeText(context, "Please verify your email first", Toast.LENGTH_SHORT).show();
                         }
                     });
-        }
     }
 
     private void changeActivity(Context context, Class<?> cls) {

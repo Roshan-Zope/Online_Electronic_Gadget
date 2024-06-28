@@ -28,23 +28,26 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_launcher_foreground" />
 
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
+
+                <ImageButton
                     android:id="@+id/prevButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/white"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
+                    android:background="@android:color/transparent"
                     android:layout_margin="8dp"
                     android:contentDescription="@string/prev_button_desc"
                     app:srcCompat="@drawable/arrow_back_24px" />
 
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                <ImageButton
                     android:backgroundTint="@color/white"
                     android:id="@+id/nextButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
+                    android:background="@android:color/transparent"
                     android:layout_centerVertical="true"
                     android:layout_margin="8dp"
                     android:contentDescription="@string/next_button_desc"
@@ -82,12 +85,14 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:text="@string/spec"
                 android:layout_marginTop="16dp"
                 android:textSize="16sp"
                 android:id="@+id/spec1"/>
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/spec"
@@ -96,6 +101,7 @@
                 android:id="@+id/spec2"/>
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/spec"
@@ -104,6 +110,7 @@
                 android:id="@+id/spec3"/>
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/spec"
@@ -112,6 +119,7 @@
                 android:id="@+id/spec4"/>
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/spec"
@@ -120,6 +128,7 @@
                 android:id="@+id/spec5"/>
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/spec"
@@ -128,6 +137,7 @@
                 android:id="@+id/spec6"/>
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/spec"
@@ -136,6 +146,7 @@
                 android:id="@+id/spec7"/>
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/spec"
@@ -144,6 +155,7 @@
                 android:id="@+id/spec8"/>
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/spec"
@@ -152,6 +164,7 @@
                 android:id="@+id/spec9"/>
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/spec"
@@ -160,6 +173,7 @@
                 android:id="@+id/spec10"/>
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/spec"
@@ -168,6 +182,7 @@
                 android:id="@+id/spec11"/>
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/spec"
@@ -176,6 +191,7 @@
                 android:id="@+id/spec12"/>
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/spec"
@@ -184,6 +200,7 @@
                 android:id="@+id/spec13"/>
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/spec"
@@ -192,6 +209,7 @@
                 android:id="@+id/spec14"/>
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/spec"
@@ -200,6 +218,7 @@
                 android:id="@+id/spec15"/>
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/spec"
@@ -208,6 +227,7 @@
                 android:id="@+id/spec16"/>
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/spec"
@@ -216,6 +236,7 @@
                 android:id="@+id/spec17"/>
 
             <androidx.recyclerview.widget.RecyclerView
+                android:visibility="gone"
                 android:layout_marginTop="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

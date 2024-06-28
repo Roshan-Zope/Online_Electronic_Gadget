@@ -20,7 +20,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.onlineelectronicgadget.R;
 import com.example.onlineelectronicgadget.database.DatabaseHelper;
+import com.example.onlineelectronicgadget.models.Laptop;
 import com.example.onlineelectronicgadget.models.Product;
+import com.example.onlineelectronicgadget.models.SmartTv;
+import com.example.onlineelectronicgadget.models.SmartWatches;
+import com.example.onlineelectronicgadget.models.Tablets;
 
 import java.util.HashMap;
 
@@ -41,10 +45,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private TextView tabDesc;
     private TextView watchDesc;
     private TextView tvDesc;
-    private Product laptop;
-    private Product tv;
-    private Product watch;
-    private Product tablet;
+    private Laptop laptop;
+    private SmartTv tv;
+    private SmartWatches watch;
+    private Tablets tablet;
     private DatabaseHelper db;
     private ProgressBar progressBar;
     private LinearLayout linearLayout;
@@ -143,10 +147,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             if (list != null & !list.isEmpty()) {
                 Product product = list.get(0);
 
-                if (category.equals("laptop")) laptop = product;
-                else if (category.equals("watch")) watch = product;
-                else if (category.equals("tv")) tv = product;
-                else if (category.equals("tablet")) tablet = product;
+                if (category.equals("laptop")) laptop = (Laptop) list.get(0);
+                else if (category.equals("watch")) watch = (SmartWatches) list.get(0);
+                else if (category.equals("tv")) tv = (SmartTv) list.get(0);
+                else if (category.equals("tablet")) tablet = (Tablets) list.get(0);
 
                 if (product.getImagesId() != null && !product.getImagesId().isEmpty()) {
                     Glide.with(getContext())
