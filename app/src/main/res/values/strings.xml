@@ -29,5 +29,14 @@
     <string name="watch">Smart Watch</string>
     <string name="spec">Specification</string>
     <string name="tv">Smart Tv</string>
+    <string name="profile">Profile</string>
+    <string name="save">Save</string>
+    <string name="old_password">Old Password</string>
+    <string name="new_password">New Password</string>
+    <string name="delete_acc">Delete Account</string>
+    <string name="log_out">Log out</string>
+    <string name="about_us">About us</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="send_us_message">Send us a message</string>
     <string name="review">Give your honest review here!</string>
 </resources>

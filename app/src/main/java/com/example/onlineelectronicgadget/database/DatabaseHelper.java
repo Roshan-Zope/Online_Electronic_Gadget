@@ -1,19 +1,24 @@
 package com.example.onlineelectronicgadget.database;
 
+import com.example.onlineelectronicgadget.authentication.Auth;
 import com.example.onlineelectronicgadget.models.Laptop;
 import com.example.onlineelectronicgadget.models.Product;
+import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.example.onlineelectronicgadget.models.SmartTv;
 import com.example.onlineelectronicgadget.models.SmartWatches;
 import com.example.onlineelectronicgadget.models.Tablets;
+import com.example.onlineelectronicgadget.models.User;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.rpc.context.AttributeContext;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +26,62 @@ import java.util.Map;
 
 public class DatabaseHelper {
     private final FirebaseFirestore firestore;
+
+    public interface Callback {
+        void onComplete(List<Product> list);
+    }
+
+    public interface FireStoreCallback {
+        void onCallback(User user);
+    }
+
+    public DatabaseHelper() {
+        this.firestore = FirebaseFirestore.getInstance();
+    }
+
+    public void deleteAcc(User user) {
+        firestore.collection("users").document(user.getId())
+                .delete()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("myTag", "database helper => account deleted");
+                    }
+                }).addOnFailureListener(e -> {
+                    Log.d("myTag", "database helper => deletion failed");
+                });
+    }
+
+    public void updateUser(String uid, String value, String field) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(field, value);
+        Log.d("myTag", "in update user method" + map + "uid => " + uid);
+
+        firestore.collection("users").document(uid)
+                .update(map)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("myTag", "user detail updated");
+                    }
+                }).addOnFailureListener(e -> {
+                    Log.d("myTag", "error: " + e.getMessage());
+                });
+    }
+
+    public void getCurrUser(String uid, FireStoreCallback callback) {
+        firestore.collection("users").document(uid).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        User user = task.getResult().toObject(User.class);
+                        Log.d("myTag", "current user => " + user.getId());
+                        callback.onCallback(user);
+                    }
+                    else {
+                        callback.onCallback(null);
+                    }
+                }).addOnFailureListener(e -> {
+                        callback.onCallback(null);
+                });
+    }
 
     public void saveReview(String review, String id) {
         DocumentReference document = firestore.collection("products").document(id);
@@ -33,24 +94,23 @@ public class DatabaseHelper {
                 });
     }
 
-    public interface Callback {
-        void onComplete(List<Product> list);
-    }
-
-    public DatabaseHelper() {
-        this.firestore = FirebaseFirestore.getInstance();
-    }
-
-    public void saveUser(String username, String email, String password) {
+    public void saveUser(String uid, String username, String email, String password) {
         Map<String, Object> user = new HashMap<>();
+        user.put("id", uid);
         user.put("username", username);
         user.put("email", email);
         user.put("password", password);
 
         firestore.collection("users")
-                .add(user)
-                .addOnSuccessListener(documentReference -> Log.d("myTag", "Document referenceId => " + documentReference.getId()))
-                .addOnFailureListener(e -> Log.d("myTag", "Failure => " + e));
+                .document(uid)
+                .set(user)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("myTag", "user added ");
+                    }
+                }).addOnFailureListener(e -> {
+                    Log.d("myTag", " " + e.getMessage());
+                });
     }
 
     public void search(Map<String, Object> specifications, Callback callback) {

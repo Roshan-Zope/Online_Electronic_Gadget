@@ -31,8 +31,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         FirebaseApp.initializeApp(this);
         initComponent();
-        loadFragment(new HomeFragment());
         auth.authenticate();
+        loadFragment(new HomeFragment());
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {

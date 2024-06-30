@@ -1,24 +1,41 @@
 package com.example.onlineelectronicgadget.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.Button;
+import android.widget.TextView;
 import com.example.onlineelectronicgadget.R;
+import com.example.onlineelectronicgadget.activities.LoginActivity;
+import com.example.onlineelectronicgadget.activities.RegisterActivity;
+import com.example.onlineelectronicgadget.authentication.Auth;
+import com.example.onlineelectronicgadget.database.DatabaseHelper;
+import com.example.onlineelectronicgadget.models.User;
 
 public class AccountFragment extends Fragment {
-
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
     private String mParam1;
     private String mParam2;
+    private TextView user_name;
+    private TextView user_email;
+    private Button edit_profile_button;
+    private TextView sendMsg;
+    private TextView aboutUs;
+    private TextView deleteAcc;
+    private TextView logOut;
+    private User user;
+    private DatabaseHelper db;
+    private Auth auth;
 
     public AccountFragment() {
         // Required empty public constructor
@@ -44,12 +61,65 @@ public class AccountFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_account, container, false);
+        View view = inflater.inflate(R.layout.fragment_account, container, false);
+        initComponent(view);
+        return view;
+    }
+
+    private void initComponent(View view) {
+        user_name = view.findViewById(R.id.user_name);
+        user_email = view.findViewById(R.id.user_email);
+        edit_profile_button = view.findViewById(R.id.edit_profile_button);
+        sendMsg = view.findViewById(R.id.sendMsg);
+        aboutUs = view.findViewById(R.id.aboutUs);
+        deleteAcc = view.findViewById(R.id.deleteAcc);
+        logOut = view.findViewById(R.id.logOut);
+        db = new DatabaseHelper();
+        auth = new Auth(getActivity());
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        loadProfile();
+
+        edit_profile_button.setOnClickListener(v -> {
+            loadFragment(new EditProfileFragment(user));
+        });
+
+        logOut.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            getActivity().finish();
+            startActivity(intent);
+        });
+
+        deleteAcc.setOnClickListener(v -> {
+            auth.deleteAcc(user.getEmail(), user.getPassword());
+            db.deleteAcc(user);
+            Intent intent = new Intent(getActivity(), RegisterActivity.class);
+            getActivity().finish();
+            startActivity(intent);
+        });
+    }
+
+    private void loadFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.fragment_layout, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+
+    private void loadProfile() {
+        user = auth.getCurrentUser();
+
+        if (user != null) {
+            user_name.setText(user.getUsername());
+            user_email.setText(user.getEmail());
+        } else {
+            Log.d("myTag", "User is null in loadProfile");
+        }
+
     }
 }
