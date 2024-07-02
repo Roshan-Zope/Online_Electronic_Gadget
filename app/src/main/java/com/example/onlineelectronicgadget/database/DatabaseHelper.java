@@ -1,23 +1,22 @@
 package com.example.onlineelectronicgadget.database;
 
-import com.example.onlineelectronicgadget.authentication.Auth;
 import com.example.onlineelectronicgadget.models.Laptop;
 import com.example.onlineelectronicgadget.models.Product;
-import android.content.Context;
+
 import android.util.Log;
-import android.widget.Toast;
+
+import androidx.transition.Transition;
+
 import com.example.onlineelectronicgadget.models.SmartTv;
 import com.example.onlineelectronicgadget.models.SmartWatches;
 import com.example.onlineelectronicgadget.models.Tablets;
 import com.example.onlineelectronicgadget.models.User;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.rpc.context.AttributeContext;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,8 +34,33 @@ public class DatabaseHelper {
         void onCallback(User user);
     }
 
+    public interface AccountTypeCallback {
+        void onCallback(String accType);
+    }
+
     public DatabaseHelper() {
         this.firestore = FirebaseFirestore.getInstance();
+    }
+
+    public String saveProduct(Product product) {
+        if (product != null) {
+            DocumentReference docRef = firestore.collection("products").document();
+
+            firestore.collection("products")
+                    .document(docRef.getId())
+                    .set(product)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Log.d("myTag", "product added");
+                        } else {
+                            Log.d("myTag", "unable to add product");
+                        }
+                    });
+
+            return docRef.getId();
+        } else {
+            return "-1";
+        }
     }
 
     public void deleteAcc(User user) {
@@ -48,6 +72,21 @@ public class DatabaseHelper {
                     }
                 }).addOnFailureListener(e -> {
                     Log.d("myTag", "database helper => deletion failed");
+                });
+    }
+
+    public void getUserAccountType(String email, AccountTypeCallback callback) {
+        firestore.collection("users").whereEqualTo("email", email).get()
+                .addOnCompleteListener(task -> {
+                   if (task.isSuccessful())  {
+                       String accType = null;
+                       for (QueryDocumentSnapshot document : task.getResult()) {
+                           accType = document.getString("accType");
+                       }
+                       callback.onCallback(accType);
+                   } else {
+                       callback.onCallback(null);
+                   }
                 });
     }
 
@@ -94,12 +133,13 @@ public class DatabaseHelper {
                 });
     }
 
-    public void saveUser(String uid, String username, String email, String password) {
+    public void saveUser(String uid, String username, String email, String password, String accType) {
         Map<String, Object> user = new HashMap<>();
         user.put("id", uid);
         user.put("username", username);
         user.put("email", email);
         user.put("password", password);
+        user.put("accType", accType);
 
         firestore.collection("users")
                 .document(uid)

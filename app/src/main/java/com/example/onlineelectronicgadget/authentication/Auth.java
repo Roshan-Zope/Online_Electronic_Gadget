@@ -3,17 +3,20 @@ package com.example.onlineelectronicgadget.authentication;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 import com.example.onlineelectronicgadget.activities.LoginActivity;
 import com.example.onlineelectronicgadget.activities.MainActivity;
 import com.example.onlineelectronicgadget.database.DatabaseHelper;
+import com.example.onlineelectronicgadget.models.Tablets;
 import com.example.onlineelectronicgadget.models.User;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class Auth {
     private DatabaseHelper db;
@@ -87,11 +90,11 @@ public class Auth {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         db.updateUser(user.getUid(), newPassword, "password");
-                        user.sendEmailVerification().addOnCompleteListener(task1 -> {
+                        /*user.sendEmailVerification().addOnCompleteListener(task1 -> {
                             Toast.makeText(context, "verification email sent to your email", Toast.LENGTH_SHORT).show();
                         }).addOnFailureListener(e -> {
                             Toast.makeText(context, "email verification failed", Toast.LENGTH_SHORT).show();
-                        });
+                        });*/
                         Log.d("myTag", "email changed successfully");
                     }
                 }).addOnFailureListener(e -> {
@@ -114,25 +117,33 @@ public class Auth {
         }
     }
 
-    public void registerUser(String username, String email, String password) {
+    public void registerUser(String username, String email, String password, String accType) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener((Activity) context, task -> {
                     if (task.isSuccessful()) {
                         Log.d("myTag", "Registration successful");
                         Toast.makeText(context, "Registration successful", Toast.LENGTH_SHORT).show();
 
-                        mAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener((Activity) context, t -> {
-                            if (t.isSuccessful()) {
-                                Log.d("myTag", "Email Verification sent");
-                                Toast.makeText(context, "Verify your email", Toast.LENGTH_SHORT).show();
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        UserProfileChangeRequest request = new UserProfileChangeRequest.Builder().setDisplayName(username).build();
+                        user.updateProfile(request).addOnCompleteListener(v -> {
+                            if (task.isSuccessful()) {
+                                Log.d("myTag", "profile updated successfully");
+                                user.sendEmailVerification().addOnCompleteListener((Activity) context, t -> {
+                                    if (t.isSuccessful()) {
+                                        Log.d("myTag", "Email Verification sent");
+                                        Toast.makeText(context, "Verify your email", Toast.LENGTH_SHORT).show();
 
-                                db.saveUser(mAuth.getCurrentUser().getUid(), username, email, password);
-
-                                changeActivity(context, LoginActivity.class);
-                            }
-                            else {
-                                Log.d("myTag", "Email verification failed");
-                                Toast.makeText(context, "Failed to send verification email", Toast.LENGTH_SHORT).show();
+                                        db.saveUser(mAuth.getCurrentUser().getUid(), username, email, password, accType);
+                                        changeActivity(context, LoginActivity.class, accType);
+                                    }
+                                    else {
+                                        Log.d("myTag", "Email verification failed");
+                                        Toast.makeText(context, "Failed to send verification email", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            } else {
+                                Log.d("myTag", "user profile is not updated");
                             }
                         });
                     } else {
@@ -142,27 +153,48 @@ public class Auth {
                 });
     }
 
-    public void login(String email, String password) {
+    public void login(String email, String password, String accType) {
         Log.d("myTag", "in Auth class => login()");
             mAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener((Activity) context, task -> {
-                        if (mAuth.getCurrentUser().isEmailVerified()) {
-                            if (task.isSuccessful()) {
-                                Log.d("myTag", "Authentication successful");
-                                Toast.makeText(context, "Authentication successful", Toast.LENGTH_SHORT).show();
-                                changeActivity(context, MainActivity.class);
+                        if (task.isSuccessful()) {
+                            if (mAuth.getCurrentUser().isEmailVerified()) {
+                                if (task.isSuccessful()) {
+                                    Log.d("myTag", "Authentication successful");
+                                    Toast.makeText(context, "Authentication successful", Toast.LENGTH_SHORT).show();
+
+                                    db.getUserAccountType(email, accType1 -> {
+                                       if (accType != null) {
+                                           FirebaseUser user = mAuth.getCurrentUser();
+                                           if (user != null) {
+                                               String id = user.getUid();
+                                               SharedPreferences preferences = context.getSharedPreferences("myPref", Context.MODE_PRIVATE);
+                                               SharedPreferences.Editor editor = preferences.edit();
+                                               editor.putString(id + "_accType", accType);
+                                               editor.apply();
+                                           }
+                                           changeActivity(context, MainActivity.class, accType1);
+                                       } else {
+                                           Log.d("myTag", "failed to login");
+                                       }
+                                    });
+                                } else {
+                                    Log.d("myTag", "Authentication failed");
+                                    Toast.makeText(context, "Authentication failed", Toast.LENGTH_SHORT).show();
+                                }
                             } else {
-                                Log.d("myTag", "Authentication failed");
-                                Toast.makeText(context, "Authentication failed", Toast.LENGTH_SHORT).show();
+                                Log.d("myTag", "Email is not verified");
+                                Toast.makeText(context, "Please verify your email first", Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            Log.d("myTag", "Email is not verified");
-                            Toast.makeText(context, "Please verify your email first", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Authentication failed", Toast.LENGTH_SHORT).show();
+                            Log.d("myTag", "Authentication failed");
                         }
                     });
     }
 
-    private void changeActivity(Context context, Class<?> cls) {
+    private void changeActivity(Context context, Class<?> cls, String accType) {
+
         Intent intent = new Intent(context, cls);
         context.startActivity(intent);
         ((Activity) context).finish();

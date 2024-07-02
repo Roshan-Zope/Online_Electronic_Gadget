@@ -1,6 +1,7 @@
 package com.example.onlineelectronicgadget.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -12,6 +13,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.onlineelectronicgadget.R;
 import com.example.onlineelectronicgadget.authentication.Auth;
 import com.example.onlineelectronicgadget.fragments.AccountFragment;
+import com.example.onlineelectronicgadget.fragments.AdminHomeScreen;
 import com.example.onlineelectronicgadget.fragments.CartFragment;
 import com.example.onlineelectronicgadget.fragments.HomeFragment;
 import com.example.onlineelectronicgadget.fragments.SearchFragment;
@@ -24,6 +26,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class MainActivity extends AppCompatActivity {
     private Auth auth;
     private BottomNavigationView bottomNavigationView;
+    private String accType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +34,29 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         FirebaseApp.initializeApp(this);
         initComponent();
+
+        Log.d("myTag", "before authenticate()");
         auth.authenticate();
-        loadFragment(new HomeFragment());
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Log.d("myTag", "after authenticate()");
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String id = user.getUid();
+            SharedPreferences preferences = getSharedPreferences("myPref", MODE_PRIVATE);
+            accType = preferences.getString(id + "_accType", null);
+            if (accType == null) {
+                accType = "Customer";
+            }
+
+            if (accType.equals("Customer")) {
+                loadFragment(new HomeFragment());
+            } else if (accType.equals("Retailer")) {
+                loadFragment(new AdminHomeScreen());
+            }
+
+            bottomNavigationView.setOnItemSelectedListener(item -> {
                 if (item.getItemId() == R.id.home_option) {
-                    loadFragment(new HomeFragment());
+                    if (accType.equals("Customer")) loadFragment(new HomeFragment());
+                    else if (accType.equals("Retailer")) loadFragment(new AdminHomeScreen());
                 }
                 if (item.getItemId() == R.id.search_option) {
                     loadFragment(new SearchFragment());
@@ -50,8 +69,10 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 return true;
-            }
-        });
+            });
+        } else {
+            Log.d("myTag", "user is not login");
+        }
     }
 
     private void loadFragment(Fragment fragment) {

@@ -14,7 +14,7 @@
         android:layout_marginTop="10dp"
         android:layout_height="160dp"
         android:layout_gravity="center"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="20dp"
         android:src="@drawable/ic_login_logo" />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -89,6 +89,38 @@
             android:textSize="20sp"
             android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroup"
+        android:layout_margin="10dp"
+        app:singleSelection="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/customerChip"
+            android:tag="customer"
+            android:checkable="true"
+            android:backgroundTint="@android:color/transparent"
+            app:chipStrokeWidth="2dp"
+            app:chipStrokeColor="@color/black"
+            android:layout_marginStart="16dp"
+            android:text="@string/customer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/retailerChip"
+            app:chipStrokeWidth="2dp"
+            android:checkable="true"
+            android:tag="retailer"
+            app:chipStrokeColor="@color/black"
+            android:layout_marginStart="16dp"
+            android:backgroundTint="@android:color/transparent"
+            android:text="@string/retailer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </com.google.android.material.chip.ChipGroup>
 
     <Button
         android:id="@+id/registerButton"

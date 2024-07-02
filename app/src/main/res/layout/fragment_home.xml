@@ -76,13 +76,13 @@
                                 <ImageView
                                     android:id="@+id/laptopImage"
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
+                                    android:layout_height="200dp"
                                     android:src="@drawable/laptop" />
 
                                 <TextView
                                     android:id="@+id/laptopName"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="40dp"
                                     android:text="@string/laptop"
                                     android:textStyle="bold"
                                     android:paddingTop="8dp" />
@@ -90,7 +90,7 @@
                                 <TextView
                                     android:id="@+id/laptopDesc"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="100dp"
                                     android:text="@string/product_desc"
                                     android:textAlignment="center" />
                             </LinearLayout>
@@ -115,13 +115,13 @@
                                 <ImageView
                                     android:id="@+id/tabImage"
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
+                                    android:layout_height="200dp"
                                     android:src="@drawable/tablet" />
 
                                 <TextView
                                     android:id="@+id/tabName"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="40dp"
                                     android:paddingTop="8dp"
                                     android:text="@string/tablet"
                                     android:textStyle="bold" />
@@ -129,7 +129,7 @@
                                 <TextView
                                     android:id="@+id/tabDesc"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="100dp"
                                     android:text="@string/product_desc"
                                     android:textAlignment="center" />
                             </LinearLayout>
@@ -154,13 +154,13 @@
                                 <ImageView
                                     android:id="@+id/watchImage"
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
+                                    android:layout_height="200dp"
                                     android:src="@drawable/watch" />
 
                                 <TextView
                                     android:id="@+id/watchName"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="40dp"
                                     android:paddingTop="8dp"
                                     android:text="@string/watch"
                                     android:textStyle="bold" />
@@ -168,7 +168,7 @@
                                 <TextView
                                     android:id="@+id/watchDesc"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="100dp"
                                     android:text="@string/product_desc"
                                     android:textAlignment="center" />
                             </LinearLayout>
@@ -193,13 +193,13 @@
                                 <ImageView
                                     android:id="@+id/tvImage"
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
+                                    android:layout_height="200dp"
                                     android:src="@drawable/tv" />
 
                                 <TextView
                                     android:id="@+id/tvName"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="40dp"
                                     android:paddingTop="8dp"
                                     android:text="@string/tv"
                                     android:textStyle="bold" />
@@ -207,7 +207,7 @@
                                 <TextView
                                     android:id="@+id/tvDesc"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="100dp"
                                     android:text="@string/product_desc"
                                     android:textAlignment="center" />
                             </LinearLayout>

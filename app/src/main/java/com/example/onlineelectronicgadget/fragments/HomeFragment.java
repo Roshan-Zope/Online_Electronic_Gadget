@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,6 +69,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.d("myTag", "in HomeFragment onCreate()");
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -78,6 +80,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d("myTag", "in HomeFragment onCreateView()");
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         initComponent(view);
 
@@ -85,6 +88,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initComponent(View view) {
+        Log.d("myTag", "in HomeFragment initComponent()");
         laptopImage = view.findViewById(R.id.laptopImage);
         tabImage = view.findViewById(R.id.tabImage);
         watchImage = view.findViewById(R.id.watchImage);
@@ -109,6 +113,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        Log.d("myTag", "in HomeFragment onViewCreated()");
         super.onViewCreated(view, savedInstanceState);
         linearLayout.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
@@ -120,6 +125,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        Log.d("myTag", "in HomeFragment onClick()");
         Product clickedProduct = null;
 
         int id = v.getId();
@@ -134,6 +140,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void loadProduct(Runnable onComplete) {
+        Log.d("myTag", "in HomeFragment loadProduct()");
         populateGrid("laptop", laptopImage, laptopName, laptopDesc, onComplete);
         populateGrid("tablet", tabImage, tabName, tabDesc, onComplete);
         populateGrid("tv", tvImage, tvName, tvDesc, onComplete);
@@ -141,6 +148,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void populateGrid(String category, ImageView imageView, TextView tv_name, TextView tv_desc, Runnable onComplete) {
+        Log.d("myTag", "in HomeFragment populatedGrid()");
         db.search(new HashMap<String, Object>(){{
             put("category", category);
         }}, list -> {

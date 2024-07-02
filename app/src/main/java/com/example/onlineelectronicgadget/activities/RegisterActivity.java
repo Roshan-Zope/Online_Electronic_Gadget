@@ -10,6 +10,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.onlineelectronicgadget.R;
 import com.example.onlineelectronicgadget.authentication.Auth;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -28,23 +30,37 @@ public class RegisterActivity extends AppCompatActivity {
     private TextInputEditText confirmPasswordEditText;
     private TextView loginLink;
     private Button registerButton;
+    private ChipGroup chipGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         initComponent();
+    }
 
-        registerButton.setOnClickListener(v -> {
-            if (validateData()) registerUser(nameEditText.getText().toString().trim(), emailEditTextR.getText().toString().trim(), passwordEditTextR.getText().toString().trim());
+    private void onRegisterButton() {
+        String name = String.valueOf(nameEditText.getText()).trim();
+        String email = String.valueOf(emailEditTextR.getText()).trim();
+        String password = String.valueOf(passwordEditTextR.getText()).trim();
+        Chip chip = findViewById(chipGroup.getCheckedChipId());
+        if (chip == null) {
+            Toast.makeText(this, "Please select account type", Toast.LENGTH_SHORT).show();
+        } else {
+            Log.d("myTag", "" + chipGroup.getCheckedChipId());
+            String accType = String.valueOf(chip.getText());
+            if (validateData()) registerUser(name, email, password, accType);
             else Toast.makeText(this, "Please enter valid data", Toast.LENGTH_SHORT).show();
-        });
+        }
+    }
 
-        loginLink.setOnClickListener(v -> {
-            changeActivity(RegisterActivity.this, LoginActivity.class);
-            Log.d("myTag", "to login activity");
-        });
+    private void onLoginLink() {
+        changeActivity(RegisterActivity.this, LoginActivity.class);
+        Log.d("myTag", "to login activity");
+    }
 
+    private void registerUser(String username, String email, String password, String accType) {
+        auth.registerUser(username, email, password, accType);
     }
 
     private void changeActivity(Context context, Class<?> cls) {
@@ -55,27 +71,31 @@ public class RegisterActivity extends AppCompatActivity {
 
     private boolean validateData() {
         List<Boolean> check = new ArrayList<>();
+        String name = String.valueOf(nameEditText.getText()).trim();
+        String email = String.valueOf(emailEditTextR.getText()).trim();
+        String password = String.valueOf(passwordEditTextR.getText()).trim();
+        String confirmPassword = String.valueOf(confirmPasswordEditText.getText()).trim();
 
-        if (nameEditText.getText().toString().trim().isEmpty()) {
+        if (name.isEmpty()) {
             check.add(false);
             tlName.setError("Invalid name");
         } else check.add(true);
 
-        if (emailEditTextR.getText().toString().trim().isEmpty()) {
+        if (email.isEmpty()) {
             check.add(false);
             tlEmailR.setError("Invalid Email");
         } else check.add(true);
 
-        if (passwordEditTextR.getText().toString().trim().isEmpty() && passwordEditTextR.getText().toString().trim().length() < 6) {
+        if (password.trim().isEmpty() && password.length() < 6) {
             check.add(false);
             tlPasswordR.setError("Invalid password. Password should be of 6 character");
         } else check.add(true);
 
-        if (confirmPasswordEditText.getText().toString().trim().isEmpty()) {
+        if (confirmPassword.isEmpty()) {
             check.add(false);
             tlConfirmPassword.setError("Confirm password");
         } else {
-            if (confirmPasswordEditText.getText().toString().trim().equals(passwordEditTextR.getText().toString().trim())) check.add(true);
+            if (confirmPassword.equals(password)) check.add(true);
             else {
                 check.add(false);
                 tlConfirmPassword.setError("password mismatch");
@@ -83,10 +103,6 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         return !check.contains(false);
-    }
-
-    private void registerUser(String username, String email, String password) {
-        auth.registerUser(username, email, password);
     }
 
     private void initComponent() {
@@ -101,5 +117,9 @@ public class RegisterActivity extends AppCompatActivity {
         tlPasswordR = findViewById(R.id.tlPasswordR);
         tlConfirmPassword = findViewById(R.id.tlConfirmPassword);
         confirmPasswordEditText = findViewById(R.id.confirmPasswordEditText);
+        chipGroup = findViewById(R.id.chipGroup);
+
+        registerButton.setOnClickListener(v -> onRegisterButton());
+        loginLink.setOnClickListener(v -> onLoginLink());
     }
 }
