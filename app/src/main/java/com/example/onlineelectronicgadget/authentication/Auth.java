@@ -135,7 +135,7 @@ public class Auth {
                                         Toast.makeText(context, "Verify your email", Toast.LENGTH_SHORT).show();
 
                                         db.saveUser(mAuth.getCurrentUser().getUid(), username, email, password, accType);
-                                        changeActivity(context, LoginActivity.class, accType);
+                                        changeActivity(context, LoginActivity.class);
                                     }
                                     else {
                                         Log.d("myTag", "Email verification failed");
@@ -160,11 +160,8 @@ public class Auth {
                         if (task.isSuccessful()) {
                             if (mAuth.getCurrentUser().isEmailVerified()) {
                                 if (task.isSuccessful()) {
-                                    Log.d("myTag", "Authentication successful");
-                                    Toast.makeText(context, "Authentication successful", Toast.LENGTH_SHORT).show();
-
                                     db.getUserAccountType(email, accType1 -> {
-                                       if (accType != null) {
+                                       if (accType1 != null && accType1.equals(accType)) {
                                            FirebaseUser user = mAuth.getCurrentUser();
                                            if (user != null) {
                                                String id = user.getUid();
@@ -173,8 +170,11 @@ public class Auth {
                                                editor.putString(id + "_accType", accType);
                                                editor.apply();
                                            }
-                                           changeActivity(context, MainActivity.class, accType1);
+                                           Log.d("myTag", "Authentication successful");
+                                           Toast.makeText(context, "Authentication successful", Toast.LENGTH_SHORT).show();
+                                           changeActivity(context, MainActivity.class);
                                        } else {
+                                           Toast.makeText(context, "check your account type", Toast.LENGTH_SHORT).show();
                                            Log.d("myTag", "failed to login");
                                        }
                                     });
@@ -193,7 +193,7 @@ public class Auth {
                     });
     }
 
-    private void changeActivity(Context context, Class<?> cls, String accType) {
+    private void changeActivity(Context context, Class<?> cls) {
 
         Intent intent = new Intent(context, cls);
         context.startActivity(intent);

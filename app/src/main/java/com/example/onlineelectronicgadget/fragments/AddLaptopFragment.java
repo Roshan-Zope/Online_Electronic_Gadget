@@ -88,6 +88,7 @@ public class AddLaptopFragment extends Fragment {
         ports = view.findViewById(R.id.ports);
         weight = view.findViewById(R.id.weight);
         color = view.findViewById(R.id.color);
+        dimension = view.findViewById(R.id.dimension);
         warranty = view.findViewById(R.id.warranty);
         save_button = view.findViewById(R.id.save_button);
         cancel_button = view.findViewById(R.id.cancel_button);
@@ -165,6 +166,11 @@ public class AddLaptopFragment extends Fragment {
             laptop.setWarranty(String.valueOf(warranty.getText()).trim());
         } catch (NullPointerException e) {
             laptop.setWarranty(null);
+        }
+        try {
+            laptop.setDimension(String.valueOf(dimension.getText()).trim());
+        } catch (NullPointerException e) {
+            laptop.setDimension(null);
         }
     }
 

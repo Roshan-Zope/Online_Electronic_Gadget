@@ -80,6 +80,7 @@ public class DatabaseHelper {
                 .addOnCompleteListener(task -> {
                    if (task.isSuccessful())  {
                        String accType = null;
+                       User user = null;
                        for (QueryDocumentSnapshot document : task.getResult()) {
                            accType = document.getString("accType");
                        }
