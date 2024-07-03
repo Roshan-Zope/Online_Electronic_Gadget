@@ -11,7 +11,10 @@ import com.example.onlineelectronicgadget.models.SmartTv;
 import com.example.onlineelectronicgadget.models.SmartWatches;
 import com.example.onlineelectronicgadget.models.Tablets;
 import com.example.onlineelectronicgadget.models.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.CollectionReference;
@@ -38,8 +41,87 @@ public class DatabaseHelper {
         void onCallback(String accType);
     }
 
+    public interface IsProductAlreadyPresentCallback {
+        void onCallback(Boolean flag);
+    }
+
     public DatabaseHelper() {
         this.firestore = FirebaseFirestore.getInstance();
+    }
+
+    public void getCart(Callback callback) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        List<Product> list = new ArrayList<>();
+        if (user != null) {
+            firestore.collection("cart").whereEqualTo("uid", user.getUid())
+                    .get()
+                    .addOnCompleteListener(task -> {
+                       if (task.isSuccessful()) {
+                           for (QueryDocumentSnapshot document : task.getResult()) {
+                               Product product = document.get("product", Product.class);
+                               list.add(product);
+                           }
+                           Log.d("myTag", list.toString());
+                           callback.onComplete(list);
+                           Log.d("mmyTag", "cart retrieve");
+                       } else {
+                           callback.onComplete(null);
+                       }
+                    });
+        }
+    }
+
+    public void addToCart(Product product, IsProductAlreadyPresentCallback listener) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (product != null && user != null) {
+            isProductAlreadyPresentInCart(product.getId(), list -> {
+                if (list != null && list.isEmpty()) {
+                    DocumentReference docRef = firestore.collection("cart").document();
+
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("uid", user.getUid());
+                    map.put("product", product);
+
+                    firestore.collection("cart")
+                            .document(docRef.getId())
+                            .set(map)
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    Log.d("myTag", "product added to cart");
+                                    listener.onCallback(true);
+                                } else {
+                                    Log.d("myTag", "unable to add to cart");
+                                    listener.onCallback(false);
+                                }
+                            });
+                } else {
+                    listener.onCallback(false);
+                }
+            });
+        } else {
+            Log.d("myTag", "unable to add product to cart");
+        }
+    }
+
+    public void isProductAlreadyPresentInCart(String id, Callback listener) {
+        List<Product> list = new ArrayList<>();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            firestore.collection("cart").whereEqualTo("uid", user.getUid())
+                    .whereEqualTo("product.id", id)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                       if (task.isSuccessful()) {
+                           for (QueryDocumentSnapshot document : task.getResult()) {
+                               Product product = document.get("product", Product.class);
+                               list.add(product);
+                           }
+                           listener.onComplete(list);
+                       } else {
+                           listener.onComplete(null);
+                       }
+                    });
+        }
     }
 
     public String saveProduct(Product product) {
@@ -60,6 +142,28 @@ public class DatabaseHelper {
             return docRef.getId();
         } else {
             return "-1";
+        }
+    }
+
+    public void removeFromCart(String id, IsProductAlreadyPresentCallback listener) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            firestore.collection("cart").whereEqualTo("uid", user.getUid())
+                    .whereEqualTo("product.id", id)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                            for (DocumentSnapshot document : task.getResult()) {
+                                document.getReference().delete()
+                                        .addOnCompleteListener(task1 -> {
+                                            if (task1.isSuccessful()) listener.onCallback(true);
+                                            else listener.onCallback(false);
+                                        });
+                            }
+                        } else {
+                            listener.onCallback(false);
+                        }
+                    });
         }
     }
 

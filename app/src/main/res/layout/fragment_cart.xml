@@ -5,11 +5,10 @@
     android:layout_height="match_parent"
     tools:context="fragments.CartFragment">
 
-    <TextView
-        android:id="@+id/cartFragment"
-        android:background="#FFC107"
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_margin="16dp"
+        android:id="@+id/cartRecycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"/>
 
 </FrameLayout>

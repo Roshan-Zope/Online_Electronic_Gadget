@@ -5,12 +5,23 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.onlineelectronicgadget.R;
+import com.example.onlineelectronicgadget.adapters.CartListAdapter;
+import com.example.onlineelectronicgadget.database.DatabaseHelper;
+import com.example.onlineelectronicgadget.models.Product;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CartFragment extends Fragment {
 
@@ -18,6 +29,11 @@ public class CartFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private String mParam1;
     private String mParam2;
+    private DatabaseHelper db;
+    private RecyclerView cartRecycler;
+    private RecyclerView.LayoutManager layoutManager;
+    private CartListAdapter adapter;
+    private List<Product> list;
 
     public CartFragment() {
         // Required empty public constructor
@@ -44,8 +60,40 @@ public class CartFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_cart, container, false);
+        View view = inflater.inflate(R.layout.fragment_cart, container, false);
+        initComponent(view);
+        populateList();
+        return view;
+    }
+
+    private void initComponent(View view) {
+        db = new DatabaseHelper();
+        list = new ArrayList<>();
+        cartRecycler = view.findViewById(R.id.cartRecycler);
+        layoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
+        cartRecycler.setLayoutManager(layoutManager);
+
+    }
+
+    private void populateList() {
+        db.getCart(list1 -> {
+            list.clear();
+            list.addAll(list1);
+            Log.d("myTag", list.toString());
+            adapter.notifyDataSetChanged();
+        });
+        adapter = new CartListAdapter(list, product -> {
+            loadFragment(new ProductViewFragment(product));
+        });
+        cartRecycler.setAdapter(adapter);
+    }
+
+    public void loadFragment(Fragment fragment) {
+        FragmentManager manager = getActivity().getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.fragment_layout, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     @Override

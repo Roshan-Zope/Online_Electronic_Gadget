@@ -73,4 +73,9 @@
     <string name="edit_profile">Edit Profile</string>
     <string name="send_us_message">Send us a message</string>
     <string name="review">Give your honest review here!</string>
+    <string name="empty_cart_message">Empty cart!</string>
+    <string name="browse_products">Browse new products</string>
+    <string name="decrease_quantity">Decrease Quantity</string>
+    <string name="increase_quantity">Increase Quantity</string>
+    <string name="remove">Remove</string>
 </resources>

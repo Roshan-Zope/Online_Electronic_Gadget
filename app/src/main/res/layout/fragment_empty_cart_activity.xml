@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/white">
+
+    <ImageView
+        android:layout_margin="16dp"
+        android:id="@+id/empty_cart_image"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/shopping_cart_off_24px"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:id="@+id/empty_cart_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/empty_cart_image"
+        android:layout_centerHorizontal="true"
+        android:text="@string/empty_cart_message"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:layout_marginBottom="16dp" />
+
+    <Button
+        android:id="@+id/browse_products_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/empty_cart_message"
+        android:layout_centerHorizontal="true"
+        android:text="@string/browse_products"
+        android:onClick="onBrowseProductsClicked"
+        android:textColor="@color/white" />
+</RelativeLayout>

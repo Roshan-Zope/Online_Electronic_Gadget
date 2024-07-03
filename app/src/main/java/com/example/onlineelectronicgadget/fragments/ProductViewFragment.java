@@ -56,7 +56,6 @@ public class ProductViewFragment extends Fragment {
     private TextView spec14;
     private TextView spec15;
     private TextView spec16;
-    private TextView spec17;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private ReviewListAdapter adapter;
@@ -155,7 +154,6 @@ public class ProductViewFragment extends Fragment {
         spec14 = view.findViewById(R.id.spec14);
         spec15 = view.findViewById(R.id.spec15);
         spec16 = view.findViewById(R.id.spec16);
-        spec17 = view.findViewById(R.id.spec17);
         recyclerView = view.findViewById(R.id.reviewsRecycler);
         layoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -168,6 +166,17 @@ public class ProductViewFragment extends Fragment {
         
         prevButton.setOnClickListener(v -> showPrevImage());
         nextButton.setOnClickListener(v -> showNextImage());
+        addToCartButton.setOnClickListener(v -> onAddToCartButton());
+    }
+
+    private void onAddToCartButton() {
+        db.addToCart(product, flag -> {
+            if (flag) {
+                Log.d("myTag", "product added to cart");
+            } else {
+                Log.d("myTag", "product already in cart");
+            }
+        });
     }
 
     private void showNextImage() {
