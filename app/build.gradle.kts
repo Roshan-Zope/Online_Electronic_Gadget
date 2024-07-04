@@ -53,6 +53,7 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     implementation("org.apache.commons:commons-email:1.6.0")
     implementation("com.github.bumptech.glide:glide:4.12.0")
+    implementation(libs.firebase.storage)
     kapt("com.github.bumptech.glide:compiler:4.12.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.0")

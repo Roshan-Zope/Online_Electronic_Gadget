@@ -277,6 +277,7 @@ public class DatabaseHelper {
         if (product.getPrice() != -1) map.put("price", product.getPrice());
         if (product.getDescription() != null && !product.getDescription().isEmpty()) map.put("description", product.getDescription());
         if (product.getStocks() != -1) map.put("stocks", product.getStocks());
+        if (product.getImagesId() != null && !product.getImagesId().isEmpty()) map.put("imagesId", FieldValue.arrayUnion(product.getImagesId()));
         if (product instanceof Laptop) {
             Laptop laptop = (Laptop) product;
             if (laptop.getProcessor() != null && !laptop.getProcessor().isEmpty()) map.put("processor", laptop.getProcessor());
@@ -308,6 +309,7 @@ public class DatabaseHelper {
             if (tablets.getWarranty() != null && !tablets.getWarranty().isEmpty()) map.put("warranty", tablets.getWarranty());
             if (tablets.getCamera() != null && !tablets.getCamera().isEmpty()) map.put("camera", tablets.getCamera());
             if (tablets.getConnectivity() != null && !tablets.getConnectivity().isEmpty()) map.put("connectivity", tablets.getConnectivity());
+
         }
         if (product instanceof SmartTv) {
             SmartTv smartTv = (SmartTv) product;

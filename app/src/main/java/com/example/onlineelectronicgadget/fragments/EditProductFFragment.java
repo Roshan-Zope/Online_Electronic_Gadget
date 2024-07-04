@@ -1,17 +1,23 @@
 package com.example.onlineelectronicgadget.fragments;
 
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.onlineelectronicgadget.R;
@@ -23,12 +29,18 @@ import com.example.onlineelectronicgadget.models.Tablets;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EditProductFFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private String mParam1;
     private String mParam2;
+    private ImageView product_image1;
     private ChipGroup chipGroupEditProduct;
     private TextInputEditText product_model;
     private TextInputEditText product_price;
@@ -36,6 +48,7 @@ public class EditProductFFragment extends Fragment {
     private TextInputEditText product_stocks;
     private Button save_button;
     private Button cancel_button;
+    private List<String> imagesUri;
 
     public EditProductFFragment() {
         // Required empty public constructor
@@ -67,6 +80,27 @@ public class EditProductFFragment extends Fragment {
         return view;
     }
 
+    private void uploadImageToFirebase(Uri imageUri) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReference();
+
+        StorageReference imageRef = storageReference.child("images/" + System.currentTimeMillis() + ".jpg");
+
+        imageRef.putFile(imageUri)
+                .addOnSuccessListener(taskSnapshot -> imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                    String downloadUrl = uri.toString();
+                    Log.d("myTag", "Image uploaded: " + downloadUrl);
+                    storeImageUrlInFirestore(downloadUrl);
+                }))
+                .addOnFailureListener(exception -> {
+                    Log.e("myTag", "Image upload failed", exception);
+                });
+    }
+
+    private void storeImageUrlInFirestore(String downloadUrl) {
+        imagesUri.add(downloadUrl);
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -74,15 +108,35 @@ public class EditProductFFragment extends Fragment {
 
     private void initComponent(View view) {
         chipGroupEditProduct = view.findViewById(R.id.chipGroupEditProduct);
+        product_image1 = view.findViewById(R.id.product_image1);
         product_model = view.findViewById(R.id.product_model);
         product_price = view.findViewById(R.id.product_price);
         product_description = view.findViewById(R.id.product_description);
         product_stocks = view.findViewById(R.id.product_stocks);
         save_button = view.findViewById(R.id.save_button);
         cancel_button = view.findViewById(R.id.cancel_button);
+        imagesUri = new ArrayList<>();
+
+        ActivityResultLauncher<PickVisualMediaRequest> media = registerForActivityResult(new ActivityResultContracts.PickMultipleVisualMedia(3),
+                result -> {
+                    if (result != null && !result.isEmpty()) {
+                        for (Uri uri : result) {
+                            Log.d("myTag", uri.toString());
+                            uploadImageToFirebase(uri);
+                        }
+                    } else {
+                        Log.d("myTag", "No media selected");
+                    }
+                });
 
         save_button.setOnClickListener(v -> onSaveButton());
         cancel_button.setOnClickListener(v -> onCancelButton());
+        product_image1.setOnClickListener(v -> addProductImages(media));
+    }
+
+    private void addProductImages(ActivityResultLauncher<PickVisualMediaRequest> media) {
+        media.launch(new PickVisualMediaRequest.Builder()
+                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build());
     }
 
     private void loadFragment(Fragment fragment) {
@@ -163,6 +217,11 @@ public class EditProductFFragment extends Fragment {
             product.setCategory(String.valueOf(chip.getText()).trim().toLowerCase());
         } catch (NullPointerException e) {
             Toast.makeText(getContext(), "Please choice type of product", Toast.LENGTH_SHORT).show();
+        }
+        try {
+            product.setImagesId(imagesUri);
+        } catch (NullPointerException e) {
+            product.setImagesId(new ArrayList<>());
         }
     }
 }
