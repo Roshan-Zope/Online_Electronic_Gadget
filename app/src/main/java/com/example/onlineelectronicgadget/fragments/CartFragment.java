@@ -63,6 +63,7 @@ public class CartFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
         initComponent(view);
         populateList();
+        Log.d("myTag", "in cart fragment onCreateView()");
         return view;
     }
 
@@ -77,14 +78,16 @@ public class CartFragment extends Fragment {
 
     private void populateList() {
         db.getCart(list1 -> {
+            if (list1.isEmpty()) {
+                loadFragment(new EmptyCartActivity());
+                Log.d("myTag", "list is empty");
+            }
             list.clear();
             list.addAll(list1);
             Log.d("myTag", list.toString());
             adapter.notifyDataSetChanged();
         });
-        adapter = new CartListAdapter(list, product -> {
-            loadFragment(new ProductViewFragment(product));
-        });
+        adapter = new CartListAdapter(list, product -> loadFragment(new ProductViewFragment(product)), () -> loadFragment(new EmptyCartActivity()));
         cartRecycler.setAdapter(adapter);
     }
 

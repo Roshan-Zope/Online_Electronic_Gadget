@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.onlineelectronicgadget.R;
 import com.example.onlineelectronicgadget.database.DatabaseHelper;
+import com.example.onlineelectronicgadget.fragments.EmptyCartActivity;
 import com.example.onlineelectronicgadget.models.Product;
 
 import java.util.List;
@@ -24,8 +25,14 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
     private List<Product> list;
     private DatabaseHelper db;
     private ProductListAdapter.OnProductClickListener listener;
+    private OnCartEmptyListener cartEmptyListener;
 
-    public CartListAdapter(List<Product> list, ProductListAdapter.OnProductClickListener listener) {
+    public interface OnCartEmptyListener {
+        void onCartEmpty();
+    }
+
+    public CartListAdapter(List<Product> list, ProductListAdapter.OnProductClickListener listener, OnCartEmptyListener cartEmptyListener) {
+        this.cartEmptyListener = cartEmptyListener;
         this.listener = listener;
         this.list = list;
         this.db = new DatabaseHelper();
@@ -87,6 +94,9 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
                     if (flag) {
                         list.remove(product);
                         notifyDataSetChanged();
+                        if (list.isEmpty()) {
+                            cartEmptyListener.onCartEmpty();
+                        }
                     } else {
                         Log.d("myTag", "product not found");
                     }

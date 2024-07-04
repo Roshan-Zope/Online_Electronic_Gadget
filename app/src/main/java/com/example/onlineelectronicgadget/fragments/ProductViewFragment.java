@@ -7,6 +7,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import android.util.Log;
@@ -118,17 +120,24 @@ public class ProductViewFragment extends Fragment {
     private void loadImages() {
         if (product != null) {
             imageUrls = product.getImagesId();
-            if (!imageUrls.isEmpty()) {
-                loadImage(imageUrls.get(currentIdx));
+            if (imageUrls != null) {
+                if (!imageUrls.isEmpty()) {
+                    loadImage(imageUrls.get(currentIdx));
+                } else {
+                    loadImage("https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.facebook.com%2FAndroidOfficial%2F&psig=AOvVaw375Tj8OcLsp4ua8_OFGTmB&ust=1720096586337000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCNjGkqLxiocDFQAAAAAdAAAAABAE");
+                }
+            } else {
+                loadImage("https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.facebook.com%2FAndroidOfficial%2F&psig=AOvVaw375Tj8OcLsp4ua8_OFGTmB&ust=1720096586337000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCNjGkqLxiocDFQAAAAAdAAAAABAE");
             }
+
         }
     }
 
     private void loadImage(String s) {
         Glide
-                .with(getActivity())
-                .load(s)
-                .into(productImage);
+            .with(getActivity())
+            .load(s)
+            .into(productImage);
     }
 
     private void initComponent(View view) {
@@ -180,22 +189,26 @@ public class ProductViewFragment extends Fragment {
     }
 
     private void showNextImage() {
-        if (!imageUrls.isEmpty()) {
-            currentIdx++;
-            if (currentIdx >= imageUrls.size()) {
-                currentIdx = 0;
+        if (imageUrls != null) {
+            if (!imageUrls.isEmpty()) {
+                currentIdx++;
+                if (currentIdx >= imageUrls.size()) {
+                    currentIdx = 0;
+                }
+                loadImage(imageUrls.get(currentIdx));
             }
-            loadImage(imageUrls.get(currentIdx));
         }
     }
 
     private void showPrevImage() {
-        if (!imageUrls.isEmpty()) {
-            currentIdx--;
-            if (currentIdx <= 0) {
-                currentIdx = imageUrls.size()-1;
+        if (imageUrls != null) {
+            if (!imageUrls.isEmpty()) {
+                currentIdx--;
+                if (currentIdx <= 0) {
+                    currentIdx = imageUrls.size()-1;
+                }
+                loadImage(imageUrls.get(currentIdx));
             }
-            loadImage(imageUrls.get(currentIdx));
         }
     }
 
@@ -215,8 +228,8 @@ public class ProductViewFragment extends Fragment {
         spec2.setVisibility(View.VISIBLE);
         spec3.setText("Stocks: " + product.getStocks());
         spec3.setVisibility(View.VISIBLE);
-        Log.d("myTag", product.getReviews().toString());
-        adapter = new ReviewListAdapter(product.getReviews());
+        if (product.getReviews() != null) adapter = new ReviewListAdapter(product.getReviews());
+        else adapter = new ReviewListAdapter(new ArrayList<>());
         recyclerView.setAdapter(adapter);
 
         if (product instanceof Laptop) fillLaptop();

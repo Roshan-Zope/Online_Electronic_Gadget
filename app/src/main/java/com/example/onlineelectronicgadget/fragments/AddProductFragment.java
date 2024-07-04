@@ -89,7 +89,7 @@ public class AddProductFragment extends Fragment {
         String category = null;
         try {
             Chip chip = getActivity().findViewById(chipGroupAddProduct.getCheckedChipId());
-            category = String.valueOf(chip.getText()).trim();
+            category = String.valueOf(chip.getText()).trim().toLowerCase();
         } catch (NullPointerException e) {
             Toast.makeText(getContext(), "Please choice type of product", Toast.LENGTH_SHORT).show();
         }
@@ -99,22 +99,22 @@ public class AddProductFragment extends Fragment {
         }
 
         switch (category) {
-            case "Laptop":
+            case "laptop":
                 Laptop laptop = new Laptop();
                 fillProduct(laptop);
                 loadFragment(new AddLaptopFragment(laptop));
                 break;
-            case "Tablet":
+            case "tablet":
                 Tablets tablet = new Tablets();
                 fillProduct(tablet);
                 loadFragment(new AddTabFragment(tablet));
                 break;
-            case "Smart Tv":
+            case "tv":
                 SmartTv smartTv = new SmartTv();
                 fillProduct(smartTv);
                 loadFragment(new AddTvFragment(smartTv));
                 break;
-            case "Smart Watch":
+            case "watch":
                 SmartWatches smartWatch = new SmartWatches();
                 fillProduct(smartWatch);
                 loadFragment(new AddWatchFragment(smartWatch));

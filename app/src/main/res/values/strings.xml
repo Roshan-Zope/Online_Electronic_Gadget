@@ -37,7 +37,7 @@
     <string name="water_resistance">Water Resistance</string>
     <string name="smart_features">Smart Features</string>
     <string name="display_technology">Display Technology</string>
-    <string name="watch">Smart Watch</string>
+    <string name="watch">Watch</string>
     <string name="spec">Specification</string>
     <string name="watch_details">Smart Watch Details</string>
     <string name="product_brand">Product Brand</string>
@@ -60,7 +60,7 @@
     <string name="camera">Camera</string>
     <string name="processor">Processor</string>
     <string name="laptop_details">Laptop Details</string>
-    <string name="tv">Smart Tv</string>
+    <string name="tv">Tv</string>
     <string name="profile">Profile</string>
     <string name="save">Save</string>
     <string name="customer">Customer</string>
@@ -78,4 +78,5 @@
     <string name="decrease_quantity">Decrease Quantity</string>
     <string name="increase_quantity">Increase Quantity</string>
     <string name="remove">Remove</string>
+    <string name="binary_bazaar">Binary Bazaar</string>
 </resources>

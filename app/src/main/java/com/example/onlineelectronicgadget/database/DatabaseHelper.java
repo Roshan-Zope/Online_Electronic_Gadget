@@ -294,6 +294,7 @@ public class DatabaseHelper {
                 callback.onComplete(productList);
             } else {
                 Log.d("myTag", "Error getting document" + task.getException());
+                callback.onComplete(new ArrayList<>());
             }
         });
     }

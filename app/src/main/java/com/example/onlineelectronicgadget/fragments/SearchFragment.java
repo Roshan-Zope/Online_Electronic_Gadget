@@ -99,10 +99,10 @@ public class SearchFragment extends Fragment {
     }
 
     private void populateList() {
-        suggestionList.add("Laptops");
-        suggestionList.add("Smart Watches");
-        suggestionList.add("Smart Tv's");
-        suggestionList.add("Tablets");;
+        suggestionList.add("laptop");
+        suggestionList.add("watches");
+        suggestionList.add("tv");
+        suggestionList.add("tablet");;
         Log.d("myTag", "list populated");
     }
 
@@ -116,6 +116,7 @@ public class SearchFragment extends Fragment {
             productList.clear();
             productList.addAll(list);
             productListAdapter.notifyDataSetChanged();
+            Log.d("myTag", "in search fragment listener");
             progressBar.setVisibility(View.GONE);
         });
     }
@@ -149,9 +150,10 @@ public class SearchFragment extends Fragment {
             }
         });
 
-        productListAdapter = new ProductListAdapter(productList, product -> {
-            loadFragment(new ProductViewFragment(product));
-        });
+        productListAdapter = new ProductListAdapter(productList,
+                product -> {
+                    loadFragment(new ProductViewFragment(product));
+                });
 
     }
 
