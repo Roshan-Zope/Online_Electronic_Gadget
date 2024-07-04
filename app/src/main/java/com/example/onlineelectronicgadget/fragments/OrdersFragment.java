@@ -83,9 +83,13 @@ public class OrdersFragment extends Fragment {
 
     private void loadOrders() {
         db.getOrders(list1 -> {
-            list.clear();
-            list.addAll(list1);
-            adapter.notifyDataSetChanged();
+            if (!list1.isEmpty() && list1 != null) {
+                list.clear();
+                list.addAll(list1);
+                adapter.notifyDataSetChanged();
+            } else {
+                loadFragment(new EmptyOrdersFragment());
+            }
         });
     }
 

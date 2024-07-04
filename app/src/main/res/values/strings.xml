@@ -83,4 +83,5 @@
     <string name="place_order">Place Order</string>
     <string name="orders">Orders</string>
     <string name="date">Date</string>
+    <string name="empty_order_message">You dont order any product yet!</string>
 </resources>

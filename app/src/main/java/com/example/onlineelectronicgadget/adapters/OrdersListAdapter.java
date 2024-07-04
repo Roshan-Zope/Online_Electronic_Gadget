@@ -48,14 +48,14 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView imageView;
         private TextView product_name;
-        //private TextView product_price;
+        private TextView product_price2;
         private TextView date;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imageView);
             product_name = itemView.findViewById(R.id.product_name);
-            //product_price = itemView.findViewById(R.id.product_price);
+            product_price2 = itemView.findViewById(R.id.product_price2);
             date = itemView.findViewById(R.id.date);
         }
 
@@ -73,7 +73,7 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.Vi
                             .into(imageView);
                 }
                 product_name.setText(order.getProduct().getModel());
-                //product_price.setText(String.valueOf(order.getProduct().getPrice()));
+                product_price2.setText(String.valueOf(order.getProduct().getPrice()));
                 date.setText(order.getDate());
                 itemView.setOnClickListener(v -> listener.onCall(order.getProduct()));
             }

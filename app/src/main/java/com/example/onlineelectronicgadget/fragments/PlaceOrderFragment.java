@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.example.onlineelectronicgadget.R;
 import com.example.onlineelectronicgadget.database.DatabaseHelper;
 import com.example.onlineelectronicgadget.models.Product;
+import com.example.onlineelectronicgadget.util.CustomAlertDialog;
 
 public class PlaceOrderFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -31,7 +32,7 @@ public class PlaceOrderFragment extends Fragment {
     private ImageView product_image;
     private TextView product_name;
     private TextView product_description;
-    private TextView product_price;
+    private TextView product_price1;
     private Button place_order_button;
 
     public PlaceOrderFragment() {
@@ -72,7 +73,7 @@ public class PlaceOrderFragment extends Fragment {
         product_image = view.findViewById(R.id.product_image);
         product_description = view.findViewById(R.id.product_description);
         product_name = view.findViewById(R.id.product_name);
-        product_price = view.findViewById(R.id.product_price);
+        product_price1 = view.findViewById(R.id.product_price1);
         place_order_button = view.findViewById(R.id.place_order_button);
         db = new DatabaseHelper();
 
@@ -87,6 +88,7 @@ public class PlaceOrderFragment extends Fragment {
                         Log.d("myTag", "product already in cart");
                     }
                 });
+                CustomAlertDialog.showCustomDialog(getContext(), "Info", "Order is placed");
             }
         });
         if (accType.equals("Customer")) loadFragment(new HomeFragment());
@@ -119,7 +121,7 @@ public class PlaceOrderFragment extends Fragment {
             }
             product_description.setText(product.getDescription());
             product_name.setText(product.getModel());
-            product_price.setText("₹ " + product.getPrice());
+            product_price1.setText("₹ " + product.getPrice());
         }
     }
 }

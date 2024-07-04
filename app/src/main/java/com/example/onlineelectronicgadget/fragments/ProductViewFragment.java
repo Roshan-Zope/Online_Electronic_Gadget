@@ -30,6 +30,7 @@ import com.example.onlineelectronicgadget.models.Product;
 import com.example.onlineelectronicgadget.models.SmartTv;
 import com.example.onlineelectronicgadget.models.SmartWatches;
 import com.example.onlineelectronicgadget.models.Tablets;
+import com.example.onlineelectronicgadget.util.CustomAlertDialog;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -197,6 +198,7 @@ public class ProductViewFragment extends Fragment {
         db.addToCart(product, flag -> {
             if (flag) {
                 Log.d("myTag", "product added to cart");
+                CustomAlertDialog.showCustomDialog(getContext(), "Info", "Product is added to cart");
                 loadFragment(new CartFragment());
             } else {
                 Log.d("myTag", "product already in cart");

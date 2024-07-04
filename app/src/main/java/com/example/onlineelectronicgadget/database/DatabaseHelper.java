@@ -374,6 +374,58 @@ public class DatabaseHelper {
                 });
     }
 
+    public void deleteCart() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            firestore.collection("cart").whereEqualTo("uid", user.getUid())
+                    .get()
+                    .addOnCompleteListener(task -> {
+                       if (task.isSuccessful()) {
+                           for (DocumentSnapshot document : task.getResult()) {
+                               DocumentReference docRef = document.getReference();
+                               docRef.delete().addOnCompleteListener(task1 -> {
+                                   if (task1.isSuccessful()) {
+                                       Log.d("myTag", "document deleted");
+                                   } else {
+                                       Log.d("myTag", "unable to clear data");
+                                   }
+                               });
+                           }
+                       } else {
+                           Log.d("myTag", "unable to clear data");
+                       }
+                    });
+        } else {
+            Log.d("myTag", "unable to clear data");
+        }
+    }
+
+    public void deleteOrders() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            firestore.collection("orders").whereEqualTo("uid", user.getUid())
+                    .get()
+                    .addOnCompleteListener(task -> {
+                       if (task.isSuccessful()) {
+                           for (DocumentSnapshot document : task.getResult()) {
+                               DocumentReference docRef = document.getReference();
+                               docRef.delete().addOnCompleteListener(task1 -> {
+                                           if (task1.isSuccessful()) {
+                                               Log.d("myTag", "document deleted");
+                                           } else {
+                                               Log.d("myTag", "unable to clear data");
+                                           }
+                                       });
+                           }
+                       } else {
+                           Log.d("myTag", "unable to clear data");
+                       }
+                    });
+        } else {
+            Log.d("myTag", "unable to clear data");
+        }
+    }
+
     public void getUserAccountType(String email, AccountTypeCallback callback) {
         firestore.collection("users").whereEqualTo("email", email).get()
                 .addOnCompleteListener(task -> {

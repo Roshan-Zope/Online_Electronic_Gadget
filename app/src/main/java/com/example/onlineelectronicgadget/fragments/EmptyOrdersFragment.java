@@ -16,20 +16,20 @@ import android.widget.Button;
 import com.example.onlineelectronicgadget.R;
 import com.example.onlineelectronicgadget.authentication.Auth;
 
-public class EmptyCartActivity extends Fragment {
+public class EmptyOrdersFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private String mParam1;
     private String mParam2;
-    private String accType;
     private Button browseProduct;
+    private String accType;
 
-    public EmptyCartActivity() {
+    public EmptyOrdersFragment() {
         // Required empty public constructor
     }
 
-    public static EmptyCartActivity newInstance(String param1, String param2) {
-        EmptyCartActivity fragment = new EmptyCartActivity();
+    public static EmptyOrdersFragment newInstance(String param1, String param2) {
+        EmptyOrdersFragment fragment = new EmptyOrdersFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -49,7 +49,7 @@ public class EmptyCartActivity extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_empty_cart_activity, container, false);
+        View view = inflater.inflate(R.layout.fragment_empty_orders, container, false);
         browseProduct = view.findViewById(R.id.browse_products_button);
         return view;
     }
@@ -57,7 +57,6 @@ public class EmptyCartActivity extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         browseProduct.setOnClickListener(v -> {
             accType = Auth.currentUser.getAccType();
             if (accType.equals("Customer")) loadFragment(new HomeFragment());

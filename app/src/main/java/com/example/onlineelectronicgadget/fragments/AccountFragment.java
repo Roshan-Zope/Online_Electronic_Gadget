@@ -20,6 +20,7 @@ import com.example.onlineelectronicgadget.activities.RegisterActivity;
 import com.example.onlineelectronicgadget.authentication.Auth;
 import com.example.onlineelectronicgadget.database.DatabaseHelper;
 import com.example.onlineelectronicgadget.models.User;
+import com.example.onlineelectronicgadget.util.CustomAlertDialog;
 
 public class AccountFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -88,17 +89,27 @@ public class AccountFragment extends Fragment {
         });
 
         logOut.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), LoginActivity.class);
-            getActivity().finish();
-            startActivity(intent);
+            CustomAlertDialog.showDialog(getContext(), "Alert!", "Do you want to log out?", flag -> {
+                if (flag) {
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    getActivity().finish();
+                    startActivity(intent);
+                }
+            });
         });
 
         deleteAcc.setOnClickListener(v -> {
-            auth.deleteAcc(user.getEmail(), user.getPassword());
-            db.deleteAcc(user);
-            Intent intent = new Intent(getActivity(), RegisterActivity.class);
-            getActivity().finish();
-            startActivity(intent);
+            CustomAlertDialog.showDialog(getContext(), "Alert!", "Do you want delete your account? This will erase your all data.", flag -> {
+                if (flag) {
+                    db.deleteOrders();
+                    db.deleteCart();
+                    auth.deleteAcc(user.getEmail(), user.getPassword());
+                    db.deleteAcc(user);
+                    Intent intent = new Intent(getActivity(), RegisterActivity.class);
+                    getActivity().finish();
+                    startActivity(intent);
+                }
+            });
         });
 
         orders.setOnClickListener(v -> {

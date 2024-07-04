@@ -33,14 +33,14 @@
             android:text="@string/description"
             android:textSize="14sp" />
 
-<!--        <TextView-->
-<!--            android:id="@+id/product_price"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="8dp"-->
-<!--            android:text="@string/product_price"-->
-<!--            android:textColor="@android:color/holo_red_dark"-->
-<!--            android:textSize="16sp" />-->
+        <TextView
+            android:id="@+id/product_price1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/product_price"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="16sp" />
 
         <Button
             android:backgroundTint="#FF9800"
