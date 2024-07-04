@@ -6,19 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.example.onlineelectronicgadget.R;
 import com.example.onlineelectronicgadget.database.DatabaseHelper;
-import com.example.onlineelectronicgadget.fragments.EmptyCartActivity;
 import com.example.onlineelectronicgadget.models.Product;
-
 import java.util.List;
 
 public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHolder> {
@@ -57,17 +51,13 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView imageView;
-        private TextView product_name;
-        private TextView product_color;
-        private TextView price;
-        private Button removeButton;
-        private Button buyButton;
+        private TextView product_name, price;
+        private Button removeButton, buyButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imageView);
             product_name = itemView.findViewById(R.id.product_name);
-            product_color = itemView.findViewById(R.id.product_color);
             price = itemView.findViewById(R.id.price);
             removeButton = itemView.findViewById(R.id.removeButton);
             buyButton = itemView.findViewById(R.id.buyButton);
@@ -75,7 +65,6 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
 
         public void bind(Product product, ProductListAdapter.OnProductClickListener listener) {
             product_name.setText(product.getBrand() + product.getModel());
-            //product_color.setText(product.getStocks());
             price.setText(String.valueOf(product.getPrice()));
             if (product.getImagesId() != null && !product.getImagesId().isEmpty()) {
                 Glide.with(itemView.getContext())
@@ -89,22 +78,21 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
                         .into(imageView);
             }
 
-            removeButton.setOnClickListener(v -> {
-                db.removeFromCart(product.getId(), flag -> {
-                    if (flag) {
-                        list.remove(product);
-                        notifyDataSetChanged();
-                        if (list.isEmpty()) {
-                            cartEmptyListener.onCartEmpty();
-                        }
-                    } else {
-                        Log.d("myTag", "product not found");
-                    }
-                });
-            });
+            removeButton.setOnClickListener(v -> onRemoveButton(product));
+            itemView.setOnClickListener(v -> listener.onProductClick(product));
+        }
 
-            imageView.setOnClickListener(v -> {
-                listener.onProductClick(product);
+        private void onRemoveButton(Product product) {
+            db.removeFromCart(product.getId(), flag -> {
+                if (flag) {
+                    list.remove(product);
+                    notifyDataSetChanged();
+                    if (list.isEmpty()) {
+                        cartEmptyListener.onCartEmpty();
+                    }
+                } else {
+                    Log.d("myTag", "product not found");
+                }
             });
         }
     }

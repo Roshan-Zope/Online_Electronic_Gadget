@@ -3,6 +3,7 @@ package com.example.onlineelectronicgadget.activities;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -36,6 +37,10 @@ public class MainActivity extends AppCompatActivity {
         auth.authenticate();
         Log.d("myTag", "after authenticate()");
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        loadFragmentWithRespectToAccType(user);
+    }
+
+    private void loadFragmentWithRespectToAccType(FirebaseUser user) {
         if (user != null) {
             String id = user.getUid();
             SharedPreferences preferences = getSharedPreferences("myPref", MODE_PRIVATE);
@@ -43,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
             if (accType == null) {
                 accType = "Customer";
             }
-
 
             if (accType.equals("Customer")) {
                 loadFragment(new HomeFragment());
@@ -53,26 +57,28 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "check your account type", Toast.LENGTH_SHORT).show();
             }
 
-            bottomNavigationView.setOnItemSelectedListener(item -> {
-                if (item.getItemId() == R.id.home_option) {
-                    if (accType.equals("Customer")) loadFragment(new HomeFragment());
-                    else if (accType.equals("Retailer")) loadFragment(new AdminHomeScreen());
-                }
-                if (item.getItemId() == R.id.search_option) {
-                    loadFragment(new SearchFragment());
-                }
-                if (item.getItemId() == R.id.cart_option) {
-                    loadFragment(new CartFragment());
-                }
-                if (item.getItemId() == R.id.account_option) {
-                    loadFragment(new AccountFragment());
-                }
-
-                return true;
-            });
+            bottomNavigationView.setOnItemSelectedListener(this::onBottomViewListener);
         } else {
             Log.d("myTag", "user is not login");
         }
+    }
+
+    private boolean onBottomViewListener(MenuItem item) {
+        if (item.getItemId() == R.id.home_option) {
+            if (accType.equals("Customer")) loadFragment(new HomeFragment());
+            else if (accType.equals("Retailer")) loadFragment(new AdminHomeScreen());
+        }
+        if (item.getItemId() == R.id.search_option) {
+            loadFragment(new SearchFragment());
+        }
+        if (item.getItemId() == R.id.cart_option) {
+            loadFragment(new CartFragment());
+        }
+        if (item.getItemId() == R.id.account_option) {
+            loadFragment(new AccountFragment());
+        }
+
+        return true;
     }
 
     private void loadFragment(Fragment fragment) {

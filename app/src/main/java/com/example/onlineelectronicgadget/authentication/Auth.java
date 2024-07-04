@@ -35,7 +35,6 @@ public class Auth {
 
         if (user != null) {
             AuthCredential credential = EmailAuthProvider.getCredential(currentEmail, currPassword);
-
             user.reauthenticate(credential).addOnCompleteListener(task -> {
                if (task.isSuccessful()) {
                    Log.d("myTag", "user re-authenticated");
@@ -73,7 +72,6 @@ public class Auth {
 
         if (user != null) {
             AuthCredential credential = EmailAuthProvider.getCredential(email, oldPassword);
-
             user.reauthenticate(credential).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Log.d("myTag", "user re-authenticated");
@@ -90,11 +88,6 @@ public class Auth {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         db.updateUser(user.getUid(), newPassword, "password");
-                        /*user.sendEmailVerification().addOnCompleteListener(task1 -> {
-                            Toast.makeText(context, "verification email sent to your email", Toast.LENGTH_SHORT).show();
-                        }).addOnFailureListener(e -> {
-                            Toast.makeText(context, "email verification failed", Toast.LENGTH_SHORT).show();
-                        });*/
                         Log.d("myTag", "email changed successfully");
                     }
                 }).addOnFailureListener(e -> {

@@ -44,8 +44,7 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView productImage;
-        private TextView productName;
-        private TextView productPrice;
+        private TextView productName, productPrice;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

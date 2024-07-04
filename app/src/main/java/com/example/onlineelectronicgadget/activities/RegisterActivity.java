@@ -20,14 +20,8 @@ import java.util.List;
 
 public class RegisterActivity extends AppCompatActivity {
     private Auth auth;
-    private TextInputLayout tlName;
-    private TextInputLayout tlEmailR;
-    private TextInputLayout tlPasswordR;
-    private TextInputLayout tlConfirmPassword;
-    private TextInputEditText nameEditText;
-    private TextInputEditText emailEditTextR;
-    private TextInputEditText passwordEditTextR;
-    private TextInputEditText confirmPasswordEditText;
+    private TextInputLayout tlName, tlEmailR, tlPasswordR, tlConfirmPassword;
+    private TextInputEditText nameEditText, emailEditTextR, passwordEditTextR, confirmPasswordEditText;
     private TextView loginLink;
     private Button registerButton;
     private ChipGroup chipGroup;

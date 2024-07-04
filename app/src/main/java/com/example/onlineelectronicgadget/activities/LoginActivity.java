@@ -19,10 +19,8 @@ import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
     private Auth auth;
-    private TextInputLayout tlEmail;
-    private TextInputLayout tlPassword;
-    private TextInputEditText etEmail;
-    private TextInputEditText etPassword;
+    private TextInputLayout tlEmail, tlPassword;
+    private TextInputEditText etEmail, etPassword;
     private Button loginButton;
     private TextView registerLink;
     private ChipGroup chipGroupL;

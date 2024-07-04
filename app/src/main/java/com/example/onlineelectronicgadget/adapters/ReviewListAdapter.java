@@ -18,7 +18,6 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.Vi
     private List<String> list;
 
     public ReviewListAdapter(List<String> list) {
-
         this.list = list;
     }
 
