@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.onlineelectronicgadget.R;
@@ -20,13 +21,19 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
     private DatabaseHelper db;
     private ProductListAdapter.OnProductClickListener listener;
     private OnCartEmptyListener cartEmptyListener;
+    private OnPlaceOrderClickListener clickListener;
+
+    public interface OnPlaceOrderClickListener {
+        void onClick(Product product);
+    }
 
     public interface OnCartEmptyListener {
         void onCartEmpty();
     }
 
-    public CartListAdapter(List<Product> list, ProductListAdapter.OnProductClickListener listener, OnCartEmptyListener cartEmptyListener) {
+    public CartListAdapter(List<Product> list, ProductListAdapter.OnProductClickListener listener, OnCartEmptyListener cartEmptyListener, OnPlaceOrderClickListener clickListener) {
         this.cartEmptyListener = cartEmptyListener;
+        this.clickListener = clickListener;
         this.listener = listener;
         this.list = list;
         this.db = new DatabaseHelper();
@@ -79,6 +86,7 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
             }
 
             removeButton.setOnClickListener(v -> onRemoveButton(product));
+            buyButton.setOnClickListener(v -> clickListener.onClick(product));
             itemView.setOnClickListener(v -> listener.onProductClick(product));
         }
 

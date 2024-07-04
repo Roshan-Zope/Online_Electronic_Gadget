@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -176,12 +178,26 @@ public class ProductViewFragment extends Fragment {
         prevButton.setOnClickListener(v -> showPrevImage());
         nextButton.setOnClickListener(v -> showNextImage());
         addToCartButton.setOnClickListener(v -> onAddToCartButton());
+        buyNowButton.setOnClickListener(v -> onBuyNowButton());
+    }
+
+    private void onBuyNowButton() {
+        loadFragment(new PlaceOrderFragment(product));
+    }
+
+    private void loadFragment(Fragment fragment) {
+        FragmentManager manager = getActivity().getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.fragment_layout, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     private void onAddToCartButton() {
         db.addToCart(product, flag -> {
             if (flag) {
                 Log.d("myTag", "product added to cart");
+                loadFragment(new CartFragment());
             } else {
                 Log.d("myTag", "product already in cart");
             }

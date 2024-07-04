@@ -29,7 +29,7 @@ public class AccountFragment extends Fragment {
     private TextView user_name;
     private TextView user_email;
     private Button edit_profile_button;
-    private TextView sendMsg;
+    private TextView orders;
     private TextView aboutUs;
     private TextView deleteAcc;
     private TextView logOut;
@@ -70,7 +70,7 @@ public class AccountFragment extends Fragment {
         user_name = view.findViewById(R.id.user_name);
         user_email = view.findViewById(R.id.user_email);
         edit_profile_button = view.findViewById(R.id.edit_profile_button);
-        sendMsg = view.findViewById(R.id.sendMsg);
+        orders = view.findViewById(R.id.orders);
         aboutUs = view.findViewById(R.id.aboutUs);
         deleteAcc = view.findViewById(R.id.deleteAcc);
         logOut = view.findViewById(R.id.logOut);
@@ -99,6 +99,10 @@ public class AccountFragment extends Fragment {
             Intent intent = new Intent(getActivity(), RegisterActivity.class);
             getActivity().finish();
             startActivity(intent);
+        });
+
+        orders.setOnClickListener(v -> {
+            loadFragment(new OrdersFragment());
         });
     }
 

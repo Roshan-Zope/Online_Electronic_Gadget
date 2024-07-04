@@ -83,7 +83,7 @@ public class AdminHomeScreen extends Fragment {
         Log.d("myTag", "in loadProductByCategory()");
         progressBar.setVisibility(View.VISIBLE);
 
-        db.search(map, products -> {
+        db.search(map, (products, total) -> {
             Log.d("myTag", "in loadProductByCategory()" + products.toString());
             list.clear();
             list.addAll(products);

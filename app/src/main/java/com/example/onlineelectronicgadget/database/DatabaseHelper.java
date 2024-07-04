@@ -1,6 +1,8 @@
 package com.example.onlineelectronicgadget.database;
 
+import com.example.onlineelectronicgadget.authentication.Auth;
 import com.example.onlineelectronicgadget.models.Laptop;
+import com.example.onlineelectronicgadget.models.Order;
 import com.example.onlineelectronicgadget.models.Product;
 
 import android.util.Log;
@@ -22,16 +24,26 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class DatabaseHelper {
     private final FirebaseFirestore firestore;
 
     public interface Callback {
-        void onComplete(List<Product> list);
+        void onComplete(List<Product> list, double total);
+    }
+
+    public interface OrderCallback {
+        void onCall(List<Order> list);
     }
 
     public interface FireStoreCallback {
@@ -62,12 +74,42 @@ public class DatabaseHelper {
                                Product product = document.get("product", Product.class);
                                list.add(product);
                            }
+                           double total = getTotal(list);
                            Log.d("myTag", list.toString());
-                           callback.onComplete(list);
+                           callback.onComplete(list, total);
                            Log.d("mmyTag", "cart retrieve");
                        } else {
-                           callback.onComplete(null);
+                           callback.onComplete(null, 0);
                        }
+                    });
+        }
+    }
+
+    private double getTotal(List<Product> list) {
+        double total = 0;
+        for (Product product : list) {
+            total += product.getPrice();
+        }
+        return total;
+    }
+
+    public void getOrders(OrderCallback listener) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        List<Order> list = new ArrayList<>();
+        if (user != null) {
+            firestore.collection("orders").whereEqualTo("uid", user.getUid())
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Order order = document.toObject(Order.class);
+                                list.add(order);
+                            }
+                            Log.d("myTag", list.toString());
+                            listener.onCall(list);
+                        } else {
+                            listener.onCall(null);
+                        }
                     });
         }
     }
@@ -75,7 +117,7 @@ public class DatabaseHelper {
     public void addToCart(Product product, IsProductAlreadyPresentCallback listener) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (product != null && user != null) {
-            isProductAlreadyPresentInCart(product.getId(), list -> {
+            isProductAlreadyPresentInCart(product.getId(), (list,total) -> {
                 if (list != null && list.isEmpty()) {
                     DocumentReference docRef = firestore.collection("cart").document();
 
@@ -104,6 +146,55 @@ public class DatabaseHelper {
         }
     }
 
+    public String saveOrder(Product product, IsProductAlreadyPresentCallback listener) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (product != null && user != null) {
+            DocumentReference docRef = firestore.collection("orders").document();
+
+            Date currentDate = Calendar.getInstance().getTime();
+            String formattedDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(currentDate);
+
+            Map<String, Object> map = new HashMap<>();
+            map.put("uid", user.getUid());
+            map.put("product", product);
+            map.put("date", formattedDate);
+
+            firestore.collection("orders")
+                    .document(docRef.getId())
+                    .set(map)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Log.d("myTag", "order placed");
+                        } else {
+                            Log.d("myTag", "unable to place order");
+                        }
+                    });
+
+            isProductAlreadyPresentInCart(product.getId(), (list,total) -> {
+                if (list != null && !list.isEmpty()) {
+                    listener.onCallback(true);
+                }
+                listener.onCallback(false);
+            });
+
+            Map<String, Object> map1 = new HashMap<>();
+            map1.put("stocks", product.getStocks()-1);
+
+            firestore.collection("products")
+                    .document(product.getId())
+                    .update(map1)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Log.d("myTag", "stock is updated successfully");
+                        } else {
+                            Log.d("myTag", "unable to update stock");
+                        }
+                    });
+        }
+
+        return Auth.currentUser.getAccType();
+    }
+
     public void isProductAlreadyPresentInCart(String id, Callback listener) {
         List<Product> list = new ArrayList<>();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -117,9 +208,9 @@ public class DatabaseHelper {
                                Product product = document.get("product", Product.class);
                                list.add(product);
                            }
-                           listener.onComplete(list);
+                           listener.onComplete(list, 0);
                        } else {
-                           listener.onComplete(null);
+                           listener.onComplete(null, 0);
                        }
                     });
         }
@@ -395,10 +486,10 @@ public class DatabaseHelper {
                     if (product != null) productList.add(product);
                     Log.d("myTag", product.toString());
                 }
-                callback.onComplete(productList);
+                callback.onComplete(productList, 0);
             } else {
                 Log.d("myTag", "Error getting document" + task.getException());
-                callback.onComplete(new ArrayList<>());
+                callback.onComplete(new ArrayList<>(), 0);
             }
         });
     }

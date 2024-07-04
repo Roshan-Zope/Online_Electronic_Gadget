@@ -80,4 +80,7 @@
     <string name="remove">Remove</string>
     <string name="binary_bazaar">Binary Bazaar</string>
     <string name="edit_product">Edit Product</string>
+    <string name="place_order">Place Order</string>
+    <string name="orders">Orders</string>
+    <string name="date">Date</string>
 </resources>

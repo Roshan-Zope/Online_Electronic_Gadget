@@ -112,7 +112,7 @@ public class SearchFragment extends Fragment {
         Map<String, Object> parseQuery = QuerySimplifier.parseQuery(query);
         progressBar.setVisibility(View.VISIBLE);
 
-        db.search(parseQuery, list -> {
+        db.search(parseQuery, (list, total) -> {
             productList.clear();
             productList.addAll(list);
             productListAdapter.notifyDataSetChanged();

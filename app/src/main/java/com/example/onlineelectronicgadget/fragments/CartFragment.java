@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.onlineelectronicgadget.R;
 import com.example.onlineelectronicgadget.adapters.CartListAdapter;
@@ -34,6 +35,8 @@ public class CartFragment extends Fragment {
     private RecyclerView.LayoutManager layoutManager;
     private CartListAdapter adapter;
     private List<Product> list;
+    private TextView totalAmount;
+    private double total;
 
     public CartFragment() {
         // Required empty public constructor
@@ -70,14 +73,14 @@ public class CartFragment extends Fragment {
     private void initComponent(View view) {
         db = new DatabaseHelper();
         list = new ArrayList<>();
+        totalAmount = view.findViewById(R.id.totalAmount);
         cartRecycler = view.findViewById(R.id.cartRecycler);
         layoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         cartRecycler.setLayoutManager(layoutManager);
-
     }
 
     private void populateList() {
-        db.getCart(list1 -> {
+        db.getCart((list1, total1)  -> {
             if (list1.isEmpty()) {
                 loadFragment(new EmptyCartActivity());
                 Log.d("myTag", "list is empty");
@@ -86,8 +89,10 @@ public class CartFragment extends Fragment {
             list.addAll(list1);
             Log.d("myTag", list.toString());
             adapter.notifyDataSetChanged();
+            total = total1;
+            totalAmount.setText("₹ " + total);
         });
-        adapter = new CartListAdapter(list, product -> loadFragment(new ProductViewFragment(product)), () -> loadFragment(new EmptyCartActivity()));
+        adapter = new CartListAdapter(list, product -> loadFragment(new ProductViewFragment(product)), () -> loadFragment(new EmptyCartActivity()), (product) -> loadFragment(new PlaceOrderFragment(product)));
         cartRecycler.setAdapter(adapter);
     }
 
