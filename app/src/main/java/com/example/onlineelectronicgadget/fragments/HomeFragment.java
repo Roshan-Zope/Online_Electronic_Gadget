@@ -88,10 +88,9 @@ public class HomeFragment extends Fragment {
             Log.d("myTag", "in loadProductByCategory()" + products.toString());
             list.clear();
             list.addAll(products);
+            progressBar.setVisibility(View.GONE);
             adapter.notifyDataSetChanged();
         });
-
-        progressBar.setVisibility(View.GONE);
     }
 
     private void initComponent(View view) {

@@ -46,6 +46,15 @@
         </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/editProductButton"
+            android:layout_gravity="end|bottom"
+            android:layout_marginBottom="84dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/edit_24px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/addProductButton"
             android:layout_gravity="end|bottom"
             android:layout_marginBottom="16dp"

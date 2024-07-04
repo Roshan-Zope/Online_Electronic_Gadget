@@ -13,47 +13,43 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.onlineelectronicgadget.R;
 import com.example.onlineelectronicgadget.database.DatabaseHelper;
-import com.example.onlineelectronicgadget.models.Product;
-import com.example.onlineelectronicgadget.models.Tablets;
+import com.example.onlineelectronicgadget.models.Laptop;
 import com.google.android.material.textfield.TextInputEditText;
 
-public class AddTabFragment extends Fragment {
+public class EditLaptopFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private String mParam1;
     private String mParam2;
-    private Tablets tablets;
     private DatabaseHelper db;
+    private Laptop laptop;
     private TextInputEditText processor;
     private TextInputEditText ram;
     private TextInputEditText storage;
     private TextInputEditText display;
     private TextInputEditText os;
     private TextInputEditText batteryLife;
-    private TextInputEditText weight;
-    private TextInputEditText color;
     private TextInputEditText ports;
+    private TextInputEditText weight;
+    private TextInputEditText dimension;
+    private TextInputEditText color;
     private TextInputEditText warranty;
-    private TextInputEditText camera;
-    private TextInputEditText connectivity;
     private Button save_button;
     private Button cancel_button;
 
-    public AddTabFragment() {
+    public EditLaptopFragment() {
         // Required empty public constructor
     }
 
-    public AddTabFragment(Tablets tablets) {
-        this.tablets = tablets;
-        Log.d("myTag", tablets.toString());
+    public EditLaptopFragment(Laptop laptop) {
+        this.laptop = laptop;
     }
 
-    public static AddTabFragment newInstance(String param1, String param2) {
-        AddTabFragment fragment = new AddTabFragment();
+    public static EditLaptopFragment newInstance(String param1, String param2) {
+        EditLaptopFragment fragment = new EditLaptopFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -73,14 +69,9 @@ public class AddTabFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_tab, container, false);
+        View view = inflater.inflate(R.layout.fragment_edit_laptop, container, false);
         initComponent(view);
         return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
     }
 
     private void initComponent(View view) {
@@ -94,14 +85,81 @@ public class AddTabFragment extends Fragment {
         ports = view.findViewById(R.id.ports);
         weight = view.findViewById(R.id.weight);
         color = view.findViewById(R.id.color);
+        dimension = view.findViewById(R.id.dimension);
         warranty = view.findViewById(R.id.warranty);
-        camera = view.findViewById(R.id.camera);
-        connectivity = view.findViewById(R.id.connectivity);
         save_button = view.findViewById(R.id.save_button);
         cancel_button = view.findViewById(R.id.cancel_button);
 
         save_button.setOnClickListener(v -> onSaveButton());
         cancel_button.setOnClickListener(v -> onCancelButton());
+    }
+
+    private void onCancelButton() {
+        getParentFragmentManager().popBackStack();
+    }
+
+    private void onSaveButton() {
+        fillLaptop(laptop);
+        db.updateProduct(laptop);
+        loadFragment(new AdminHomeScreen());
+    }
+
+    private void fillLaptop(Laptop laptop) {
+        try {
+            laptop.setProcessor(String.valueOf(processor.getText()).trim());
+        } catch (NullPointerException e) {
+            laptop.setProcessor(null);
+        }
+        try {
+            laptop.setRam(String.valueOf(ram.getText()).trim());
+        } catch (NullPointerException e) {
+            laptop.setRam(null);
+        }
+        try {
+            laptop.setStorage(String.valueOf(storage.getText()).trim());
+        } catch (NullPointerException e) {
+            laptop.setStorage(null);
+        }
+        try {
+            laptop.setDisplay(String.valueOf(display.getText()).trim());
+        } catch (NullPointerException e) {
+            laptop.setDisplay(null);
+        }
+        try {
+            laptop.setOs(String.valueOf(os.getText()).trim());
+        } catch (NullPointerException e) {
+            laptop.setOs(null);
+        }
+        try {
+            laptop.setBatteryLife(String.valueOf(batteryLife.getText()).trim());
+        } catch (NullPointerException e) {
+            laptop.setBatteryLife(null);
+        }
+        try {
+            laptop.setPorts(String.valueOf(ports.getText()).trim());
+        } catch (NullPointerException e) {
+            laptop.setPorts(null);
+        }
+        try {
+            laptop.setWeight(Double.parseDouble(String.valueOf(weight.getText()).trim()));
+        } catch (NullPointerException | NumberFormatException e) {
+            laptop.setWeight(-1);
+        }
+        try {
+            laptop.setColor(String.valueOf(color.getText()).trim());
+        } catch (NullPointerException e) {
+            laptop.setColor(null);
+        }
+        try {
+            laptop.setWarranty(String.valueOf(warranty.getText()).trim());
+        } catch (NullPointerException e) {
+            laptop.setWarranty(null);
+        }
+        try {
+            laptop.setDimension(String.valueOf(dimension.getText()).trim());
+        } catch (NullPointerException e) {
+            laptop.setDimension(null);
+        }
     }
 
     private void loadFragment(Fragment fragment) {
@@ -112,77 +170,8 @@ public class AddTabFragment extends Fragment {
         transaction.commit();
     }
 
-    private void onCancelButton() {
-        getParentFragmentManager().popBackStack();
-    }
-
-    private void onSaveButton() {
-        fillTablet(tablets);
-        String id = db.saveProduct(tablets);
-        Toast.makeText(getActivity(), "product id: " + id, Toast.LENGTH_LONG).show();
-        loadFragment(new AdminHomeScreen());
-    }
-
-    private void fillTablet(Tablets tablets) {
-        try {
-            tablets.setProcessor(String.valueOf(processor.getText()).trim());
-        } catch (NullPointerException e) {
-            tablets.setProcessor(null);
-        }
-        try {
-            tablets.setRam(String.valueOf(ram.getText()).trim());
-        } catch (NullPointerException e) {
-            tablets.setRam(null);
-        }
-        try {
-            tablets.setStorage(String.valueOf(storage.getText()).trim());
-        } catch (NullPointerException e) {
-            tablets.setStorage(null);
-        }
-        try {
-            tablets.setDisplay(String.valueOf(display.getText()).trim());
-        } catch (NullPointerException e) {
-            tablets.setDisplay(null);
-        }
-        try {
-            tablets.setOs(String.valueOf(os.getText()).trim());
-        } catch (NullPointerException e) {
-            tablets.setOs(null);
-        }
-        try {
-            tablets.setBatteryLife(String.valueOf(batteryLife.getText()).trim());
-        } catch (NullPointerException e) {
-            tablets.setBatteryLife(null);
-        }
-        try {
-            tablets.setPorts(String.valueOf(ports.getText()).trim());
-        } catch (NullPointerException e) {
-            tablets.setPorts(null);
-        }
-        try {
-            tablets.setWeight(Double.parseDouble(String.valueOf(weight.getText()).trim()));
-        } catch (NullPointerException | NumberFormatException e) {
-            tablets.setWeight(-1);
-        }
-        try {
-            tablets.setColor(String.valueOf(color.getText()).trim());
-        } catch (NullPointerException e) {
-            tablets.setColor(null);
-        }
-        try {
-            tablets.setWarranty(String.valueOf(warranty.getText()).trim());
-        } catch (NullPointerException e) {
-            tablets.setWarranty(null);
-        }
-        try {
-            tablets.setCamera(String.valueOf(camera.getText()).trim());
-        } catch (NullPointerException e) {
-            tablets.setCamera(null);
-        }
-        try {
-            tablets.setConnectivity(String.valueOf(connectivity.getText()).trim());
-        } catch (NullPointerException e) {
-            tablets.setConnectivity(null);
-        }
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 }

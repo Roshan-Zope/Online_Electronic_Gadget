@@ -35,6 +35,7 @@ public class AdminHomeScreen extends Fragment {
     private String mParam1;
     private String mParam2;
     private FloatingActionButton addProductButton;
+    private FloatingActionButton editProductButton;
     private DatabaseHelper db;
     private ProgressBar progressBar;
     private RecyclerView recyclerView;
@@ -94,6 +95,7 @@ public class AdminHomeScreen extends Fragment {
 
     private void initComponent(View view) {
         addProductButton = view.findViewById(R.id.addProductButton);
+        editProductButton = view.findViewById(R.id.editProductButton);
         db = new DatabaseHelper();
         progressBar = view.findViewById(R.id.progressBar);
         recyclerView = view.findViewById(R.id.recyclerView);
@@ -116,6 +118,7 @@ public class AdminHomeScreen extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         addProductButton.setOnClickListener(v -> onAddProductButton());
+        editProductButton.setOnClickListener(v -> onEditProductButton());
 
         categoryAdapter = new CategoryAdapter(categories, category -> {
             loadProductByCategory(category.toLowerCase());
@@ -129,6 +132,10 @@ public class AdminHomeScreen extends Fragment {
         });
 
         recyclerView.setAdapter(adapter);
+    }
+
+    private void onEditProductButton() {
+        loadFragment(new EditProductFFragment());
     }
 
     private void onAddProductButton() {

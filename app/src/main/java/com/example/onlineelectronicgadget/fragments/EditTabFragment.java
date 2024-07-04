@@ -13,15 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.onlineelectronicgadget.R;
 import com.example.onlineelectronicgadget.database.DatabaseHelper;
-import com.example.onlineelectronicgadget.models.Product;
 import com.example.onlineelectronicgadget.models.Tablets;
 import com.google.android.material.textfield.TextInputEditText;
 
-public class AddTabFragment extends Fragment {
+public class EditTabFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private String mParam1;
@@ -43,17 +41,17 @@ public class AddTabFragment extends Fragment {
     private Button save_button;
     private Button cancel_button;
 
-    public AddTabFragment() {
+
+    public EditTabFragment() {
         // Required empty public constructor
     }
 
-    public AddTabFragment(Tablets tablets) {
+    public EditTabFragment(Tablets tablets) {
         this.tablets = tablets;
-        Log.d("myTag", tablets.toString());
     }
 
-    public static AddTabFragment newInstance(String param1, String param2) {
-        AddTabFragment fragment = new AddTabFragment();
+    public static EditTabFragment newInstance(String param1, String param2) {
+        EditTabFragment fragment = new EditTabFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -73,7 +71,7 @@ public class AddTabFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_tab, container, false);
+        View view = inflater.inflate(R.layout.fragment_edit_tab, container, false);
         initComponent(view);
         return view;
     }
@@ -118,8 +116,7 @@ public class AddTabFragment extends Fragment {
 
     private void onSaveButton() {
         fillTablet(tablets);
-        String id = db.saveProduct(tablets);
-        Toast.makeText(getActivity(), "product id: " + id, Toast.LENGTH_LONG).show();
+        db.updateProduct(tablets);
         loadFragment(new AdminHomeScreen());
     }
 
@@ -161,8 +158,10 @@ public class AddTabFragment extends Fragment {
         }
         try {
             tablets.setWeight(Double.parseDouble(String.valueOf(weight.getText()).trim()));
+            Log.d("myTag", tablets.getWeight()+"");
         } catch (NullPointerException | NumberFormatException e) {
             tablets.setWeight(-1);
+            Log.d("myTag", tablets.getWeight()+"");
         }
         try {
             tablets.setColor(String.valueOf(color.getText()).trim());
