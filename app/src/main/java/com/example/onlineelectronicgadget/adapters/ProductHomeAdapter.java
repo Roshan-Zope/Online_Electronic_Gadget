@@ -54,7 +54,7 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
         }
 
         public void bind(Product product, ProductListAdapter.OnProductClickListener listener) {
-            productName.setText(product.getBrand() + product.getModel());
+            productName.setText(product.getModel());
             productPrice.setText("₹ " + product.getPrice());
             if (product.getImagesId() != null && !product.getImagesId().isEmpty()) {
                 Glide.with(itemView.getContext())

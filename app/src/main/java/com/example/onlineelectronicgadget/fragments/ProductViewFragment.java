@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.onlineelectronicgadget.R;
 import com.example.onlineelectronicgadget.adapters.ReviewListAdapter;
+import com.example.onlineelectronicgadget.adapters.SpecListAdapter;
 import com.example.onlineelectronicgadget.database.DatabaseHelper;
 import com.example.onlineelectronicgadget.models.Laptop;
 import com.example.onlineelectronicgadget.models.Product;
@@ -45,22 +46,9 @@ public class ProductViewFragment extends Fragment {
     private TextView productName;
     private TextView productPrice;
     private TextView productDescription;
-    private TextView spec1;
-    private TextView spec2;
-    private TextView spec3;
-    private TextView spec4;
-    private TextView spec5;
-    private TextView spec6;
-    private TextView spec7;
-    private TextView spec8;
-    private TextView spec9;
-    private TextView spec10;
-    private TextView spec11;
-    private TextView spec12;
-    private TextView spec13;
-    private TextView spec14;
-    private TextView spec15;
-    private TextView spec16;
+    private RecyclerView specRecycler;
+    private RecyclerView.LayoutManager specLayoutManager;
+    private SpecListAdapter specAdapter;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private ReviewListAdapter adapter;
@@ -71,6 +59,7 @@ public class ProductViewFragment extends Fragment {
     private Button buyNowButton;
     private Product product;
     private List<String> imageUrls;
+    private List<String> specs;
     private int currentIdx = 0;
     private DatabaseHelper db;
 
@@ -150,22 +139,9 @@ public class ProductViewFragment extends Fragment {
         productName = view.findViewById(R.id.productName);
         productPrice = view.findViewById(R.id.productPrice);
         productDescription = view.findViewById(R.id.productDescription);
-        spec1 = view.findViewById(R.id.spec1);
-        spec2 = view.findViewById(R.id.spec2);
-        spec3 = view.findViewById(R.id.spec3);
-        spec4 = view.findViewById(R.id.spec4);
-        spec5 = view.findViewById(R.id.spec5);
-        spec6 = view.findViewById(R.id.spec6);
-        spec7 = view.findViewById(R.id.spec7);
-        spec8 = view.findViewById(R.id.spec8);
-        spec9 = view.findViewById(R.id.spec9);
-        spec10 = view.findViewById(R.id.spec10);
-        spec11 = view.findViewById(R.id.spec11);
-        spec12 = view.findViewById(R.id.spec12);
-        spec13 = view.findViewById(R.id.spec13);
-        spec14 = view.findViewById(R.id.spec14);
-        spec15 = view.findViewById(R.id.spec15);
-        spec16 = view.findViewById(R.id.spec16);
+        specRecycler = view.findViewById(R.id.specRecycler);
+        specLayoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
+        specRecycler.setLayoutManager(specLayoutManager);
         recyclerView = view.findViewById(R.id.reviewsRecycler);
         layoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -175,6 +151,7 @@ public class ProductViewFragment extends Fragment {
         addToCartButton = view.findViewById(R.id.addToCartButton);
         buyNowButton = view.findViewById(R.id.buyNowButton);
         db = new DatabaseHelper();
+        specs = new ArrayList<>();
         
         prevButton.setOnClickListener(v -> showPrevImage());
         nextButton.setOnClickListener(v -> showNextImage());
@@ -234,18 +211,14 @@ public class ProductViewFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         fillView();
+        specAdapter = new SpecListAdapter(specs);
+        specRecycler.setAdapter(specAdapter);
     }
 
     private void fillView() {
-        productName.setText(product.getBrand() + " " + product.getModel());
-        productPrice.setText("₹ " + String.valueOf(product.getPrice()));
+        productName.setText(product.getModel());
+        productPrice.setText("₹ " + product.getPrice());
         productDescription.setText(product.getDescription());
-        spec1.setText("Category: " + product.getCategory());
-        spec1.setVisibility(View.VISIBLE);
-        spec2.setText("Rating: " + product.getRating());
-        spec2.setVisibility(View.VISIBLE);
-        spec3.setText("Stocks: " + product.getStocks());
-        spec3.setVisibility(View.VISIBLE);
         if (product.getReviews() != null) adapter = new ReviewListAdapter(product.getReviews());
         else adapter = new ReviewListAdapter(new ArrayList<>());
         recyclerView.setAdapter(adapter);
@@ -258,108 +231,86 @@ public class ProductViewFragment extends Fragment {
 
     private void fillWatch() {
         SmartWatches smartWatches = (SmartWatches) product;
-        spec4.setText("Processor: " + smartWatches.getProcessor());
-        spec4.setVisibility(View.VISIBLE);
-        spec7.setText("Water Resistance: " + smartWatches.getWaterResistance());
-        spec8.setText("Display: " + smartWatches.getDisplay());
-        spec8.setVisibility(View.VISIBLE);
-        spec10.setText("Battery Life: " + smartWatches.getBatteryLife());
-        spec10.setVisibility(View.VISIBLE);
-        spec11.setText("Connectivity: " + smartWatches.getConnectivity());
-        spec11.setVisibility(View.VISIBLE);
-        spec12.setText("Weight: " + smartWatches.getWeight());
-        spec12.setVisibility(View.VISIBLE);
-        spec13.setText("Sensor: " + smartWatches.getSensor());
-        spec13.setVisibility(View.VISIBLE);
-        spec14.setText("Color: " + smartWatches.getColor());
-        spec14.setVisibility(View.VISIBLE);
-        spec15.setText("Warranty: " + smartWatches.getWarranty());
-        spec15.setVisibility(View.VISIBLE);
+        if (specs != null) {
+            specs.add("Category: " + smartWatches.getCategory());
+            specs.add("Rating: " + smartWatches.getRating());
+            specs.add("Stocks: " + smartWatches.getStocks());
+            specs.add("Processor: " + smartWatches.getProcessor());
+            specs.add("Water Resistance: " + smartWatches.getWaterResistance());
+            specs.add("Display: " + smartWatches.getDisplay());
+            specs.add("Battery Life: " + smartWatches.getBatteryLife());
+            specs.add("Connectivity: " + smartWatches.getConnectivity());
+            specs.add("Weight: " + smartWatches.getWeight());
+            specs.add("Sensor: " + smartWatches.getSensor());
+            specs.add("Color: " + smartWatches.getColor());
+            specs.add("Warranty: " + smartWatches.getWarranty());
+        }
     }
 
     private void fillTv() {
         SmartTv smartTv = (SmartTv) product;
-        spec4.setText("Screen size: " + smartTv.getScreenSize());
-        spec4.setVisibility(View.VISIBLE);
-        spec5.setText("Resolution: " + smartTv.getResolution());
-        spec5.setVisibility(View.VISIBLE);
-        spec6.setText("Display Technology: " + smartTv.getDisplayTechnology());
-        spec6.setVisibility(View.VISIBLE);
-        spec7.setText("Connectivity: " + smartTv.getConnectivity());
-        spec7.setVisibility(View.VISIBLE);
-        spec8.setText("Smart Features: " + smartTv.getSmartFeatures());
-        spec8.setVisibility(View.VISIBLE);
-        spec9.setText("Operating System: " + smartTv.getOs());
-        spec9.setVisibility(View.VISIBLE);
-        spec10.setText("Sound: " + smartTv.getSound());
-        spec10.setVisibility(View.VISIBLE);
-        spec11.setText("Ports: " + smartTv.getPorts());
-        spec11.setVisibility(View.VISIBLE);
-        spec12.setText("Weight: " + smartTv.getWeight());
-        spec12.setVisibility(View.VISIBLE);
-        spec13.setText("Dimension: " + smartTv.getDimension());
-        spec13.setVisibility(View.VISIBLE);
-        spec14.setText("Color: " + smartTv.getColor());
-        spec14.setVisibility(View.VISIBLE);
-        spec15.setText("Warranty: " + smartTv.getWarranty());
-        spec15.setVisibility(View.VISIBLE);
+
+        if (specs != null) {
+            specs.add("Category: " + smartTv.getCategory());
+            specs.add("Rating: " + smartTv.getRating());
+            specs.add("Stocks: " + smartTv.getStocks());
+            specs.add("Screen Size: " + smartTv.getScreenSize());
+            specs.add("Resolution: " + smartTv.getResolution());
+            specs.add("Display Technology: " + smartTv.getDisplayTechnology());
+            specs.add("Smart Features: " + smartTv.getSmartFeatures());
+            specs.add("Connectivity: " + smartTv.getConnectivity());
+            specs.add("Weight: " + smartTv.getWeight());
+            specs.add("Operating System: " + smartTv.getOs());
+            specs.add("Color: " + smartTv.getColor());
+            specs.add("Warranty: " + smartTv.getWarranty());
+            specs.add("Sound: " + smartTv.getSound());
+            specs.add("Ports: " + smartTv.getPorts());
+            specs.add("Dimensions: " + smartTv.getDimension());
+        }
     }
 
     private void fillTab() {
         Tablets tablets = (Tablets) product;
-        spec4.setText("Processor: " + tablets.getProcessor());
-        spec4.setVisibility(View.VISIBLE);
-        spec5.setText("Ram: " + tablets.getRam());
-        spec5.setVisibility(View.VISIBLE);
-        spec6.setText("Storage: " + tablets.getStorage());
-        spec6.setVisibility(View.VISIBLE);
-        spec7.setText("Camera: " + tablets.getCamera());
-        spec7.setVisibility(View.VISIBLE);
-        spec8.setText("Display: " + tablets.getDisplay());
-        spec8.setVisibility(View.VISIBLE);
-        spec9.setText("Operating System: " + tablets.getOs());
-        spec9.setVisibility(View.VISIBLE);
-        spec10.setText("Battery Life: " + tablets.getBatteryLife());
-        spec10.setVisibility(View.VISIBLE);
-        spec11.setText("Ports: " + tablets.getPorts());
-        spec11.setVisibility(View.VISIBLE);
-        spec12.setText("Weight: " + tablets.getWeight());
-        spec12.setVisibility(View.VISIBLE);
-        spec13.setText("Dimension: " + tablets.getDimension());
-        spec13.setVisibility(View.VISIBLE);
-        spec14.setText("Color: " + tablets.getColor());
-        spec14.setVisibility(View.VISIBLE);
-        spec15.setText("Warranty: " + tablets.getWarranty());
-        spec15.setVisibility(View.VISIBLE);
-        spec16.setText("Connectivity: " + tablets.getConnectivity());
-        spec16.setVisibility(View.VISIBLE);
+
+        if (specs != null) {
+            specs.add("Category: " + tablets.getCategory());
+            specs.add("Rating: " + tablets.getRating());
+            specs.add("Stocks: " + tablets.getStocks());
+            specs.add("Processor: " + tablets.getProcessor());
+            specs.add("Ram: " + tablets.getRam());
+            specs.add("Display: " + tablets.getDisplay());
+            specs.add("Battery Life: " + tablets.getBatteryLife());
+            specs.add("Connectivity: " + tablets.getConnectivity());
+            specs.add("Weight: " + tablets.getWeight());
+            specs.add("Storage: " + tablets.getStorage());
+            specs.add("Color: " + tablets.getColor());
+            specs.add("Warranty: " + tablets.getWarranty());
+            specs.add("Camera: " + tablets.getCamera());
+            specs.add("Ports: " + tablets.getPorts());
+            specs.add("Dimensions: " + tablets.getDimension());
+            specs.add("Operating System: " + tablets.getOs());
+        }
     }
 
     private void fillLaptop() {
         Laptop laptop = (Laptop) product;
-        spec4.setText("Processor: " + laptop.getProcessor());
-        spec4.setVisibility(View.VISIBLE);
-        spec5.setText("Ram: " + laptop.getRam());
-        spec5.setVisibility(View.VISIBLE);
-        spec6.setText("Storage: " + laptop.getStorage());
-        spec6.setVisibility(View.VISIBLE);
-        spec7.setText("Graphics: " + laptop.getGraphics());
-        spec7.setVisibility(View.VISIBLE);
-        spec8.setText("Display: " + laptop.getDisplay());
-        spec8.setVisibility(View.VISIBLE);
-        spec9.setText("Operating System: " + laptop.getOs());
-        spec9.setVisibility(View.VISIBLE);
-        spec10.setText("Battery Life: " + laptop.getBatteryLife());
-        spec10.setVisibility(View.VISIBLE);
-        spec11.setText("Ports: " + laptop.getPorts());
-        spec11.setVisibility(View.VISIBLE);
-        spec12.setText("Weight: " + laptop.getWeight());
-        spec12.setVisibility(View.VISIBLE);
-        spec13.setText("Dimension: " + laptop.getDimension());
-        spec13.setVisibility(View.VISIBLE);
-        spec14.setText("Color: " + laptop.getColor());
-        spec14.setVisibility(View.VISIBLE);
-        spec15.setText("Warranty: " + laptop.getWarranty());
-        spec15.setVisibility(View.VISIBLE);
+
+        if (specs != null) {
+            specs.add("Category: " + laptop.getCategory());
+            specs.add("Rating: " + laptop.getRating());
+            specs.add("Stocks: " + laptop.getStocks());
+            specs.add("Processor: " + laptop.getProcessor());
+            specs.add("Ram: " + laptop.getRam());
+            specs.add("Display: " + laptop.getDisplay());
+            specs.add("Battery Life: " + laptop.getBatteryLife());
+            specs.add("Graphics: " + laptop.getGraphics());
+            specs.add("Weight: " + laptop.getWeight());
+            specs.add("Storage: " + laptop.getStorage());
+            specs.add("Color: " + laptop.getColor());
+            specs.add("Warranty: " + laptop.getWarranty());
+            specs.add("Ports: " + laptop.getPorts());
+            specs.add("Dimensions: " + laptop.getDimension());
+            specs.add("Operating System: " + laptop.getOs());
+        }
     }
 }

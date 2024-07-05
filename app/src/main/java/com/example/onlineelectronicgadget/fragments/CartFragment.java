@@ -1,5 +1,7 @@
 package com.example.onlineelectronicgadget.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,12 +16,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.onlineelectronicgadget.R;
 import com.example.onlineelectronicgadget.adapters.CartListAdapter;
 import com.example.onlineelectronicgadget.database.DatabaseHelper;
 import com.example.onlineelectronicgadget.models.Product;
+import com.example.onlineelectronicgadget.util.CustomAlertDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +41,12 @@ public class CartFragment extends Fragment {
     private List<Product> list;
     private TextView totalAmount;
     private double total;
+    private OnCartItemCountChangeListener listener;
+    private Button buyButton;
+
+    public interface OnCartItemCountChangeListener {
+        void onCartItemCountChange(int count);
+    }
 
     public CartFragment() {
         // Required empty public constructor
@@ -58,6 +68,12 @@ public class CartFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        if (getActivity() instanceof OnCartItemCountChangeListener) {
+            listener = (OnCartItemCountChangeListener) getActivity();
+        } else {
+            throw new RuntimeException("Activity must implement OnCartItemCountChangeListener");
+        }
     }
 
     @Override
@@ -77,6 +93,21 @@ public class CartFragment extends Fragment {
         cartRecycler = view.findViewById(R.id.cartRecycler);
         layoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         cartRecycler.setLayoutManager(layoutManager);
+        buyButton = view.findViewById(R.id.buyButton);
+
+        buyButton.setOnClickListener(v -> onBuyButton());
+    }
+
+    private void onBuyButton() {
+        if (list != null && !list.isEmpty()) {
+            for (Product product : list) {
+                db.saveOrder(product, flag -> {});
+                db.removeFromCart(product.getId(), flag -> {});
+            }
+            CustomAlertDialog.showCustomDialog(getActivity(), "Info", "Your order is placed!");
+
+            loadFragment(new EmptyCartActivity());
+        }
     }
 
     private void populateList() {
@@ -91,6 +122,11 @@ public class CartFragment extends Fragment {
             adapter.notifyDataSetChanged();
             total = total1;
             totalAmount.setText("₹ " + total);
+
+            if (listener != null) {
+                listener.onCartItemCountChange(list.size());
+                Log.d("myTag", "after on cart item count change listener");
+            }
         });
         adapter = new CartListAdapter(list, product -> loadFragment(new ProductViewFragment(product)), () -> loadFragment(new EmptyCartActivity()), (product) -> loadFragment(new PlaceOrderFragment(product)));
         cartRecycler.setAdapter(adapter);

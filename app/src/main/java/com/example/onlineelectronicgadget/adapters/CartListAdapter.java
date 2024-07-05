@@ -57,9 +57,8 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private ImageView imageView;
+        private ImageView imageView, removeButton;
         private TextView product_name, price;
-        private Button removeButton, buyButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -67,12 +66,11 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
             product_name = itemView.findViewById(R.id.product_name);
             price = itemView.findViewById(R.id.price);
             removeButton = itemView.findViewById(R.id.removeButton);
-            buyButton = itemView.findViewById(R.id.buyButton);
         }
 
         public void bind(Product product, ProductListAdapter.OnProductClickListener listener) {
-            product_name.setText(product.getBrand() + product.getModel());
-            price.setText(String.valueOf(product.getPrice()));
+            product_name.setText(product.getModel());
+            price.setText("₹ " + product.getPrice());
             if (product.getImagesId() != null && !product.getImagesId().isEmpty()) {
                 Glide.with(itemView.getContext())
                         .load(product.getImagesId().get(0))
@@ -86,7 +84,7 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
             }
 
             removeButton.setOnClickListener(v -> onRemoveButton(product));
-            buyButton.setOnClickListener(v -> clickListener.onClick(product));
+            //buyButton.setOnClickListener(v -> clickListener.onClick(product));
             itemView.setOnClickListener(v -> listener.onProductClick(product));
         }
 

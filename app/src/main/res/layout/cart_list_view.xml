@@ -8,11 +8,10 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_margin="10dp"
+        android:layout_margin="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="8dp" >
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -21,70 +20,44 @@
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_margin="10dp"
+                android:layout_height="100dp"
                 android:src="@drawable/ic_launcher_background"/>
 
             <LinearLayout
                 android:layout_width="0dp"
+                android:layout_margin="5dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_weight="1"
-                android:paddingStart="8dp">
+                android:layout_weight="1">
 
                 <TextView
                     android:id="@+id/product_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="SanDisk Cruze Blade SDCZ50"
+                    android:maxLines="1"
+                    android:lines="1"
                     android:textSize="16sp"
-                    android:textColor="@android:color/black" />
-
-                <TextView
-                    android:id="@+id/product_color"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Red, Black"
-                    android:textSize="14sp"
-                    android:textColor="@android:color/darker_gray" />
+                    android:layout_margin="10dp" />
 
                 <TextView
                     android:id="@+id/price"
+                    android:textStyle="bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
                     android:text="40% off ₹700 ₹419"
-                    android:textSize="14sp"
-                    android:textColor="@android:color/holo_red_dark" />
+                    android:textSize="14sp" />
             </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="8dp">
-
-            <Button
+            <ImageView
+                android:layout_marginTop="70dp"
+                android:src="@drawable/delete_24px"
                 android:id="@+id/removeButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textColor="@color/black"
-                android:layout_margin="10dp"
-                android:backgroundTint="@android:color/holo_red_dark"
-                android:text="Remove"/>
-
-            <Button
-                android:id="@+id/buyButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textColor="@color/black"
-                android:layout_margin="10dp"
-                android:backgroundTint="@android:color/holo_blue_dark"
-                android:text="Buy this now" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
-
     </LinearLayout>
 
 

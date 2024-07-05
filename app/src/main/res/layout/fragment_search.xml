@@ -12,10 +12,11 @@
         android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:queryHint="@string/search_here"
+        android:layout_margin="16dp"
         android:background="@drawable/search_view_bg"
         android:iconifiedByDefault="false"
-        android:layout_margin="8dp"
+        android:queryHint="@string/search_here"
+        app:autoShowKeyboard="true"
         app:queryHint="Search here" />
 
     <com.google.android.material.progressindicator.CircularProgressIndicator

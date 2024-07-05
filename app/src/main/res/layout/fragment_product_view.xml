@@ -25,7 +25,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:contentDescription="@string/product_images"
-                    android:scaleType="centerCrop"
+                    android:scaleType="fitXY"
                     android:src="@drawable/ic_launcher_foreground" />
 
 
@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/product_name"
-                android:textSize="24sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -70,170 +70,24 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/product_price"
-                android:textColor="@android:color/holo_red_dark"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/productDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:lines="2"
                 android:layout_marginTop="16dp"
                 android:text="@string/product_desc"
-                android:textSize="16sp" />
+                android:textSize="12sp" />
 
-            <TextView
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_margin="4dp"
+                android:id="@+id/specRecycler"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:text="@string/spec"
-                android:layout_marginTop="16dp"
-                android:textSize="16sp"
-                android:id="@+id/spec1"/>
-
-            <TextView
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/spec"
-                android:layout_marginTop="16dp"
-                android:textSize="16sp"
-                android:id="@+id/spec2"/>
-
-            <TextView
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/spec"
-                android:layout_marginTop="16dp"
-                android:textSize="16sp"
-                android:id="@+id/spec3"/>
-
-            <TextView
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/spec"
-                android:layout_marginTop="16dp"
-                android:textSize="16sp"
-                android:id="@+id/spec4"/>
-
-            <TextView
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/spec"
-                android:layout_marginTop="16dp"
-                android:textSize="16sp"
-                android:id="@+id/spec5"/>
-
-            <TextView
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/spec"
-                android:layout_marginTop="16dp"
-                android:textSize="16sp"
-                android:id="@+id/spec6"/>
-
-            <TextView
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/spec"
-                android:layout_marginTop="16dp"
-                android:textSize="16sp"
-                android:id="@+id/spec7"/>
-
-            <TextView
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/spec"
-                android:layout_marginTop="16dp"
-                android:textSize="16sp"
-                android:id="@+id/spec8"/>
-
-            <TextView
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/spec"
-                android:layout_marginTop="16dp"
-                android:textSize="16sp"
-                android:id="@+id/spec9"/>
-
-            <TextView
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/spec"
-                android:layout_marginTop="16dp"
-                android:textSize="16sp"
-                android:id="@+id/spec10"/>
-
-            <TextView
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/spec"
-                android:layout_marginTop="16dp"
-                android:textSize="16sp"
-                android:id="@+id/spec11"/>
-
-            <TextView
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/spec"
-                android:layout_marginTop="16dp"
-                android:textSize="16sp"
-                android:id="@+id/spec12"/>
-
-            <TextView
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/spec"
-                android:layout_marginTop="16dp"
-                android:textSize="16sp"
-                android:id="@+id/spec13"/>
-
-            <TextView
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/spec"
-                android:layout_marginTop="16dp"
-                android:textSize="16sp"
-                android:id="@+id/spec14"/>
-
-            <TextView
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/spec"
-                android:layout_marginTop="16dp"
-                android:textSize="16sp"
-                android:id="@+id/spec15"/>
-
-            <TextView
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/spec"
-                android:layout_marginTop="16dp"
-                android:textSize="16sp"
-                android:id="@+id/spec16"/>
-
-            <TextView
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/spec"
-                android:layout_marginTop="16dp"
-                android:textSize="16sp"
-                android:id="@+id/spec17"/>
+                android:layout_height="wrap_content"/>
 
             <TextView
                 android:layout_marginTop="20dp"
@@ -242,14 +96,14 @@
                 android:layout_height="wrap_content"/>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="4dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/reviewsRecycler"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/el_review"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="4dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 
@@ -288,33 +142,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:padding="16dp"
+        android:padding="2dp"
         android:background="@android:color/white"
-        android:elevation="4dp">
+        android:elevation="2dp">
 
         <Button
             android:id="@+id/addToCartButton"
-            android:layout_width="180dp"
+            android:layout_width="150dp"
+            android:layout_marginStart="10dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="10dp"
+            android:layout_alignParentLeft="true"
             android:text="@string/add_to_cart"
             android:backgroundTint="@android:color/holo_blue_dark"
             android:textColor="@android:color/white" />
 
         <Button
             android:id="@+id/buyNowButton"
-            android:layout_width="180dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/addToCartButton"
-            android:layout_toRightOf="@id/addToCartButton"
-            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="10dp"
             android:text="@string/buy_now"
             android:backgroundTint="@android:color/holo_green_dark"
             android:textColor="@android:color/white" />
 
     </RelativeLayout>
-
 </RelativeLayout>

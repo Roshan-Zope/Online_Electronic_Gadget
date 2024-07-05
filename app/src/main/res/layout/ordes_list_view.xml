@@ -3,16 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
-    android:orientation="vertical"
-    android:layout_margin="10dp">
+    android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="10dp"
-        app:cardUseCompatPadding="true"
-        android:layout_margin="5dp">
+        app:cardCornerRadius="2dp"
+        app:cardUseCompatPadding="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -21,11 +18,10 @@
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="123dp"
-                android:layout_height="100dp"
+                android:layout_width="100dp"
+                android:layout_height="80dp"
                 android:scaleType="fitXY"
-                android:layout_margin="10dp"
-                android:padding="4dp">
+                android:layout_margin="8dp">
 
             </ImageView>
 
@@ -36,37 +32,32 @@
 
                 <TextView
                     android:id="@+id/product_name"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/imageView"
-                    android:textSize="20sp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginLeft="16dp"
+                    android:textSize="16sp"
+                    android:maxLines="1"
+                    android:lines="1"
+                    android:layout_marginTop="10dp"
                     android:text="@string/product_name"
                     android:textAppearance="@style/TextAppearance.AppCompat.Light.Widget.PopupMenu.Small" />
 
 
                 <TextView
                     android:id="@+id/product_price2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:drawableLeft="@drawable/currency_rupee_24px"
                     android:text="@string/product_price"
-                    android:textSize="18sp"
-                    android:padding="5dp"
-                    android:textColor="#EF0606"
-                    android:layout_marginTop="1dp"
-                    android:layout_marginLeft="16dp"
-                    android:drawableLeft="@drawable/baseline_currency_rupee_24"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/date"
                     android:text="@string/date"
-                    android:textSize="18sp"
-                    android:padding="5dp"
-                    android:textColor="#EF0606"
-                    android:layout_marginTop="1dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_width="wrap_content"
+                    android:textSize="12sp"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
         </LinearLayout>

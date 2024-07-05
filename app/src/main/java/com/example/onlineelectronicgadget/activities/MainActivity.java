@@ -1,5 +1,6 @@
 package com.example.onlineelectronicgadget.activities;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,20 +12,24 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.example.onlineelectronicgadget.R;
 import com.example.onlineelectronicgadget.authentication.Auth;
+import com.example.onlineelectronicgadget.database.DatabaseHelper;
 import com.example.onlineelectronicgadget.fragments.AccountFragment;
 import com.example.onlineelectronicgadget.fragments.AdminHomeScreen;
 import com.example.onlineelectronicgadget.fragments.CartFragment;
 import com.example.onlineelectronicgadget.fragments.HomeFragment;
 import com.example.onlineelectronicgadget.fragments.SearchFragment;
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CartFragment.OnCartItemCountChangeListener {
     private Auth auth;
     private BottomNavigationView bottomNavigationView;
     private String accType;
+    private BadgeDrawable badgeDrawable;
+    private DatabaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +43,14 @@ public class MainActivity extends AppCompatActivity {
         Log.d("myTag", "after authenticate()");
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         loadFragmentWithRespectToAccType(user);
+        fetchCount();
+    }
+
+    private void fetchCount() {
+        db.getCart((list, total) -> {
+            int count = list.size();
+            updateCartItemCount(count);
+        });
     }
 
     private void loadFragmentWithRespectToAccType(FirebaseUser user) {
@@ -92,5 +105,22 @@ public class MainActivity extends AppCompatActivity {
     private void initComponent() {
         auth = new Auth(this);
         bottomNavigationView = findViewById(R.id.navigation_layout);
+        db = new DatabaseHelper();
+
+        badgeDrawable = BadgeDrawable.create(this);
+        badgeDrawable.setNumber(0);
+
+        bottomNavigationView.getOrCreateBadge(R.id.cart_option).setVisible(true);
+        bottomNavigationView.getOrCreateBadge(R.id.cart_option).setNumber(0);
+    }
+
+    @Override
+    public void onCartItemCountChange(int count) {
+        updateCartItemCount(count);
+    }
+
+    public void updateCartItemCount(int count) {
+        bottomNavigationView.getOrCreateBadge(R.id.cart_option).setVisible(count > 0);
+        bottomNavigationView.getOrCreateBadge(R.id.cart_option).setNumber(count);
     }
 }

@@ -1,5 +1,8 @@
 package com.example.onlineelectronicgadget.fragments;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -132,6 +136,8 @@ public class SearchFragment extends Fragment {
 
         search_recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         search_recyclerView.setAdapter(adapter);
+        searchView.setIconified(false);
+        searchView.requestFocus();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -150,11 +156,24 @@ public class SearchFragment extends Fragment {
             }
         });
 
+        searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                showKeyboard(v.findFocus());
+            }
+        });
+
         productListAdapter = new ProductListAdapter(productList,
                 product -> {
                     loadFragment(new ProductViewFragment(product));
                 });
 
+    }
+
+    private void showKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.showSoftInput(view, 0);
+        }
     }
 
     private void loadFragment(Fragment fragment) {

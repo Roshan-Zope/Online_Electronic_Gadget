@@ -28,7 +28,7 @@
                 android:textSize="24sp"
                 android:layout_margin="8dp"
                 android:typeface="monospace"
-                android:textStyle="italic | bold"
+                android:textStyle="italic|bold"
                 android:textAlignment="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
@@ -38,8 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="8dp"
-                android:layout_marginBottom="16dp"/>
+                android:layout_marginBottom="2dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
