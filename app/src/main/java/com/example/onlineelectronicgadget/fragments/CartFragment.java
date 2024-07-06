@@ -17,6 +17,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.onlineelectronicgadget.R;
@@ -43,6 +45,8 @@ public class CartFragment extends Fragment {
     private double total;
     private OnCartItemCountChangeListener listener;
     private Button buyButton;
+    private ProgressBar progressBar;
+    private LinearLayout mainLayout;
 
     public interface OnCartItemCountChangeListener {
         void onCartItemCountChange(int count);
@@ -94,6 +98,8 @@ public class CartFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         cartRecycler.setLayoutManager(layoutManager);
         buyButton = view.findViewById(R.id.buyButton);
+        progressBar = view.findViewById(R.id.progressBar);
+        mainLayout = view.findViewById(R.id.mainLayout);
 
         buyButton.setOnClickListener(v -> onBuyButton());
     }
@@ -111,24 +117,41 @@ public class CartFragment extends Fragment {
     }
 
     private void populateList() {
+        mainLayout.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
         db.getCart((list1, total1)  -> {
             if (list1.isEmpty()) {
+                if (listener != null) {
+                    listener.onCartItemCountChange(0);
+                }
                 loadFragment(new EmptyCartActivity());
                 Log.d("myTag", "list is empty");
+            } else {
+                list.clear();
+                list.addAll(list1);
+                Log.d("myTag", list.toString());
+                adapter.notifyDataSetChanged();
+                total = total1;
+                totalAmount.setText("₹ " + total);
             }
-            list.clear();
-            list.addAll(list1);
-            Log.d("myTag", list.toString());
-            adapter.notifyDataSetChanged();
-            total = total1;
-            totalAmount.setText("₹ " + total);
 
             if (listener != null) {
                 listener.onCartItemCountChange(list.size());
                 Log.d("myTag", "after on cart item count change listener");
             }
+            progressBar.setVisibility(View.GONE);
+            mainLayout.setVisibility(View.VISIBLE);
         });
-        adapter = new CartListAdapter(list, product -> loadFragment(new ProductViewFragment(product)), () -> loadFragment(new EmptyCartActivity()), (product) -> loadFragment(new PlaceOrderFragment(product)));
+        adapter = new CartListAdapter(list, product -> loadFragment(new ProductViewFragment(product)), () -> loadFragment(new EmptyCartActivity()), (product) -> loadFragment(new PlaceOrderFragment(product)), () -> {
+            db.getCart((list1, total1) -> {
+                list.clear();
+                list.addAll(list1);
+                adapter.notifyDataSetChanged();
+                if (listener != null) {
+                    listener.onCartItemCountChange(list.size());
+                }
+            });
+        });
         cartRecycler.setAdapter(adapter);
     }
 

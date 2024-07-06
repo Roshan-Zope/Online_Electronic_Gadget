@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.example.onlineelectronicgadget.R;
 import com.example.onlineelectronicgadget.adapters.OrdersListAdapter;
@@ -32,6 +33,7 @@ public class OrdersFragment extends Fragment {
     private List<Order> list;
     private OrdersListAdapter adapter;
     private DatabaseHelper db;
+    private ProgressBar progressBar;
 
     public OrdersFragment() {
         // Required empty public constructor
@@ -79,9 +81,11 @@ public class OrdersFragment extends Fragment {
         list = new ArrayList<>();
         layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
+        progressBar = view.findViewById(R.id.progressBar);
     }
 
     private void loadOrders() {
+        progressBar.setVisibility(View.VISIBLE);
         db.getOrders(list1 -> {
             if (!list1.isEmpty() && list1 != null) {
                 list.clear();
@@ -90,6 +94,7 @@ public class OrdersFragment extends Fragment {
             } else {
                 loadFragment(new EmptyOrdersFragment());
             }
+            progressBar.setVisibility(View.GONE);
         });
     }
 

@@ -22,6 +22,7 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
     private ProductListAdapter.OnProductClickListener listener;
     private OnCartEmptyListener cartEmptyListener;
     private OnPlaceOrderClickListener clickListener;
+    private OnItemRemovedListener itemRemovedListener;
 
     public interface OnPlaceOrderClickListener {
         void onClick(Product product);
@@ -31,11 +32,16 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
         void onCartEmpty();
     }
 
-    public CartListAdapter(List<Product> list, ProductListAdapter.OnProductClickListener listener, OnCartEmptyListener cartEmptyListener, OnPlaceOrderClickListener clickListener) {
+    public interface OnItemRemovedListener {
+        void onItemRemoved();
+    }
+
+    public CartListAdapter(List<Product> list, ProductListAdapter.OnProductClickListener listener, OnCartEmptyListener cartEmptyListener, OnPlaceOrderClickListener clickListener, OnItemRemovedListener itemRemovedListener) {
         this.cartEmptyListener = cartEmptyListener;
         this.clickListener = clickListener;
         this.listener = listener;
         this.list = list;
+        this.itemRemovedListener = itemRemovedListener;
         this.db = new DatabaseHelper();
     }
 
@@ -95,6 +101,9 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
                     notifyDataSetChanged();
                     if (list.isEmpty()) {
                         cartEmptyListener.onCartEmpty();
+                    }
+                    if (itemRemovedListener != null) {
+                        itemRemovedListener.onItemRemoved();
                     }
                 } else {
                     Log.d("myTag", "product not found");

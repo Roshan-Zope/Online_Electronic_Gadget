@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.MutableLiveData;
+
 import com.example.onlineelectronicgadget.R;
 import com.example.onlineelectronicgadget.authentication.Auth;
 import com.example.onlineelectronicgadget.database.DatabaseHelper;
@@ -30,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements CartFragment.OnCa
     private String accType;
     private BadgeDrawable badgeDrawable;
     private DatabaseHelper db;
+    private MutableLiveData<Integer> cartItemCount = new MutableLiveData<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +47,12 @@ public class MainActivity extends AppCompatActivity implements CartFragment.OnCa
         Log.d("myTag", "after authenticate()");
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         loadFragmentWithRespectToAccType(user);
-        fetchCount();
+        cartItemCount.setValue(0);
+        observeCartItemCount();
     }
 
-    private void fetchCount() {
-        db.getCart((list, total) -> {
-            int count = list.size();
+    private void observeCartItemCount() {
+        cartItemCount.observe(this, count -> {
             updateCartItemCount(count);
         });
     }
@@ -116,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements CartFragment.OnCa
 
     @Override
     public void onCartItemCountChange(int count) {
-        updateCartItemCount(count);
+        cartItemCount.setValue(count);
     }
 
     public void updateCartItemCount(int count) {

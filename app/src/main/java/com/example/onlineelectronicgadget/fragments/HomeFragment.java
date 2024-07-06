@@ -82,6 +82,7 @@ public class HomeFragment extends Fragment {
         map.put("category", category);
 
         Log.d("myTag", "in loadProductByCategory()");
+        recyclerView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
 
         db.search(map, (products, total) -> {
@@ -89,6 +90,7 @@ public class HomeFragment extends Fragment {
             list.clear();
             list.addAll(products);
             progressBar.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
             adapter.notifyDataSetChanged();
         });
     }
