@@ -19,8 +19,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.onlineelectronicgadget.R;
 import com.example.onlineelectronicgadget.database.DatabaseHelper;
+import com.example.onlineelectronicgadget.models.Order;
 import com.example.onlineelectronicgadget.models.Product;
 import com.example.onlineelectronicgadget.util.CustomAlertDialog;
+
+import java.util.List;
 
 public class PlaceOrderFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -28,7 +31,7 @@ public class PlaceOrderFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private DatabaseHelper db;
-    private Product product;
+    private List<Product> products;
     private ImageView product_image;
     private TextView product_name;
     private TextView product_description;
@@ -39,8 +42,8 @@ public class PlaceOrderFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public PlaceOrderFragment(Product product) {
-        this.product = product;
+    public PlaceOrderFragment(List<Product> products) {
+        this.products = products;
     }
 
     public static PlaceOrderFragment newInstance(String param1, String param2) {
@@ -81,9 +84,11 @@ public class PlaceOrderFragment extends Fragment {
     }
 
     private void onPlaceOrder() {
-        String accType = db.saveOrder(product, flag -> {
+        Order order = new Order();
+        order.setProducts(products);
+        String accType = db.saveOrder(order, flag -> {
             if (!flag) {
-                db.removeFromCart(product.getId(), flag1 -> {
+                db.removeFromCart(products, flag1 -> {
                     if (flag1) {
                         Log.d("myTag", "product already in cart");
                     }
@@ -107,11 +112,11 @@ public class PlaceOrderFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (product != null) {
-            if (product.getImagesId() != null && !product.getImagesId().isEmpty()) {
+        if (products != null) {
+            if (products.get(0).getImagesId() != null && !products.get(0).getImagesId().isEmpty()) {
                 Glide
                         .with(getActivity())
-                        .load(product.getImagesId().get(0))
+                        .load(products.get(0).getImagesId().get(0))
                         .into(product_image);
             } else {
                 Glide
@@ -119,9 +124,9 @@ public class PlaceOrderFragment extends Fragment {
                         .load(R.drawable.ic_launcher_foreground)
                         .into(product_image);
             }
-            product_description.setText(product.getDescription());
-            product_name.setText(product.getModel());
-            product_price1.setText("₹ " + product.getPrice());
+            product_description.setText(products.get(0).getDescription());
+            product_name.setText(products.get(0).getModel());
+            product_price1.setText("₹ " + products.get(0).getPrice());
         }
     }
 }

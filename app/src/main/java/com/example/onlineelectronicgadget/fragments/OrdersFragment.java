@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.example.onlineelectronicgadget.OrdersProductListFragment;
 import com.example.onlineelectronicgadget.R;
 import com.example.onlineelectronicgadget.adapters.OrdersListAdapter;
 import com.example.onlineelectronicgadget.database.DatabaseHelper;
@@ -22,6 +23,7 @@ import com.example.onlineelectronicgadget.models.Order;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class OrdersFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -30,7 +32,7 @@ public class OrdersFragment extends Fragment {
     private String mParam2;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    private List<Order> list;
+    private List<Map<String, Object>> list;
     private OrdersListAdapter adapter;
     private DatabaseHelper db;
     private ProgressBar progressBar;
@@ -69,8 +71,8 @@ public class OrdersFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        adapter = new OrdersListAdapter(list, product -> {
-            loadFragment(new ProductViewFragment(product));
+        adapter = new OrdersListAdapter(list, products -> {
+            loadFragment(new OrdersProductListFragment(products));
         });
         recyclerView.setAdapter(adapter);
     }

@@ -47,14 +47,14 @@ public class MainActivity extends AppCompatActivity implements CartFragment.OnCa
         Log.d("myTag", "after authenticate()");
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         loadFragmentWithRespectToAccType(user);
-        cartItemCount.setValue(0);
+
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        cartItemCount.setValue(preferences.getInt("cart_count", 0));
         observeCartItemCount();
     }
 
     private void observeCartItemCount() {
-        cartItemCount.observe(this, count -> {
-            updateCartItemCount(count);
-        });
+        cartItemCount.observe(this, this::updateCartItemCount);
     }
 
     private void loadFragmentWithRespectToAccType(FirebaseUser user) {
@@ -124,6 +124,10 @@ public class MainActivity extends AppCompatActivity implements CartFragment.OnCa
     }
 
     public void updateCartItemCount(int count) {
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("cart_count", count);
+        editor.apply();
         bottomNavigationView.getOrCreateBadge(R.id.cart_option).setVisible(count > 0);
         bottomNavigationView.getOrCreateBadge(R.id.cart_option).setNumber(count);
     }

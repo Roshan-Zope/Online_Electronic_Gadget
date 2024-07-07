@@ -1,13 +1,15 @@
 package com.example.onlineelectronicgadget.models;
 
+import java.util.List;
+
 public class Order {
     private String uid, date;
-    private Product product;
+    private List<Product> products;
 
-    public Order(String uid, String date, Product product) {
+    public Order(String uid, String date, List<Product> products) {
         this.uid = uid;
         this.date = date;
-        this.product = product;
+        this.products = products;
     }
 
     public Order() {
@@ -29,12 +31,12 @@ public class Order {
         this.date = date;
     }
 
-    public Product getProduct() {
-        return product;
+    public List<Product> getProducts() {
+        return products;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 
     @Override
@@ -42,7 +44,7 @@ public class Order {
         return "Order{" +
                 "uid='" + uid + '\'' +
                 ", date='" + date + '\'' +
-                ", product=" + product +
+                ", products=" + products +
                 '}';
     }
 }

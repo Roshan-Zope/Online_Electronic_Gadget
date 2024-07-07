@@ -164,6 +164,8 @@ public class SearchFragment extends Fragment {
 
         productListAdapter = new ProductListAdapter(productList,
                 product -> {
+//                    List<Product> products = new ArrayList<>();
+//                    products.add(product);
                     loadFragment(new ProductViewFragment(product));
                 });
 

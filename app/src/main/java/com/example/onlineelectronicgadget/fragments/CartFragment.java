@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.example.onlineelectronicgadget.R;
 import com.example.onlineelectronicgadget.adapters.CartListAdapter;
 import com.example.onlineelectronicgadget.database.DatabaseHelper;
+import com.example.onlineelectronicgadget.models.Order;
 import com.example.onlineelectronicgadget.models.Product;
 import com.example.onlineelectronicgadget.util.CustomAlertDialog;
 
@@ -106,13 +107,14 @@ public class CartFragment extends Fragment {
 
     private void onBuyButton() {
         if (list != null && !list.isEmpty()) {
-            for (Product product : list) {
-                db.saveOrder(product, flag -> {});
-                db.removeFromCart(product.getId(), flag -> {});
-            }
+            Order order = new Order();
+            order.setProducts(list);
+            db.saveOrder(order, flag -> {});
+            db.removeFromCart(list, flag -> {});
             CustomAlertDialog.showCustomDialog(getActivity(), "Info", "Your order is placed!");
 
             loadFragment(new EmptyCartActivity());
+            listener.onCartItemCountChange(0);
         }
     }
 
@@ -142,16 +144,19 @@ public class CartFragment extends Fragment {
             progressBar.setVisibility(View.GONE);
             mainLayout.setVisibility(View.VISIBLE);
         });
-        adapter = new CartListAdapter(list, product -> loadFragment(new ProductViewFragment(product)), () -> loadFragment(new EmptyCartActivity()), (product) -> loadFragment(new PlaceOrderFragment(product)), () -> {
+        adapter = new CartListAdapter(list, product -> {
+            loadFragment(new ProductViewFragment(product));
+        }, () -> loadFragment(new EmptyCartActivity()), (product) -> {
+            List<Product> products = new ArrayList<>();
+            products.add(product);
+            loadFragment(new PlaceOrderFragment(products));
+        }, () -> {
             db.getCart((list1, total1) -> {
                 list.clear();
                 list.addAll(list1);
                 adapter.notifyDataSetChanged();
-                if (listener != null) {
-                    listener.onCartItemCountChange(list.size());
-                }
             });
-        });
+        }, count -> {listener.onCartItemCountChange(count);});
         cartRecycler.setAdapter(adapter);
     }
 

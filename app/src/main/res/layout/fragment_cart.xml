@@ -7,41 +7,37 @@
 
     <LinearLayout
         android:id="@+id/mainLayout"
+
         android:layout_width="match_parent"
+        android:orientation="vertical"
         android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/totalAmount"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_gravity="right"
-                android:text="Total Amount: 12000"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_margin="8dp"
-                android:id="@+id/cartRecycler"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
-
-        <Button
-            android:backgroundTint="#FFC107"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:text="@string/place_order"
-            android:layout_margin="10dp"
-            android:textColor="@color/black"
-            android:id="@+id/buyButton"
+        <TextView
+            android:id="@+id/totalAmount"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_gravity="right"
+            android:text="Total Amount: 12000"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_margin="8dp"
+            android:id="@+id/cartRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
     </LinearLayout>
+
+    <Button
+        android:backgroundTint="#FFC107"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/place_order"
+        android:layout_margin="10dp"
+        android:textColor="@color/black"
+        android:id="@+id/buyButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
     <ProgressBar
         android:id="@+id/progressBar"

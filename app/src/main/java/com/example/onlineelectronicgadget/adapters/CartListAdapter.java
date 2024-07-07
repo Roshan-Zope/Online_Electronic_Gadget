@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.onlineelectronicgadget.R;
 import com.example.onlineelectronicgadget.database.DatabaseHelper;
+import com.example.onlineelectronicgadget.fragments.CartFragment;
 import com.example.onlineelectronicgadget.models.Product;
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
     private OnCartEmptyListener cartEmptyListener;
     private OnPlaceOrderClickListener clickListener;
     private OnItemRemovedListener itemRemovedListener;
+    private CartFragment.OnCartItemCountChangeListener countChangeListener;
 
     public interface OnPlaceOrderClickListener {
         void onClick(Product product);
@@ -36,11 +38,12 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
         void onItemRemoved();
     }
 
-    public CartListAdapter(List<Product> list, ProductListAdapter.OnProductClickListener listener, OnCartEmptyListener cartEmptyListener, OnPlaceOrderClickListener clickListener, OnItemRemovedListener itemRemovedListener) {
+    public CartListAdapter(List<Product> list, ProductListAdapter.OnProductClickListener listener, OnCartEmptyListener cartEmptyListener, OnPlaceOrderClickListener clickListener, OnItemRemovedListener itemRemovedListener, CartFragment.OnCartItemCountChangeListener countChangeListener) {
         this.cartEmptyListener = cartEmptyListener;
         this.clickListener = clickListener;
         this.listener = listener;
         this.list = list;
+        this.countChangeListener = countChangeListener;
         this.itemRemovedListener = itemRemovedListener;
         this.db = new DatabaseHelper();
     }
@@ -90,12 +93,13 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
             }
 
             removeButton.setOnClickListener(v -> onRemoveButton(product));
-            //buyButton.setOnClickListener(v -> clickListener.onClick(product));
-            itemView.setOnClickListener(v -> listener.onProductClick(product));
+            itemView.setOnClickListener(v -> {
+                listener.onProductClick(product);
+            });
         }
 
         private void onRemoveButton(Product product) {
-            db.removeFromCart(product.getId(), flag -> {
+            db.removeFromCart(list, flag -> {
                 if (flag) {
                     list.remove(product);
                     notifyDataSetChanged();
@@ -104,6 +108,9 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
                     }
                     if (itemRemovedListener != null) {
                         itemRemovedListener.onItemRemoved();
+                    }
+                    if (countChangeListener != null) {
+                        countChangeListener.onCartItemCountChange(list.size());
                     }
                 } else {
                     Log.d("myTag", "product not found");

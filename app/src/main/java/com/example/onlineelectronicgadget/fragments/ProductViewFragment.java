@@ -160,7 +160,9 @@ public class ProductViewFragment extends Fragment {
     }
 
     private void onBuyNowButton() {
-        loadFragment(new PlaceOrderFragment(product));
+        List<Product> list = new ArrayList<>();
+        list.add(product);
+        loadFragment(new PlaceOrderFragment(list));
     }
 
     private void loadFragment(Fragment fragment) {

@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Product {
     private String id, brand, model, description, category;
-    private long price;
+    private double price;
     private List<String> imagesId, reviews;
     private int stocks;
     private double rating;
@@ -51,11 +51,11 @@ public class Product {
         this.model = model;
     }
 
-    public long getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(long price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

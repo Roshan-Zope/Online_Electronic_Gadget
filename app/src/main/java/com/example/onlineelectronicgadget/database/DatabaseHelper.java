@@ -44,7 +44,7 @@ public class DatabaseHelper {
     }
 
     public interface OrderCallback {
-        void onCall(List<Order> list);
+        void onCall(List<Map<String, Object>> list);
     }
 
     public interface FireStoreCallback {
@@ -96,15 +96,17 @@ public class DatabaseHelper {
 
     public void getOrders(OrderCallback listener) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        List<Order> list = new ArrayList<>();
+        List<Map<String, Object>> list = new ArrayList<>();
         if (user != null) {
             firestore.collection("orders").whereEqualTo("uid", user.getUid())
                     .get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Order order = document.toObject(Order.class);
-                                list.add(order);
+                                Map<String, Object> map = document.getData();
+                                Log.d("myTag", map.toString());
+
+                                list.add(map);
                             }
                             Log.d("myTag", list.toString());
                             listener.onCall(list);
@@ -147,9 +149,9 @@ public class DatabaseHelper {
         }
     }
 
-    public String saveOrder(Product product, IsProductAlreadyPresentCallback listener) {
+    public String saveOrder(Order order, IsProductAlreadyPresentCallback listener) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (product != null && user != null) {
+        if (order != null && user != null) {
             DocumentReference docRef = firestore.collection("orders").document();
 
             Date currentDate = Calendar.getInstance().getTime();
@@ -157,7 +159,7 @@ public class DatabaseHelper {
 
             Map<String, Object> map = new HashMap<>();
             map.put("uid", user.getUid());
-            map.put("product", product);
+            map.put("product", order.getProducts());
             map.put("date", formattedDate);
 
             firestore.collection("orders")
@@ -171,26 +173,31 @@ public class DatabaseHelper {
                         }
                     });
 
-            isProductAlreadyPresentInCart(product.getId(), (list,total) -> {
-                if (list != null && !list.isEmpty()) {
-                    listener.onCallback(true);
-                }
-                listener.onCallback(false);
-            });
+            List<Boolean> isAlreadyPresent = new ArrayList<>();
+            for (Product product : order.getProducts()) {
+                isProductAlreadyPresentInCart(product.getId(), ((list, total) -> {
+                    if (list != null && !list.isEmpty()) {
+                        isAlreadyPresent.add(true);
+                    }
+                    isAlreadyPresent.add(false);
+                }));
 
-            Map<String, Object> map1 = new HashMap<>();
-            map1.put("stocks", product.getStocks()-1);
+                Map<String, Object> map1 = new HashMap<>();
+                map1.put("stocks", product.getStocks()-1);
 
-            firestore.collection("products")
-                    .document(product.getId())
-                    .update(map1)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            Log.d("myTag", "stock is updated successfully");
-                        } else {
-                            Log.d("myTag", "unable to update stock");
-                        }
-                    });
+                firestore.collection("products")
+                        .document(product.getId())
+                        .update(map1)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Log.d("myTag", "stock is updated successfully");
+                            } else {
+                                Log.d("myTag", "unable to update stock");
+                            }
+                        });
+            }
+
+            listener.onCallback(!isAlreadyPresent.contains(false));
         }
 
         return Auth.currentUser.getAccType();
@@ -343,25 +350,34 @@ public class DatabaseHelper {
         return map;
     }
 
-    public void removeFromCart(String id, IsProductAlreadyPresentCallback listener) {
+    public void removeFromCart(List<Product> products, IsProductAlreadyPresentCallback listener) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        List<Boolean> isDeleted = new ArrayList<>();
         if (user != null) {
-            firestore.collection("cart").whereEqualTo("uid", user.getUid())
-                    .whereEqualTo("product.id", id)
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful() && !task.getResult().isEmpty()) {
-                            for (DocumentSnapshot document : task.getResult()) {
-                                document.getReference().delete()
-                                        .addOnCompleteListener(task1 -> {
-                                            if (task1.isSuccessful()) listener.onCallback(true);
-                                            else listener.onCallback(false);
-                                        });
+
+            for (Product product : products) {
+                firestore.collection("cart").whereEqualTo("uid", user.getUid())
+                        .whereEqualTo("product.id", product.getId())
+                        .get()
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                                for (DocumentSnapshot document : task.getResult()) {
+                                    document.getReference().delete()
+                                            .addOnCompleteListener(task1 -> {
+                                                if (task1.isSuccessful()) {
+                                                    isDeleted.add(true);
+                                                } else {
+                                                    isDeleted.add(false);
+                                                }
+                                            });
+                                }
+                            } else {
+                                isDeleted.add(false);
                             }
-                        } else {
-                            listener.onCallback(false);
-                        }
-                    });
+                        });
+            }
+
+            listener.onCallback(!isDeleted.contains(false));
         }
     }
 

@@ -129,6 +129,8 @@ public class AdminHomeScreen extends Fragment {
         categoryRecyclerView.setAdapter(categoryAdapter);
 
         adapter = new ProductHomeAdapter(list, product -> {
+//            List<Product> products = new ArrayList<>();
+//            products.add(product);
             loadFragment(new ProductViewFragment(product));
         });
 
