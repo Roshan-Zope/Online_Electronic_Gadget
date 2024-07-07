@@ -4,16 +4,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Product {
-    private String id;
-    private String brand;
-    private String model;
+    private String id, brand, model, description, category;
     private long price;
-    private String description;
-    private List<String> imagesId;
+    private List<String> imagesId, reviews;
     private int stocks;
     private double rating;
-    private List<String> reviews;
-    private String category;
 
     public Product(String id, String brand, String model, long price, String description, List<String> imagesId,
                    int stocks, double rating, List<String> reviews, String category) {

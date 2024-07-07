@@ -1,11 +1,7 @@
 package com.example.onlineelectronicgadget.models;
 
 public class User {
-    private String id;
-    private String username;
-    private String email;
-    private String password;
-    private String accType;
+    private String id, username, email, password, accType;
 
     public User(String id, String username, String email, String password, String accType) {
         this.id = id;

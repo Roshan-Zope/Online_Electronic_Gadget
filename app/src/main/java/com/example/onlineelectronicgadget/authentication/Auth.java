@@ -34,36 +34,35 @@ public class Auth {
         FirebaseUser user = mAuth.getCurrentUser();
 
         if (user != null) {
+
             AuthCredential credential = EmailAuthProvider.getCredential(currentEmail, currPassword);
             user.reauthenticate(credential).addOnCompleteListener(task -> {
                if (task.isSuccessful()) {
                    Log.d("myTag", "user re-authenticated");
                    changeEmail(user, newEmail);
                }
-            }).addOnFailureListener(e -> {
-                Log.d("myTag", "user re-authenticated failed");
             });
+
         }
 
     }
 
     private void changeEmail(FirebaseUser user, String newEmail) {
         if (user != null) {
-            user.updateEmail(newEmail).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
+            user.verifyBeforeUpdateEmail(newEmail).addOnCompleteListener(task1 -> {
+                if (task1.isSuccessful()) {
                     Log.d("myTag", "email changed successfully");
+                    Toast.makeText(context, "email is updated.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Verification email is sent", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "please verify your email before login", Toast.LENGTH_SHORT).show();
+
                     db.updateUser(user.getUid(), newEmail, "email");
-                    user.sendEmailVerification().addOnCompleteListener(task1 -> {
-                        if (task1.isSuccessful()) {
-                            Toast.makeText(context, "verification email sent to your email", Toast.LENGTH_SHORT).show();
-                        }
-                    }).addOnFailureListener(e -> {
-                        Toast.makeText(context, "email verification failed", Toast.LENGTH_SHORT).show();
-                    });
+                }  else {
+                    Log.d("myTag", "unable to update => firebase auth" + task1.getException());
                 }
-            }).addOnFailureListener(e -> {
-                Log.d("myTag", "email update failed");
             });
+        } else {
+            Log.d("myTag", "user => null");
         }
     }
 
@@ -88,10 +87,10 @@ public class Auth {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         db.updateUser(user.getUid(), newPassword, "password");
-                        Log.d("myTag", "email changed successfully");
+                        Log.d("myTag", "password changed successfully");
+                    } else {
+                        Log.d("myTag", "" + task.getException());
                     }
-                }).addOnFailureListener(e -> {
-                    Log.d("myTag", "error => while updating password");
                 });
     }
 

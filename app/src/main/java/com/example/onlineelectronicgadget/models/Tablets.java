@@ -3,19 +3,8 @@ package com.example.onlineelectronicgadget.models;
 import java.util.List;
 
 public class Tablets extends Product{
-    private String processor;
-    private String ram;
-    private String storage;
-    private String display;
-    private String os;
-    private String batteryLife;
+    private String processor, ram, storage, display, os, batteryLife, dimension, color, ports, warranty, camera, connectivity;
     private double weight;
-    private String dimension;
-    private String color;
-    private String ports;
-    private String warranty;
-    private String camera;
-    private String connectivity;
 
     public Tablets () {}
 

@@ -176,7 +176,6 @@
             </androidx.cardview.widget.CardView>
 
             <Button
-                android:enabled="false"
                 android:id="@+id/save_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

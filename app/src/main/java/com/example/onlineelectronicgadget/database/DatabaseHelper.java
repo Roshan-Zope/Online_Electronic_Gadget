@@ -16,6 +16,7 @@ import com.example.onlineelectronicgadget.models.Tablets;
 import com.example.onlineelectronicgadget.models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -457,6 +458,18 @@ public class DatabaseHelper {
                     }
                 }).addOnFailureListener(e -> {
                     Log.d("myTag", "error: " + e.getMessage());
+                });
+
+        UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder()
+                .setDisplayName(value)
+                .build();
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        user.updateProfile(profileChangeRequest)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("myTag", "name updated");
+                    }
                 });
     }
 

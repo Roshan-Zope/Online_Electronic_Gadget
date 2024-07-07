@@ -3,15 +3,8 @@ package com.example.onlineelectronicgadget.models;
 import java.util.List;
 
 public class SmartWatches extends Product {
-    private String processor;
-    private String display;
-    private String batteryLife;
+    private String processor, display, batteryLife, color, connectivity, sensor, waterResistance, warranty;
     private double weight;
-    private String color;
-    private String connectivity;
-    private String sensor;
-    private String waterResistance;
-    private String warranty;
 
     public SmartWatches() {}
 

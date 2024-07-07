@@ -64,6 +64,7 @@ public class AccountFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_account, container, false);
         initComponent(view);
+        loadProfile();
         return view;
     }
 
@@ -82,7 +83,6 @@ public class AccountFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        loadProfile();
 
         edit_profile_button.setOnClickListener(v -> {
             loadFragment(new EditProfileFragment(user));

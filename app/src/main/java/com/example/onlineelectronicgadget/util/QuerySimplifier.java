@@ -17,6 +17,7 @@ public class QuerySimplifier {
         Map<String, Object> specifications = new HashMap<>();
         String[] words = query.toLowerCase().split("\\s+");
         String category = null;
+
         Log.d("myTag", Arrays.toString(words));
 
         for (String s : words) {

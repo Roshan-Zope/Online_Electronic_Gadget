@@ -1,8 +1,7 @@
 package com.example.onlineelectronicgadget.models;
 
 public class Order {
-    private String uid;
-    private String date;
+    private String uid, date;
     private Product product;
 
     public Order(String uid, String date, Product product) {

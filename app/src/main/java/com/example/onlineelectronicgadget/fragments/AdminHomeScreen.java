@@ -81,16 +81,17 @@ public class AdminHomeScreen extends Fragment {
         map.put("category", category);
 
         Log.d("myTag", "in loadProductByCategory()");
+        recyclerView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
 
         db.search(map, (products, total) -> {
             Log.d("myTag", "in loadProductByCategory()" + products.toString());
             list.clear();
             list.addAll(products);
+            progressBar.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
             adapter.notifyDataSetChanged();
         });
-
-        progressBar.setVisibility(View.GONE);
     }
 
     private void initComponent(View view) {

@@ -3,18 +3,8 @@ package com.example.onlineelectronicgadget.models;
 import java.util.List;
 
 public class SmartTv extends Product {
-    private String screenSize;
-    private String resolution;
-    private String displayTechnology;
-    private String os;
-    private String ports;
-    private String connectivity;
-    private String smartFeatures;
-    private String sound;
+    private String screenSize, resolution, displayTechnology, os, ports, connectivity, smartFeatures, sound, dimension, color, warranty;
     private double weight;
-    private String dimension;
-    private String color;
-    private String warranty;
 
     public SmartTv() {}
 

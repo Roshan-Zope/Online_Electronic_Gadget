@@ -30,12 +30,15 @@ public class CustomAlertDialog {
         Dialog dialog =new Dialog(context);
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.custom_dialog);
+
         TextView dialog_title = dialog.findViewById(R.id.dialog_title);
         TextView dialog_message = dialog.findViewById(R.id.dialog_message);
         Button dialog_button = dialog.findViewById(R.id.dialog_button);
         dialog.getWindow().setLayout(-1, -2);
+
         dialog_title.setText(title);
         dialog_message.setText(msg);
+
         dialog_button.setOnClickListener(v -> {
             dialog.dismiss();
         });
