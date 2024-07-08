@@ -89,6 +89,23 @@ public class DatabaseHelper {
         }
     }
 
+    public void getProducts(Callback callback) {
+        List<Product> products = new ArrayList<>();
+
+        firestore.collection("products").get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Product product = documentToProduct(document);
+                            if (product != null) products.add(product);
+                        }
+                        callback.onComplete(products, 0);
+                    } else {
+                        callback.onComplete(new ArrayList<>(), 0);
+                    }
+                });
+    }
+
     private Product mapToProduct(Map<String, Object> productMap) {
         Product product = new Product();
 
@@ -900,6 +917,7 @@ public class DatabaseHelper {
                     if (product != null) productList.add(product);
                     Log.d("myTag", product.toString());
                 }
+                Log.d("myTag", "" + productList);
                 callback.onComplete(productList, 0);
             } else {
                 Log.d("myTag", "Error getting document" + task.getException());

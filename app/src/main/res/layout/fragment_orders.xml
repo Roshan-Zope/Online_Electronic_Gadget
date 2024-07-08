@@ -7,29 +7,61 @@
     android:layout_height="match_parent"
     tools:context=".fragments.OrdersFragment">
 
+    <ImageView
+        android:layout_margin="16dp"
+        android:id="@+id/empty_cart_image"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:visibility="gone"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/shopping_cart_off_24px"
+        android:layout_marginBottom="16dp" />
+
     <TextView
-        android:text="Orders"
-        android:textSize="24sp"
-        android:layout_margin="8dp"
-        android:textStyle="bold|italic"
-        android:textAlignment="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:id="@+id/empty_cart_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:text="@string/empty_order_message"
+        android:textSize="18sp"
+        android:visibility="gone"
+        android:textColor="@color/black"
+        android:layout_marginBottom="16dp" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <Button
+        android:id="@+id/browse_products_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="120dp"
+        android:visibility="gone"
+        android:text="@string/browse_products"
+        android:onClick="onBrowseProductsClicked"
+        android:textColor="@color/white" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        <TextView
+            android:text="Orders"
+            android:id="@+id/ordersTv"
+            android:textSize="24sp"
             android:layout_margin="8dp"
+            android:textStyle="bold|italic"
+            android:textAlignment="center"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <ProgressBar
-            android:layout_centerInParent="true"
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-    </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_margin="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ProgressBar
+                android:layout_centerInParent="true"
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
 </LinearLayout>

@@ -3,6 +3,8 @@ package com.example.onlineelectronicgadget.fragments;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -18,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.example.onlineelectronicgadget.R;
 import com.example.onlineelectronicgadget.adapters.CategoryAdapter;
@@ -73,8 +76,22 @@ public class HomeFragment extends Fragment {
         Log.d("myTag", "in HomeFragment onCreateView()");
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         initComponent(view);
-        loadProductByCategory("tablet");
+        loadProduct();
         return view;
+    }
+
+
+    private void loadProduct() {
+        recyclerView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+
+        db.getProducts((products, total) ->{
+            list.clear();
+            list.addAll(products);
+            progressBar.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            adapter.notifyDataSetChanged();
+        });
     }
 
     private void loadProductByCategory(String category) {
@@ -105,7 +122,6 @@ public class HomeFragment extends Fragment {
         categoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         categories = new ArrayList<>();
         list = new ArrayList<>();
-
     }
 
     private void loadCategories() {

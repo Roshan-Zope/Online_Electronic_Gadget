@@ -21,6 +21,8 @@ import com.example.onlineelectronicgadget.authentication.Auth;
 import com.example.onlineelectronicgadget.database.DatabaseHelper;
 import com.example.onlineelectronicgadget.models.User;
 import com.example.onlineelectronicgadget.util.CustomAlertDialog;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class AccountFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -91,6 +93,8 @@ public class AccountFragment extends Fragment {
         logOut.setOnClickListener(v -> {
             CustomAlertDialog.showDialog(getContext(), "Alert!", "Do you want to log out?", flag -> {
                 if (flag) {
+                    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+                    firebaseAuth.signOut();
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
                     getActivity().finish();
                     startActivity(intent);

@@ -13,11 +13,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.onlineelectronicgadget.OrdersProductListFragment;
 import com.example.onlineelectronicgadget.R;
 import com.example.onlineelectronicgadget.adapters.OrdersListAdapter;
+import com.example.onlineelectronicgadget.authentication.Auth;
 import com.example.onlineelectronicgadget.database.DatabaseHelper;
 import com.example.onlineelectronicgadget.models.Order;
 
@@ -36,6 +42,11 @@ public class OrdersFragment extends Fragment {
     private OrdersListAdapter adapter;
     private DatabaseHelper db;
     private ProgressBar progressBar;
+    private ImageView empty_cart_image;
+    private TextView empty_cart_message;
+    private Button browse_products_button;
+    private TextView ordersTv;
+    private String accType;
 
     public OrdersFragment() {
         // Required empty public constructor
@@ -84,6 +95,16 @@ public class OrdersFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         progressBar = view.findViewById(R.id.progressBar);
+        empty_cart_image = view.findViewById(R.id.empty_cart_image);
+        empty_cart_message = view.findViewById(R.id.empty_cart_message);
+        browse_products_button = view.findViewById(R.id.browse_products_button);
+        ordersTv = view.findViewById(R.id.ordersTv);
+
+        browse_products_button.setOnClickListener(v -> {
+            accType = Auth.currentUser.getAccType();
+            if (accType.equals("Customer")) loadFragment(new HomeFragment());
+            else if (accType.equals("Retailer")) loadFragment(new AdminHomeScreen());
+        });
     }
 
     private void loadOrders() {
@@ -94,7 +115,11 @@ public class OrdersFragment extends Fragment {
                 list.addAll(list1);
                 adapter.notifyDataSetChanged();
             } else {
-                loadFragment(new EmptyOrdersFragment());
+                ordersTv.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.GONE);
+                empty_cart_message.setVisibility(View.VISIBLE);
+                empty_cart_image.setVisibility(View.VISIBLE);
+                browse_products_button.setVisibility(View.VISIBLE);
             }
             progressBar.setVisibility(View.GONE);
         });

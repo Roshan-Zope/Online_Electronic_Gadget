@@ -5,8 +5,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -26,14 +30,14 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class MainActivity extends AppCompatActivity implements CartFragment.OnCartItemCountChangeListener {
+public class MainActivity extends AppCompatActivity implements CartFragment.OnCartItemCountChangeListener, FragmentManager.OnBackStackChangedListener {
     private Auth auth;
     private BottomNavigationView bottomNavigationView;
     private String accType;
     private BadgeDrawable badgeDrawable;
     private DatabaseHelper db;
     private MutableLiveData<Integer> cartItemCount = new MutableLiveData<>();
-
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,14 @@ public class MainActivity extends AppCompatActivity implements CartFragment.OnCa
         setContentView(R.layout.activity_main);
         FirebaseApp.initializeApp(this);
         initComponent();
+
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+        if (savedInstanceState == null) {
+            loadFragment(new HomeFragment(), false);
+        }
+        getSupportFragmentManager().addOnBackStackChangedListener(this);
+        onBackStackChanged(); // Initial check
 
         Log.d("myTag", "before authenticate()");
         auth.authenticate();
@@ -51,6 +63,31 @@ public class MainActivity extends AppCompatActivity implements CartFragment.OnCa
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
         cartItemCount.setValue(preferences.getInt("cart_count", 0));
         observeCartItemCount();
+    }
+
+    @Override
+    public void onBackStackChanged() {
+        // Show or hide the back arrow based on the current fragment
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            toolbar.setNavigationIcon(R.drawable.arrow_back_24px);
+        } else {
+            toolbar.setNavigationIcon(null);
+        }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     private void observeCartItemCount() {
@@ -67,9 +104,9 @@ public class MainActivity extends AppCompatActivity implements CartFragment.OnCa
             }
 
             if (accType.equals("Customer")) {
-                loadFragment(new HomeFragment());
+                loadFragment(new HomeFragment(), false);
             } else if (accType.equals("Retailer")) {
-                loadFragment(new AdminHomeScreen());
+                loadFragment(new AdminHomeScreen(), false);
             } else {
                 Toast.makeText(this, "check your account type", Toast.LENGTH_SHORT).show();
             }
@@ -82,27 +119,29 @@ public class MainActivity extends AppCompatActivity implements CartFragment.OnCa
 
     private boolean onBottomViewListener(MenuItem item) {
         if (item.getItemId() == R.id.home_option) {
-            if (accType.equals("Customer")) loadFragment(new HomeFragment());
-            else if (accType.equals("Retailer")) loadFragment(new AdminHomeScreen());
+            if (accType.equals("Customer")) loadFragment(new HomeFragment(), false);
+            else if (accType.equals("Retailer")) loadFragment(new AdminHomeScreen(), false);
         }
         if (item.getItemId() == R.id.search_option) {
-            loadFragment(new SearchFragment());
+            loadFragment(new SearchFragment(), true);
         }
         if (item.getItemId() == R.id.cart_option) {
-            loadFragment(new CartFragment());
+            loadFragment(new CartFragment(), true);
         }
         if (item.getItemId() == R.id.account_option) {
-            loadFragment(new AccountFragment());
+            loadFragment(new AccountFragment(), true);
         }
 
         return true;
     }
 
-    private void loadFragment(Fragment fragment) {
+    private void loadFragment(Fragment fragment, boolean addToBackStack) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_layout, fragment);
-        fragmentTransaction.addToBackStack(null);
+        if (addToBackStack) {
+            fragmentTransaction.addToBackStack(null);
+        }
         fragmentTransaction.commit();
     }
 
@@ -116,6 +155,8 @@ public class MainActivity extends AppCompatActivity implements CartFragment.OnCa
 
         bottomNavigationView.getOrCreateBadge(R.id.cart_option).setVisible(true);
         bottomNavigationView.getOrCreateBadge(R.id.cart_option).setNumber(0);
+
+        toolbar = findViewById(R.id.toolbar);
     }
 
     @Override

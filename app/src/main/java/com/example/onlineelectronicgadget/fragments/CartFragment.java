@@ -17,12 +17,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.onlineelectronicgadget.R;
 import com.example.onlineelectronicgadget.adapters.CartListAdapter;
+import com.example.onlineelectronicgadget.authentication.Auth;
 import com.example.onlineelectronicgadget.database.DatabaseHelper;
 import com.example.onlineelectronicgadget.models.Order;
 import com.example.onlineelectronicgadget.models.Product;
@@ -48,6 +50,10 @@ public class CartFragment extends Fragment {
     private Button buyButton;
     private ProgressBar progressBar;
     private LinearLayout mainLayout;
+    private ImageView empty_cart_image;
+    private TextView empty_cart_message;
+    private Button browse_products_button;
+    private String accType;
 
     public interface OnCartItemCountChangeListener {
         void onCartItemCountChange(int count);
@@ -101,7 +107,15 @@ public class CartFragment extends Fragment {
         buyButton = view.findViewById(R.id.buyButton);
         progressBar = view.findViewById(R.id.progressBar);
         mainLayout = view.findViewById(R.id.mainLayout);
+        empty_cart_image = view.findViewById(R.id.empty_cart_image);
+        empty_cart_message = view.findViewById(R.id.empty_cart_message);
+        browse_products_button = view.findViewById(R.id.browse_products_button);
 
+        browse_products_button.setOnClickListener(v -> {
+            accType = Auth.currentUser.getAccType();
+            if (accType.equals("Customer")) loadFragment(new HomeFragment());
+            else if (accType.equals("Retailer")) loadFragment(new AdminHomeScreen());
+        });
         buyButton.setOnClickListener(v -> onBuyButton());
     }
 
@@ -113,7 +127,12 @@ public class CartFragment extends Fragment {
             db.removeFromCart(list, flag -> {});
             CustomAlertDialog.showCustomDialog(getActivity(), "Info", "Your order is placed!");
 
-            loadFragment(new EmptyCartActivity());
+            mainLayout.setVisibility(View.GONE);
+            totalAmount.setVisibility(View.GONE);
+            buyButton.setVisibility(View.GONE);
+            empty_cart_image.setVisibility(View.VISIBLE);
+            empty_cart_message.setVisibility(View.VISIBLE);
+            browse_products_button.setVisibility(View.VISIBLE);
             listener.onCartItemCountChange(0);
         }
     }
@@ -126,7 +145,12 @@ public class CartFragment extends Fragment {
                 if (listener != null) {
                     listener.onCartItemCountChange(0);
                 }
-                loadFragment(new EmptyCartActivity());
+                mainLayout.setVisibility(View.GONE);
+                totalAmount.setVisibility(View.GONE);
+                buyButton.setVisibility(View.GONE);
+                empty_cart_image.setVisibility(View.VISIBLE);
+                empty_cart_message.setVisibility(View.VISIBLE);
+                browse_products_button.setVisibility(View.VISIBLE);
                 Log.d("myTag", "list is empty");
             } else {
                 list.clear();
@@ -146,7 +170,14 @@ public class CartFragment extends Fragment {
         });
         adapter = new CartListAdapter(list, product -> {
             loadFragment(new ProductViewFragment(product));
-        }, () -> loadFragment(new EmptyCartActivity()), (product) -> {
+        }, () -> {
+            mainLayout.setVisibility(View.GONE);
+            totalAmount.setVisibility(View.GONE);
+            buyButton.setVisibility(View.GONE);
+            empty_cart_image.setVisibility(View.VISIBLE);
+            empty_cart_message.setVisibility(View.VISIBLE);
+            browse_products_button.setVisibility(View.VISIBLE);
+        }, (product) -> {
             List<Product> products = new ArrayList<>();
             products.add(product);
             loadFragment(new PlaceOrderFragment(products));

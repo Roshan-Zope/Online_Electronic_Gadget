@@ -60,7 +60,6 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.chip.Chip
-            android:backgroundTint="@android:color/transparent"
             android:id="@+id/customerChipL"
             app:chipStrokeWidth="2dp"
             android:checkable="true"
@@ -78,7 +77,6 @@
             app:chipStrokeWidth="2dp"
             app:chipStrokeColor="@color/black"
             android:layout_marginStart="16dp"
-            android:backgroundTint="@android:color/transparent"
             android:text="@string/retailer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
