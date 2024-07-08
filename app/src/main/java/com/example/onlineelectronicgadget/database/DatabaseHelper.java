@@ -694,7 +694,6 @@ public class DatabaseHelper {
                                                         listener.onCallback(!isDeleted.contains(false));
                                                     }
                                                 }
-
                                             });
                                 }
                             } else {
