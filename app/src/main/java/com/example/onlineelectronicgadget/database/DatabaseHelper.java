@@ -24,6 +24,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.model.Document;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -72,8 +73,10 @@ public class DatabaseHelper {
                     .addOnCompleteListener(task -> {
                        if (task.isSuccessful()) {
                            for (QueryDocumentSnapshot document : task.getResult()) {
-                               Product product = document.get("product", Product.class);
-                               list.add(product);
+                               Map<String, Object> map = document.getData();
+                                Map<String, Object> productMap = (Map<String, Object>) map.get("product");
+                                Product product = mapToProduct(productMap);
+                                list.add(product);
                            }
                            double total = getTotal(list);
                            Log.d("myTag", list.toString());
@@ -83,6 +86,317 @@ public class DatabaseHelper {
                            callback.onComplete(null, 0);
                        }
                     });
+        }
+    }
+
+    private Product mapToProduct(Map<String, Object> productMap) {
+        Product product = new Product();
+
+        String category = (String) productMap.get("category");
+        switch (category) {
+            case "laptop" :
+                product = new Laptop();
+                fillLaptop(product, productMap);
+                break;
+            case "tablet" :
+                product = new Tablets();
+                fillTablet(product, productMap);
+                break;
+            case "watch" :
+                product = new SmartWatches();
+                fillWatch(product, productMap);
+                break;
+            case "tv" :
+                product = new SmartTv();
+                fillTv(product, productMap);
+        }
+
+        fillProduct(product, productMap);
+        return product;
+    }
+
+    private void fillTv(Product product, Map<String, Object> productMap) {
+        try {
+            ((SmartTv) product).setResolution((String) productMap.get("resolution"));
+        } catch (NullPointerException e) {
+            ((SmartTv) product).setResolution(null);
+        }
+        try {
+            ((SmartTv) product).setScreenSize((String) productMap.get("screenSize"));
+        } catch (NullPointerException e) {
+            ((SmartTv) product).setScreenSize(null);
+        }
+        try {
+            ((SmartTv) product).setSmartFeatures((String) productMap.get("smartFeatures"));
+        } catch (NullPointerException e) {
+            ((SmartTv) product).setSmartFeatures(null);
+        }
+        try {
+            ((SmartTv) product).setDisplayTechnology((String) productMap.get("displayTechnology"));
+        } catch (NullPointerException e) {
+            ((SmartTv) product).setDisplayTechnology(null);
+        }
+        try {
+            ((SmartTv) product).setOs((String) productMap.get("os"));
+        } catch (NullPointerException e) {
+            ((SmartTv) product).setOs(null);
+        }
+        try {
+            ((SmartTv) product).setSound(((String) productMap.get("sound")));
+        } catch (NullPointerException e) {
+            ((SmartTv) product).setSound(null);
+        }
+        try {
+            ((SmartTv) product).setDimension((String) productMap.get("dimension"));
+        } catch (NullPointerException e) {
+            ((SmartTv) product).setDimension(null);
+        }
+        try {
+            ((SmartTv) product).setColor((String) productMap.get("color"));
+        } catch (NullPointerException e) {
+            ((SmartTv) product).setColor(null);
+        }
+        try {
+            ((SmartTv) product).setWarranty((String) productMap.get("warranty"));
+        } catch (NullPointerException e) {
+            ((SmartTv) product).setWarranty(null);
+        }
+        try {
+            ((SmartTv) product).setPorts((String) productMap.get("ports"));
+        } catch (NullPointerException e) {
+            ((SmartTv) product).setPorts(null);
+        }
+        try {
+            ((SmartTv) product).setWeight(((Number) productMap.get("weight")).doubleValue());
+        } catch (NullPointerException|ClassCastException|NumberFormatException e) {
+            ((SmartTv) product).setWeight(0);
+        }
+    }
+
+    private void fillWatch(Product product, Map<String, Object> productMap) {
+        try {
+            ((SmartWatches) product).setProcessor((String) productMap.get("processor"));
+        } catch (NullPointerException e) {
+            ((SmartWatches) product).setProcessor(null);
+        }
+        try {
+            ((SmartWatches) product).setSensor((String) productMap.get("sensor"));
+        } catch (NullPointerException e) {
+            ((SmartWatches) product).setSensor(null);
+        }
+        try {
+            ((SmartWatches) product).setConnectivity((String) productMap.get("connectivity"));
+        } catch (NullPointerException e) {
+            ((SmartWatches) product).setConnectivity(null);
+        }
+        try {
+            ((SmartWatches) product).setDisplay((String) productMap.get("display"));
+        } catch (NullPointerException e) {
+            ((SmartWatches) product).setDisplay(null);
+        }
+        try {
+            ((SmartWatches) product).setWaterResistance((String) productMap.get("waterResistance"));
+        } catch (NullPointerException e) {
+            ((SmartWatches) product).setWaterResistance(null);
+        }
+        try {
+            ((SmartWatches) product).setBatteryLife((String) productMap.get("batteryLife"));
+        } catch (NullPointerException e) {
+            ((SmartWatches) product).setBatteryLife(null);
+        }
+        try {
+            ((SmartWatches) product).setColor((String) productMap.get("color"));
+        } catch (NullPointerException e) {
+            ((SmartWatches) product).setColor(null);
+        }
+        try {
+            ((SmartWatches) product).setWarranty((String) productMap.get("warranty"));
+        } catch (NullPointerException e) {
+            ((SmartWatches) product).setWarranty(null);
+        }
+        try {
+            ((SmartWatches) product).setWeight(((Number) productMap.get("weight")).doubleValue());
+        } catch (NullPointerException|NumberFormatException|ClassCastException e) {
+            ((SmartWatches) product).setWeight(0);
+        }
+    }
+
+    private void fillTablet(Product product, Map<String, Object> productMap) {
+        try {
+            ((Tablets) product).setProcessor((String) productMap.get("processor"));
+        } catch (NullPointerException e) {
+            ((Tablets) product).setProcessor(null);
+        }
+        try {
+            ((Tablets) product).setRam((String) productMap.get("ram"));
+        } catch (NullPointerException e) {
+            ((Tablets) product).setRam(null);
+        }
+        try {
+            ((Tablets) product).setStorage((String) productMap.get("storage"));
+        } catch (NullPointerException e) {
+            ((Tablets) product).setStorage(null);
+        }
+        try {
+            ((Tablets) product).setConnectivity((String) productMap.get("connectivity"));
+        } catch (NullPointerException e) {
+            ((Tablets) product).setConnectivity(null);
+        }
+        try {
+            ((Tablets) product).setDisplay((String) productMap.get("display"));
+        } catch (NullPointerException e) {
+            ((Tablets) product).setDisplay(null);
+        }
+        try {
+            ((Tablets) product).setOs((String) productMap.get("os"));
+        } catch (NullPointerException e) {
+            ((Tablets) product).setOs(null);
+        }
+        try {
+            ((Tablets) product).setBatteryLife((String) productMap.get("batteryLife"));
+        } catch (NullPointerException e) {
+            ((Tablets) product).setBatteryLife(null);
+        }
+        try {
+            ((Tablets) product).setDimension((String) productMap.get("dimension"));
+        } catch (NullPointerException e) {
+            ((Tablets) product).setDimension(null);
+        }
+        try {
+            ((Tablets) product).setColor((String) productMap.get("color"));
+        } catch (NullPointerException e) {
+            ((Tablets) product).setColor(null);
+        }
+        try {
+            ((Tablets) product).setWarranty((String) productMap.get("warranty"));
+        } catch (NullPointerException e) {
+            ((Tablets) product).setWarranty(null);
+        }
+        try {
+            ((Tablets) product).setPorts((String) productMap.get("ports"));
+        } catch (NullPointerException e) {
+            ((Tablets) product).setPorts(null);
+        }
+        try {
+            ((Tablets) product).setWeight(((Number) productMap.get("weight")).doubleValue());
+        } catch (NullPointerException|ClassCastException|NumberFormatException e) {
+            ((Tablets) product).setProcessor(null);
+        }
+    }
+
+    private void fillLaptop(Product product, Map<String, Object> productMap) {
+        try {
+            ((Laptop) product).setProcessor((String) productMap.get("processor"));
+        } catch (NullPointerException e) {
+            ((Laptop) product).setProcessor(null);
+        }
+        try {
+            ((Laptop) product).setRam((String) productMap.get("ram"));
+        } catch (NullPointerException e) {
+            ((Laptop) product).setRam(null);
+        }
+        try {
+            ((Laptop) product).setStorage((String) productMap.get("storage"));
+        } catch (NullPointerException e) {
+            ((Laptop) product).setStorage(null);
+        }
+        try {
+            ((Laptop) product).setGraphics((String) productMap.get("graphics"));
+        } catch (NullPointerException e) {
+            ((Laptop) product).setGraphics(null);
+        }
+        try {
+            ((Laptop) product).setDisplay((String) productMap.get("display"));
+        } catch (NullPointerException e) {
+            ((Laptop) product).setDisplay(null);
+        }
+        try {
+            ((Laptop) product).setOs((String) productMap.get("os"));
+        } catch (NullPointerException e) {
+            ((Laptop) product).setOs(null);
+        }
+        try {
+            ((Laptop) product).setBatteryLife((String) productMap.get("batteryLife"));
+        } catch (NullPointerException e) {
+            ((Laptop) product).setBatteryLife(null);
+        }
+        try {
+            ((Laptop) product).setDimension((String) productMap.get("dimension"));
+        } catch (NullPointerException e) {
+            ((Laptop) product).setDimension(null);
+        }
+        try {
+            ((Laptop) product).setColor((String) productMap.get("color"));
+        } catch (NullPointerException e) {
+            ((Laptop) product).setColor(null);
+        }
+        try {
+            ((Laptop) product).setWarranty((String) productMap.get("warranty"));
+        } catch (NullPointerException e) {
+            ((Laptop) product).setWarranty(null);
+        }
+        try {
+            ((Laptop) product).setPorts((String) productMap.get("ports"));
+        } catch (NullPointerException e) {
+            ((Laptop) product).setPorts(null);
+        }
+        try {
+            ((Laptop) product).setWeight(((Number) productMap.get("weight")).doubleValue());
+        } catch (NullPointerException|ClassCastException|NumberFormatException e) {
+            ((Laptop) product).setWeight(0);
+        }
+    }
+
+    private void fillProduct(Product product, Map<String, Object> productMap) {
+        try {
+            product.setId((String) productMap.get("id"));
+        } catch (NullPointerException e) {
+            product.setId(null);
+        }
+        try {
+            product.setModel((String) productMap.get("model"));
+        } catch (NullPointerException e) {
+            product.setModel(null);
+        }
+        try {
+            product.setImagesId((List<String>) productMap.get("imagesId"));
+        } catch (NullPointerException|ClassCastException e) {
+            product.setImagesId(null);
+        }
+        try {
+            product.setReviews((List<String>) productMap.get("reviews"));
+        } catch (NullPointerException|ClassCastException e) {
+            product.setReviews(null);
+        }
+        try {
+            product.setPrice(((Number) productMap.get("price")).doubleValue());
+        } catch (NullPointerException|ClassCastException|NumberFormatException e) {
+            product.setPrice(0);
+        }
+        try {
+            product.setRating(((Number) productMap.get("rating")).doubleValue());
+        } catch (NullPointerException|ClassCastException|NumberFormatException e) {
+            product.setRating(0);
+        }
+        try {
+            product.setDescription((String) productMap.get("description"));
+        } catch (NullPointerException e) {
+            product.setDescription(null);
+        }
+        try {
+            product.setCategory((String) productMap.get("category"));
+        } catch (NullPointerException e) {
+            product.setCategory(null);
+        }
+        try {
+            product.setBrand((String) productMap.get("brand"));
+        } catch (NullPointerException e) {
+            product.setBrand(null);
+        }
+        try {
+            product.setStocks(((Number) productMap.get("stocks")).intValue());
+        } catch (NullPointerException|ClassCastException|NumberFormatException e) {
+            product.setStocks(0);
         }
     }
 
@@ -124,6 +438,7 @@ public class DatabaseHelper {
                 if (list != null && list.isEmpty()) {
                     DocumentReference docRef = firestore.collection("cart").document();
 
+                    Log.d("myTag", product.toString());
                     Map<String, Object> map = new HashMap<>();
                     map.put("uid", user.getUid());
                     map.put("product", product);
@@ -184,6 +499,8 @@ public class DatabaseHelper {
 
                 Map<String, Object> map1 = new HashMap<>();
                 map1.put("stocks", product.getStocks()-1);
+
+                Log.d("myTag", product.toString());
 
                 firestore.collection("products")
                         .document(product.getId())
@@ -353,6 +670,9 @@ public class DatabaseHelper {
     public void removeFromCart(List<Product> products, IsProductAlreadyPresentCallback listener) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         List<Boolean> isDeleted = new ArrayList<>();
+        int totalProducts = products.size();
+        final int[] completedCount = {0};
+
         if (user != null) {
 
             for (Product product : products) {
@@ -364,15 +684,27 @@ public class DatabaseHelper {
                                 for (DocumentSnapshot document : task.getResult()) {
                                     document.getReference().delete()
                                             .addOnCompleteListener(task1 -> {
-                                                if (task1.isSuccessful()) {
-                                                    isDeleted.add(true);
-                                                } else {
-                                                    isDeleted.add(false);
+                                                synchronized (completedCount) {
+                                                    if (task1.isSuccessful()) {
+                                                        isDeleted.add(true);
+                                                    } else {
+                                                        isDeleted.add(false);
+                                                    }
+                                                    if (completedCount[0] == totalProducts) {
+                                                        listener.onCallback(!isDeleted.contains(false));
+                                                    }
                                                 }
+
                                             });
                                 }
                             } else {
-                                isDeleted.add(false);
+                                synchronized (completedCount) {
+                                    completedCount[0]++;
+                                    isDeleted.add(false);
+                                    if (completedCount[0] == totalProducts) {
+                                        listener.onCallback(!isDeleted.contains(false));
+                                    }
+                                }
                             }
                         });
             }

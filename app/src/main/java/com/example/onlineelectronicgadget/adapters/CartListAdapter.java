@@ -15,6 +15,8 @@ import com.example.onlineelectronicgadget.R;
 import com.example.onlineelectronicgadget.database.DatabaseHelper;
 import com.example.onlineelectronicgadget.fragments.CartFragment;
 import com.example.onlineelectronicgadget.models.Product;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHolder> {
@@ -99,7 +101,9 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
         }
 
         private void onRemoveButton(Product product) {
-            db.removeFromCart(list, flag -> {
+            List<Product> products = new ArrayList<>();
+            products.add(product);
+            db.removeFromCart(products, flag -> {
                 if (flag) {
                     list.remove(product);
                     notifyDataSetChanged();
