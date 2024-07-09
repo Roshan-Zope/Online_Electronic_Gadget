@@ -72,8 +72,21 @@ public class AdminHomeScreen extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_admin_home_screen, container, false);
         initComponent(view);
-        loadProductByCategory("tablet");
+        loadProduct();
         return view;
+    }
+
+    private void loadProduct() {
+        recyclerView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+
+        db.getProducts((products, total) ->{
+            list.clear();
+            list.addAll(products);
+            progressBar.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            adapter.notifyDataSetChanged();
+        });
     }
 
     private void loadProductByCategory(String category) {
@@ -129,8 +142,6 @@ public class AdminHomeScreen extends Fragment {
         categoryRecyclerView.setAdapter(categoryAdapter);
 
         adapter = new ProductHomeAdapter(list, product -> {
-//            List<Product> products = new ArrayList<>();
-//            products.add(product);
             loadFragment(new ProductViewFragment(product));
         });
 

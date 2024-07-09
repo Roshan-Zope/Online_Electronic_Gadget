@@ -216,7 +216,7 @@ public class AddProductFragment extends Fragment {
         }
         try {
             Chip chip = getActivity().findViewById(chipGroupAddProduct.getCheckedChipId());
-            product.setCategory(String.valueOf(chip.getText()).trim());
+            product.setCategory(String.valueOf(chip.getText()).trim().toLowerCase());
         } catch (NullPointerException e) {
             Toast.makeText(getContext(), "Please choice type of product", Toast.LENGTH_SHORT).show();
         }

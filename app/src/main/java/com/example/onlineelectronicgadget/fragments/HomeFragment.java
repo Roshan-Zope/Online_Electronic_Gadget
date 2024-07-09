@@ -118,6 +118,8 @@ public class HomeFragment extends Fragment {
         progressBar = view.findViewById(R.id.progressBar);
         recyclerView = view.findViewById(R.id.recyclerView);
         categoryRecyclerView = view.findViewById(R.id.categoryRecyclerView);
+        recyclerView.setPadding(0, 0, 0, 16);
+        recyclerView.setClipToPadding(false);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         categoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         categories = new ArrayList<>();
@@ -144,8 +146,6 @@ public class HomeFragment extends Fragment {
         categoryRecyclerView.setAdapter(categoryAdapter);
 
         adapter = new ProductHomeAdapter(list, product -> {
-//            List<Product> products = new ArrayList<>();
-//            products.add(product);
             loadFragment(new ProductViewFragment(product));
         });
 

@@ -99,6 +99,7 @@ public class DatabaseHelper {
                             Product product = documentToProduct(document);
                             if (product != null) products.add(product);
                         }
+                        Log.d("myTag", "list size => " + products.size());
                         callback.onComplete(products, 0);
                     } else {
                         callback.onComplete(new ArrayList<>(), 0);
@@ -561,6 +562,7 @@ public class DatabaseHelper {
     public String saveProduct(Product product) {
         if (product != null) {
             DocumentReference docRef = firestore.collection("products").document();
+            product.setId(docRef.getId());
 
             firestore.collection("products")
                     .document(docRef.getId())
