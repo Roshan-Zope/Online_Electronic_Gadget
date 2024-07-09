@@ -1,4 +1,4 @@
-package com.example.onlineelectronicgadget;
+package com.example.onlineelectronicgadget.fragments;
 
 import android.os.Bundle;
 
@@ -14,13 +14,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.example.onlineelectronicgadget.R;
 import com.example.onlineelectronicgadget.adapters.OrdersProductListAdapter;
-import com.example.onlineelectronicgadget.fragments.ProductViewFragment;
-import com.example.onlineelectronicgadget.models.Order;
 import com.example.onlineelectronicgadget.models.Product;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class OrdersProductListFragment extends Fragment {
@@ -32,13 +31,16 @@ public class OrdersProductListFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private OrdersProductListAdapter adapter;
+    private TextView total_amount;
+    private double total;
 
     public OrdersProductListFragment() {
         // Required empty public constructor
     }
 
-    public OrdersProductListFragment(List<Product> products) {
+    public OrdersProductListFragment(List<Product> products, double total) {
         this.products = products;
+        this.total = total;
     }
 
     public static OrdersProductListFragment newInstance(String param1, String param2) {
@@ -64,13 +66,12 @@ public class OrdersProductListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_orders_product_list, container, false);
-
+        total_amount = view.findViewById(R.id.total_amount);
+        total_amount.setText("Total Amount: ₹ " + total);
         recyclerView = view.findViewById(R.id.recyclerView);
         layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new OrdersProductListAdapter(products, product -> {
-//            List<Product> productList = new ArrayList<>();
-//            productList.add(product);
             loadFragment(new ProductViewFragment(product));
         });
         recyclerView.setAdapter(adapter);

@@ -32,7 +32,7 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.Vi
     }
 
     public interface OrderCallback {
-        void onCall(List<Product> products);
+        void onCall(List<Product> products, double total);
     }
 
     @NonNull
@@ -97,11 +97,12 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.Vi
                 }
 
                 Log.d("myTag", "list => " + products);
+                double total = getTotalAmount(products);
                 order_name.setText(String.valueOf(products.get(0).getModel()));
-                total_amount.setText(String.valueOf(getTotalAmount(products)));
+                total_amount.setText(String.valueOf(total));
                 numOfItem.setText("Num of items: " + products.size());
                 date.setText(String.valueOf(map.get("date")));
-                itemView.setOnClickListener(v -> listener.onCall(products));
+                itemView.setOnClickListener(v -> listener.onCall(products, total));
             }
         }
 

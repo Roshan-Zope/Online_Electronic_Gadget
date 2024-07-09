@@ -101,7 +101,6 @@
             android:id="@+id/customerChip"
             android:tag="customer"
             android:checkable="true"
-            android:backgroundTint="@android:color/transparent"
             app:chipStrokeWidth="2dp"
             app:chipStrokeColor="@color/black"
             android:layout_marginStart="16dp"
@@ -116,7 +115,6 @@
             android:tag="retailer"
             app:chipStrokeColor="@color/black"
             android:layout_marginStart="16dp"
-            android:backgroundTint="@android:color/transparent"
             android:text="@string/retailer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>

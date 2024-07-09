@@ -15,17 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.onlineelectronicgadget.OrdersProductListFragment;
 import com.example.onlineelectronicgadget.R;
 import com.example.onlineelectronicgadget.adapters.OrdersListAdapter;
 import com.example.onlineelectronicgadget.authentication.Auth;
 import com.example.onlineelectronicgadget.database.DatabaseHelper;
-import com.example.onlineelectronicgadget.models.Order;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,8 +78,8 @@ public class OrdersFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        adapter = new OrdersListAdapter(list, products -> {
-            loadFragment(new OrdersProductListFragment(products));
+        adapter = new OrdersListAdapter(list, (products, total) -> {
+            loadFragment(new OrdersProductListFragment(products, total));
         });
         recyclerView.setAdapter(adapter);
     }
