@@ -1,5 +1,6 @@
 package com.example.onlineelectronicgadget.adapters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,24 +27,37 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     public ProductListAdapter(List<Product> productList, OnProductClickListener listener) {
         this.productList = productList;
         this.listener = listener;
+        notifyDataSetChanged();
+
     }
 
     @NonNull
     @Override
     public ProductListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_list_view, parent, false);
+        Log.d("myTag", "in onCreateViewHolder() => productListAdapter");
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ProductListAdapter.ViewHolder holder, int position) {
-        holder.productImage.setImageResource(R.drawable.ic_launcher_foreground);
-        holder.bind(productList.get(position), listener);
+
+        try {
+            Log.d("myTag","OnBind");
+            holder.productImage.setImageResource(R.drawable.ic_launcher_foreground);
+            holder.bind(productList.get(position), listener);
+        } catch (Exception e) {
+            Log.d("myTag",e.getMessage(),e);
+            e.printStackTrace();
+        }
 
     }
 
     @Override
     public int getItemCount() {
+        Log.d("myTag","====>"+productList.size());
+
+
         return productList.size();
     }
 
@@ -60,6 +74,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         }
 
         public void bind(Product product, OnProductClickListener listener) {
+
+            Log.d("myTag",product.getBrand());
             productName.setText(product.getBrand());
             productPrice.setText("₹ " + String.valueOf(product.getPrice()));
             productDescription.setText(product.getDescription());

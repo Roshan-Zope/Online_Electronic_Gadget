@@ -21,6 +21,10 @@ import com.example.onlineelectronicgadget.models.Laptop;
 import com.example.onlineelectronicgadget.models.Product;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 public class AddLaptopFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -41,13 +45,16 @@ public class AddLaptopFragment extends Fragment {
     private TextInputEditText warranty;
     private Button save_button;
     private Button cancel_button;
+    private List<String> keywords;
 
     public AddLaptopFragment() {
         // Required empty public constructor
     }
 
-    public AddLaptopFragment(Laptop laptop) {
+    public AddLaptopFragment(Laptop laptop, List<String> keywords) {
         this.laptop = laptop;
+        this.keywords = keywords;
+        Collections.addAll(keywords, "processor", "ram", "storage", "graphics", "display", "operating system", "battery Life", "weight", "dimension", "color", "ports", "warranty");
         Log.d("myTag", laptop.toString());
     }
 
@@ -122,56 +129,68 @@ public class AddLaptopFragment extends Fragment {
         } catch (NullPointerException e) {
             laptop.setProcessor(null);
         }
+        keywords.add(laptop.getProcessor());
         try {
             laptop.setRam(String.valueOf(ram.getText()).trim());
         } catch (NullPointerException e) {
             laptop.setRam(null);
         }
+        keywords.add(laptop.getRam());
         try {
             laptop.setStorage(String.valueOf(storage.getText()).trim());
         } catch (NullPointerException e) {
             laptop.setStorage(null);
         }
+        keywords.add(laptop.getStorage());
         try {
             laptop.setDisplay(String.valueOf(display.getText()).trim());
         } catch (NullPointerException e) {
             laptop.setDisplay(null);
         }
+        keywords.add(laptop.getDisplay());
         try {
             laptop.setOs(String.valueOf(os.getText()).trim());
         } catch (NullPointerException e) {
             laptop.setOs(null);
         }
+        keywords.add(laptop.getOs());
         try {
             laptop.setBatteryLife(String.valueOf(batteryLife.getText()).trim());
         } catch (NullPointerException e) {
             laptop.setBatteryLife(null);
         }
+        keywords.add(laptop.getBatteryLife());
         try {
             laptop.setPorts(String.valueOf(ports.getText()).trim());
         } catch (NullPointerException e) {
             laptop.setPorts(null);
         }
+        keywords.add(laptop.getPorts());
         try {
             laptop.setWeight(Double.parseDouble(String.valueOf(weight.getText()).trim()));
         } catch (NullPointerException | NumberFormatException e) {
             laptop.setWeight(0);
         }
+        keywords.add(laptop.getWeight() + "");
         try {
             laptop.setColor(String.valueOf(color.getText()).trim());
         } catch (NullPointerException e) {
             laptop.setColor(null);
         }
+        keywords.add(laptop.getColor());
         try {
             laptop.setWarranty(String.valueOf(warranty.getText()).trim());
         } catch (NullPointerException e) {
             laptop.setWarranty(null);
         }
+        keywords.add(laptop.getWarranty());
         try {
             laptop.setDimension(String.valueOf(dimension.getText()).trim());
         } catch (NullPointerException e) {
             laptop.setDimension(null);
         }
+        keywords.add(laptop.getDimension());
+        laptop.setKeywords(keywords);
     }
 
     @Override

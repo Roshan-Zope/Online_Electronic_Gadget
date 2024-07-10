@@ -33,6 +33,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class AddProductFragment extends Fragment {
@@ -50,6 +51,7 @@ public class AddProductFragment extends Fragment {
     private List<String> imagesUri;
     private Button save_button;
     private Button cancel_button;
+    private List<String> keywords = new ArrayList<>(Arrays.asList("brand", "model", "price", "category"));
 
     public AddProductFragment() {
         // Required empty public constructor
@@ -157,22 +159,22 @@ public class AddProductFragment extends Fragment {
             case "laptop":
                 Laptop laptop = new Laptop();
                 fillProduct(laptop);
-                loadFragment(new AddLaptopFragment(laptop));
+                loadFragment(new AddLaptopFragment(laptop, keywords));
                 break;
             case "tablet":
                 Tablets tablet = new Tablets();
                 fillProduct(tablet);
-                loadFragment(new AddTabFragment(tablet));
+                loadFragment(new AddTabFragment(tablet, keywords));
                 break;
             case "tv":
                 SmartTv smartTv = new SmartTv();
                 fillProduct(smartTv);
-                loadFragment(new AddTvFragment(smartTv));
+                loadFragment(new AddTvFragment(smartTv, keywords));
                 break;
             case "watch":
                 SmartWatches smartWatch = new SmartWatches();
                 fillProduct(smartWatch);
-                loadFragment(new AddWatchFragment(smartWatch));
+                loadFragment(new AddWatchFragment(smartWatch, keywords));
                 break;
             default:
                 Toast.makeText(getContext(), "Invalid product category.", Toast.LENGTH_SHORT).show();
@@ -194,16 +196,19 @@ public class AddProductFragment extends Fragment {
         } catch (NullPointerException e) {
             product.setBrand(null);
         }
+        keywords.add(product.getBrand());
         try {
             product.setModel(String.valueOf(product_model.getText()).trim());
         } catch (NullPointerException e) {
             product.setModel(null);
         }
+        keywords.add(product.getModel());
         try {
             product.setPrice(Long.parseLong(String.valueOf(product_price.getText()).trim()));
         } catch (NullPointerException | NumberFormatException e) {
             product.setPrice(0);
         }
+        keywords.add(""+product.getPrice());
         try {
             product.setDescription(String.valueOf(product_description.getText()).trim());
         } catch (NullPointerException e) {
@@ -220,6 +225,7 @@ public class AddProductFragment extends Fragment {
         } catch (NullPointerException e) {
             Toast.makeText(getContext(), "Please choice type of product", Toast.LENGTH_SHORT).show();
         }
+        keywords.add(product.getCategory());
         try {
             product.setImagesId(imagesUri);
         } catch (NullPointerException e) {

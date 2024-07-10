@@ -5,13 +5,14 @@ import java.util.List;
 public class Tablets extends Product{
     private String processor, ram, storage, display, os, batteryLife, dimension, color, ports, warranty, camera, connectivity;
     private double weight;
+    private List<String> keywords;
 
     public Tablets () {}
 
     public Tablets(String id, String brand, String model, long price, String description, List<String> imagesId,
                    int stocks, double rating, List<String> reviews, String category, String processor, String ram,
                    String storage, String display, String os, String batteryLife, double weight,
-                   String dimension, String color, String ports, String warranty, String camera, String connectivity) {
+                   String dimension, String color, String ports, String warranty, String camera, String connectivity, List<String> keywords) {
         super(id, brand, model, price, description, imagesId, stocks, rating, reviews, category);
         this.processor = processor;
         this.ram = ram;
@@ -26,6 +27,15 @@ public class Tablets extends Product{
         this.warranty = warranty;
         this.camera = camera;
         this.connectivity = connectivity;
+        this.keywords = keywords;
+    }
+
+    public List<String> getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(List<String> keywords) {
+        this.keywords = keywords;
     }
 
     public String getProcessor() {

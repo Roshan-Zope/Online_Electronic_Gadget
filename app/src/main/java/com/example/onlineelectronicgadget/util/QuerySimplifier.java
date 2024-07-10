@@ -13,6 +13,11 @@ public class QuerySimplifier {
             "screenSize", "sensor", "waterResistance", "camera"
     };
 
+    public static String[] parseQueryArray(String query) {
+        String[] words = query.toLowerCase().split("\\s+");
+        return words;
+    }
+
     public static Map<String, Object> parseQuery(String query) {
         Map<String, Object> specifications = new HashMap<>();
         String[] words = query.toLowerCase().split("\\s+");

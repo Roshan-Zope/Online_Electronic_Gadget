@@ -5,13 +5,14 @@ import java.util.List;
 public class SmartWatches extends Product {
     private String processor, display, batteryLife, color, connectivity, sensor, waterResistance, warranty;
     private double weight;
+    private List<String> keywords;
 
     public SmartWatches() {}
 
     public SmartWatches(String id, String brand, String model, long price, String description, List<String> imagesId,
                         int stocks, double rating, List<String> reviews, String category, String processor, String display,
                         String batteryLife, double weight, String color, String connectivity, String sensor,
-                        String waterResistance, String warranty) {
+                        String waterResistance, String warranty, List<String> keywords) {
         super(id, brand, model, price, description, imagesId, stocks, rating, reviews, category);
         this.processor = processor;
         this.display = display;
@@ -22,6 +23,15 @@ public class SmartWatches extends Product {
         this.sensor = sensor;
         this.waterResistance = waterResistance;
         this.warranty = warranty;
+        this.keywords = keywords;
+    }
+
+    public List<String> getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(List<String> keywords) {
+        this.keywords = keywords;
     }
 
     public String getProcessor() {

@@ -96,6 +96,7 @@ public class SearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         initComponent(view);
+
         populateList();
         Log.d("myTag", "onCreateView_searchFragment");
         // Inflate the layout for this fragment
@@ -113,15 +114,31 @@ public class SearchFragment extends Fragment {
     private void populateProductList(String query) {
         Log.d("myTag", "in populate product list");
 
-        Map<String, Object> parseQuery = QuerySimplifier.parseQuery(query);
+        //Map<String, Object> parseQuery = QuerySimplifier.parseQuery(query);
+        String[] keywords = QuerySimplifier.parseQueryArray(query);
         progressBar.setVisibility(View.VISIBLE);
 
-        db.search(parseQuery, (list, total) -> {
-            productList.clear();
-            productList.addAll(list);
-            productListAdapter.notifyDataSetChanged();
-            Log.d("myTag", "in search fragment listener");
-            progressBar.setVisibility(View.GONE);
+        db.search(keywords, (list, total) -> {
+            try {
+                //Log.d("myTag", ""+total+" "+list.size());
+                productList.clear();
+                productList.addAll(list);
+                Log.d("myTag", "beofre "+productListAdapter.getItemCount());
+                Log.d("myTag", "list "+list.size());
+                productListAdapter=new ProductListAdapter(list, new ProductListAdapter.OnProductClickListener() {
+                    @Override
+                    public void onProductClick(Product product) {
+
+                    }
+                });
+                search_recyclerView.setAdapter(productListAdapter);
+                productListAdapter.notifyDataSetChanged();
+                Log.d("myTag", "beofre "+productListAdapter.getItemCount());
+                //Log.d("myTag", "in search fragment listener");
+                progressBar.setVisibility(View.GONE);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         });
     }
 
@@ -134,7 +151,9 @@ public class SearchFragment extends Fragment {
             Log.d("myTag", "you selected: " + suggestion);
         });
 
-        search_recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        productListAdapter = new ProductListAdapter(productList, product -> loadFragment(new ProductViewFragment(product)));
+
+        search_recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
         search_recyclerView.setAdapter(adapter);
         searchView.setIconified(false);
         searchView.requestFocus();
@@ -161,14 +180,6 @@ public class SearchFragment extends Fragment {
                 showKeyboard(v.findFocus());
             }
         });
-
-        productListAdapter = new ProductListAdapter(productList,
-                product -> {
-//                    List<Product> products = new ArrayList<>();
-//                    products.add(product);
-                    loadFragment(new ProductViewFragment(product));
-                });
-
     }
 
     private void showKeyboard(View view) {

@@ -21,6 +21,9 @@ import com.example.onlineelectronicgadget.models.Product;
 import com.example.onlineelectronicgadget.models.SmartWatches;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.Collections;
+import java.util.List;
+
 public class AddWatchFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -39,13 +42,16 @@ public class AddWatchFragment extends Fragment {
     private TextInputEditText warranty;
     private Button save_button;
     private Button cancel_button;
+    private List<String> keywords;
 
     public AddWatchFragment() {
         // Required empty public constructor
     }
 
-    public AddWatchFragment(SmartWatches smartWatches) {
+    public AddWatchFragment(SmartWatches smartWatches, List<String> keywords) {
         this.smartWatches = smartWatches;
+        this.keywords = keywords;
+        Collections.addAll(keywords, "processor", "display", "battery life", "weight", "color", "connectivity", "sensor", "water resistance", "warranty");
         Log.d("myTag", smartWatches.toString());
     }
 
@@ -115,46 +121,56 @@ public class AddWatchFragment extends Fragment {
         } catch (NullPointerException e) {
             smartWatches.setProcessor(null);
         }
+        keywords.add(smartWatches.getProcessor());
         try {
             smartWatches.setConnectivity(String.valueOf(connectivity.getText()).trim());
         } catch (NullPointerException e) {
             smartWatches.setConnectivity(null);
         }
+        keywords.add(smartWatches.getConnectivity());
         try {
             smartWatches.setSensor(String.valueOf(sensor.getText()).trim());
         } catch (NullPointerException e) {
             smartWatches.setSensor(null);
         }
+        keywords.add(smartWatches.getSensor());
         try {
             smartWatches.setDisplay(String.valueOf(display.getText()).trim());
         } catch (NullPointerException e) {
             smartWatches.setDisplay(null);
         }
+        keywords.add(smartWatches.getDisplay());
         try {
             smartWatches.setWaterResistance(String.valueOf(waterResistance.getText()).trim());
         } catch (NullPointerException e) {
             smartWatches.setWaterResistance(null);
         }
+        keywords.add(smartWatches.getWaterResistance());
         try {
             smartWatches.setBatteryLife(String.valueOf(batteryLife.getText()).trim());
         } catch (NullPointerException e) {
             smartWatches.setBatteryLife(null);
         }
+        keywords.add(smartWatches.getBatteryLife());
         try {
             smartWatches.setWeight(Double.parseDouble(String.valueOf(weight.getText()).trim()));
         } catch (NullPointerException | NumberFormatException e) {
             smartWatches.setWeight(0);
         }
+        keywords.add(smartWatches.getWeight() + "");
         try {
             smartWatches.setColor(String.valueOf(color.getText()).trim());
         } catch (NullPointerException e) {
             smartWatches.setColor(null);
         }
+        keywords.add(smartWatches.getColor());
         try {
             smartWatches.setWarranty(String.valueOf(warranty.getText()).trim());
         } catch (NullPointerException e) {
             smartWatches.setWarranty(null);
         }
+        keywords.add(smartWatches.getWarranty());
+        smartWatches.setKeywords(keywords);
     }
 
     private void loadFragment(Fragment fragment) {

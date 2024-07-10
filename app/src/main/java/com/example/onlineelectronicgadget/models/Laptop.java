@@ -5,11 +5,12 @@ import java.util.List;
 public class Laptop extends Product {
     private String processor, ram, storage, graphics, display, os, batteryLife, ports, dimension, color, warranty;
     private double weight;
+    private List<String> keywords;
 
     public Laptop(String id, String brand, String model, long price, String description, List<String> imagesId,
                   int stocks, double rating, List<String> reviews, String category, String processor, String ram, String storage,
                   String graphics, String display, String os, String batteryLife, double weight,
-                  String dimension, String color, String ports, String warranty) {
+                  String dimension, String color, String ports, String warranty, List<String> keywords) {
 
         super(id, brand, model, price, description, imagesId, stocks, rating, reviews, category);
         this.processor = processor;
@@ -24,9 +25,18 @@ public class Laptop extends Product {
         this.color = color;
         this.ports = ports;
         this.warranty = warranty;
+        this.keywords = keywords;
     }
 
     public Laptop() {
+    }
+
+    public List<String> getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(List<String> keywords) {
+        this.keywords = keywords;
     }
 
     public String getProcessor() {

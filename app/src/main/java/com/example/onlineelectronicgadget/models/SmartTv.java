@@ -5,13 +5,14 @@ import java.util.List;
 public class SmartTv extends Product {
     private String screenSize, resolution, displayTechnology, os, ports, connectivity, smartFeatures, sound, dimension, color, warranty;
     private double weight;
+    private List<String> keywords;
 
     public SmartTv() {}
 
     public SmartTv(String id, String brand, String model, long price, String description, List<String> imagesId,
                    int stocks, double rating, List<String> reviews, String category, String screenSize, String resolution,
                    String displayTechnology, String os, String ports, String connectivity, String smartFeatures,
-                   String sound, double weight, String dimension, String color, String warranty) {
+                   String sound, double weight, String dimension, String color, String warranty, List<String> keywords) {
         super(id, brand, model, price, description, imagesId, stocks, rating, reviews, category);
         this.screenSize = screenSize;
         this.resolution = resolution;
@@ -25,6 +26,15 @@ public class SmartTv extends Product {
         this.dimension = dimension;
         this.color = color;
         this.warranty = warranty;
+        this.keywords = keywords;
+    }
+
+    public List<String> getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(List<String> keywords) {
+        this.keywords = keywords;
     }
 
     public String getScreenSize() {

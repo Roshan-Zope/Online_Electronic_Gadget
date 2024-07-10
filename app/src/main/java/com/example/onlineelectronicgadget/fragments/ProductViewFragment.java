@@ -20,7 +20,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.example.onlineelectronicgadget.R;
 import com.example.onlineelectronicgadget.adapters.ReviewListAdapter;
@@ -34,6 +37,7 @@ import com.example.onlineelectronicgadget.models.Tablets;
 import com.example.onlineelectronicgadget.util.CustomAlertDialog;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class ProductViewFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -62,6 +66,7 @@ public class ProductViewFragment extends Fragment {
     private List<String> specs;
     private int currentIdx = 0;
     private DatabaseHelper db;
+    private RatingBar ratingBar;
 
     public ProductViewFragment() {
         // Required empty public constructor
@@ -99,12 +104,14 @@ public class ProductViewFragment extends Fragment {
 
         sendButton.setOnClickListener(v -> {
             if (!String.valueOf(et_review.getText()).trim().isEmpty()) {
-                db.saveReview(String.valueOf(et_review.getText()).trim(), product.getId());
+                db.saveReview(String.valueOf(et_review.getText()).trim() + " -by " + FirebaseAuth.getInstance().getCurrentUser().getDisplayName(), product.getId());
                 et_review.setText("");
             } else {
                 el_review.setError("Enter valid review");
             }
         });
+
+        ratingBar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> Toast.makeText(getActivity(), "Rating: " + rating, Toast.LENGTH_SHORT).show());
 
         return view;
     }
@@ -152,6 +159,7 @@ public class ProductViewFragment extends Fragment {
         buyNowButton = view.findViewById(R.id.buyNowButton);
         db = new DatabaseHelper();
         specs = new ArrayList<>();
+        ratingBar = view.findViewById(R.id.ratingBar);
         
         prevButton.setOnClickListener(v -> showPrevImage());
         nextButton.setOnClickListener(v -> showNextImage());
@@ -236,7 +244,13 @@ public class ProductViewFragment extends Fragment {
         if (specs != null) {
             specs.add("Category: " + smartWatches.getCategory());
             specs.add("Rating: " + smartWatches.getRating());
-            specs.add("Stocks: " + smartWatches.getStocks());
+            if (smartWatches.getStocks() > 0) {
+                specs.add("Stocks: " + smartWatches.getStocks());
+            } else {
+                specs.add("Stocks: Not Available");
+                addToCartButton.setEnabled(false);
+                buyNowButton.setEnabled(false);
+            }
             specs.add("Processor: " + smartWatches.getProcessor());
             specs.add("Water Resistance: " + smartWatches.getWaterResistance());
             specs.add("Display: " + smartWatches.getDisplay());
@@ -255,7 +269,13 @@ public class ProductViewFragment extends Fragment {
         if (specs != null) {
             specs.add("Category: " + smartTv.getCategory());
             specs.add("Rating: " + smartTv.getRating());
-            specs.add("Stocks: " + smartTv.getStocks());
+            if (smartTv.getStocks() > 0) {
+                specs.add("Stocks: " + smartTv.getStocks());
+            } else {
+                specs.add("Stocks: Not Available");
+                addToCartButton.setEnabled(false);
+                buyNowButton.setEnabled(false);
+            }
             specs.add("Screen Size: " + smartTv.getScreenSize());
             specs.add("Resolution: " + smartTv.getResolution());
             specs.add("Display Technology: " + smartTv.getDisplayTechnology());
@@ -277,6 +297,13 @@ public class ProductViewFragment extends Fragment {
         if (specs != null) {
             specs.add("Category: " + tablets.getCategory());
             specs.add("Rating: " + tablets.getRating());
+            if (tablets.getStocks() > 0) {
+                specs.add("Stocks: " + tablets.getStocks());
+            } else {
+                specs.add("Stocks: Not Available");
+                addToCartButton.setEnabled(false);
+                buyNowButton.setEnabled(false);
+            }
             specs.add("Stocks: " + tablets.getStocks());
             specs.add("Processor: " + tablets.getProcessor());
             specs.add("Ram: " + tablets.getRam());
@@ -300,7 +327,13 @@ public class ProductViewFragment extends Fragment {
         if (specs != null) {
             specs.add("Category: " + laptop.getCategory());
             specs.add("Rating: " + laptop.getRating());
-            specs.add("Stocks: " + laptop.getStocks());
+            if (laptop.getStocks() > 0) {
+                specs.add("Stocks: " + laptop.getStocks());
+            } else {
+                addToCartButton.setEnabled(false);
+                buyNowButton.setEnabled(false);
+                specs.add("Stocks: Not Available");
+            }
             specs.add("Processor: " + laptop.getProcessor());
             specs.add("Ram: " + laptop.getRam());
             specs.add("Display: " + laptop.getDisplay());

@@ -21,6 +21,9 @@ import com.example.onlineelectronicgadget.models.Product;
 import com.example.onlineelectronicgadget.models.SmartTv;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.Collections;
+import java.util.List;
+
 
 public class AddTvFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -43,13 +46,16 @@ public class AddTvFragment extends Fragment {
     private TextInputEditText warranty;
     private Button save_button;
     private Button cancel_button;
+    private List<String> keywords;
 
     public AddTvFragment() {
         // Required empty public constructor
     }
 
-    public AddTvFragment(SmartTv smartTv) {
+    public AddTvFragment(SmartTv smartTv, List<String> keywords) {
         this.smartTv = smartTv;
+        this.keywords = keywords;
+        Collections.addAll(keywords, "screen size", "resolution", "display technology", "operating system", "ports", "connectivity", "smart features", "sound", "weight", "dimension", "color", "warranty");
         Log.d("myTag", smartTv.toString());
     }
 
@@ -130,60 +136,73 @@ public class AddTvFragment extends Fragment {
         } catch (NullPointerException e) {
             smartTv.setScreenSize(null);
         }
+        keywords.add(smartTv.getScreenSize());
         try {
             smartTv.setResolution(String.valueOf(resolution.getText()).trim());
         } catch (NullPointerException e) {
             smartTv.setResolution(null);
         }
+        keywords.add(smartTv.getResolution());
         try {
             smartTv.setDisplayTechnology(String.valueOf(displayTechnology.getText()).trim());
         } catch (NullPointerException e) {
             smartTv.setDisplayTechnology(null);
         }
+        keywords.add(smartTv.getDisplayTechnology());
         try {
             smartTv.setConnectivity(String.valueOf(connectivity.getText()).trim());
         } catch (NullPointerException e) {
             smartTv.setConnectivity(null);
         }
+        keywords.add(smartTv.getConnectivity());
         try {
             smartTv.setOs(String.valueOf(os.getText()).trim());
         } catch (NullPointerException e) {
             smartTv.setOs(null);
         }
+        keywords.add(smartTv.getOs());
         try {
             smartTv.setSmartFeatures(String.valueOf(smartFeatures.getText()).trim());
         } catch (NullPointerException e) {
             smartTv.setSmartFeatures(null);
         }
+        keywords.add(smartTv.getSmartFeatures());
         try {
             smartTv.setPorts(String.valueOf(ports.getText()).trim());
         } catch (NullPointerException e) {
             smartTv.setPorts(null);
         }
+        keywords.add(smartTv.getPorts());
         try {
             smartTv.setWeight(Double.parseDouble(String.valueOf(weight.getText()).trim()));
         } catch (NullPointerException | NumberFormatException e) {
             smartTv.setWeight(0);
         }
+        keywords.add(smartTv.getWeight() + "");
         try {
             smartTv.setColor(String.valueOf(color.getText()).trim());
         } catch (NullPointerException e) {
             smartTv.setColor(null);
         }
+        keywords.add(smartTv.getColor());
         try {
             smartTv.setWarranty(String.valueOf(warranty.getText()).trim());
         } catch (NullPointerException e) {
             smartTv.setWarranty(null);
         }
+        keywords.add(smartTv.getWarranty());
         try {
             smartTv.setDimension(String.valueOf(dimension.getText()).trim());
         } catch (NullPointerException e) {
             smartTv.setDimension(null);
         }
+        keywords.add(smartTv.getDimension());
         try {
             smartTv.setSound(String.valueOf(sound.getText()).trim());
         } catch (NullPointerException e) {
             smartTv.setSound(null);
         }
+        keywords.add(smartTv.getSound());
+        smartTv.setKeywords(keywords);
     }
 }

@@ -21,6 +21,9 @@ import com.example.onlineelectronicgadget.models.Product;
 import com.example.onlineelectronicgadget.models.Tablets;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.Collections;
+import java.util.List;
+
 public class AddTabFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -42,13 +45,16 @@ public class AddTabFragment extends Fragment {
     private TextInputEditText connectivity;
     private Button save_button;
     private Button cancel_button;
+    private List<String> keywords;
 
     public AddTabFragment() {
         // Required empty public constructor
     }
 
-    public AddTabFragment(Tablets tablets) {
+    public AddTabFragment(Tablets tablets, List<String> keywords) {
         this.tablets = tablets;
+        this.keywords = keywords;
+        Collections.addAll(keywords, "processor", "ram", "storage", "display", "operating system", "battery life", "weight", "dimension", "color", "ports", "warranty", "camera", "connectivity");
         Log.d("myTag", tablets.toString());
     }
 
@@ -129,60 +135,73 @@ public class AddTabFragment extends Fragment {
         } catch (NullPointerException e) {
             tablets.setProcessor(null);
         }
+        keywords.add(tablets.getProcessor());
         try {
             tablets.setRam(String.valueOf(ram.getText()).trim());
         } catch (NullPointerException e) {
             tablets.setRam(null);
         }
+        keywords.add(tablets.getRam());
         try {
             tablets.setStorage(String.valueOf(storage.getText()).trim());
         } catch (NullPointerException e) {
             tablets.setStorage(null);
         }
+        keywords.add(tablets.getStorage());
         try {
             tablets.setDisplay(String.valueOf(display.getText()).trim());
         } catch (NullPointerException e) {
             tablets.setDisplay(null);
         }
+        keywords.add(tablets.getDisplay());
         try {
             tablets.setOs(String.valueOf(os.getText()).trim());
         } catch (NullPointerException e) {
             tablets.setOs(null);
         }
+        keywords.add(tablets.getOs());
         try {
             tablets.setBatteryLife(String.valueOf(batteryLife.getText()).trim());
         } catch (NullPointerException e) {
             tablets.setBatteryLife(null);
         }
+        keywords.add(tablets.getBatteryLife());
         try {
             tablets.setPorts(String.valueOf(ports.getText()).trim());
         } catch (NullPointerException e) {
             tablets.setPorts(null);
         }
+        keywords.add(tablets.getPorts());
         try {
             tablets.setWeight(Double.parseDouble(String.valueOf(weight.getText()).trim()));
         } catch (NullPointerException | NumberFormatException e) {
             tablets.setWeight(-1);
         }
+        keywords.add(tablets.getWeight() + "");
         try {
             tablets.setColor(String.valueOf(color.getText()).trim());
         } catch (NullPointerException e) {
             tablets.setColor(null);
         }
+        keywords.add(tablets.getColor());
         try {
             tablets.setWarranty(String.valueOf(warranty.getText()).trim());
         } catch (NullPointerException e) {
             tablets.setWarranty(null);
         }
+        keywords.add(tablets.getWarranty());
         try {
             tablets.setCamera(String.valueOf(camera.getText()).trim());
         } catch (NullPointerException e) {
             tablets.setCamera(null);
         }
+        keywords.add(tablets.getWarranty());
         try {
             tablets.setConnectivity(String.valueOf(connectivity.getText()).trim());
         } catch (NullPointerException e) {
             tablets.setConnectivity(null);
         }
+        keywords.add(tablets.getConnectivity());
+        tablets.setKeywords(keywords);
     }
 }

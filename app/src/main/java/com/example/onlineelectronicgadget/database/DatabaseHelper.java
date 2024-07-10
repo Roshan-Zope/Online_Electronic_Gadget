@@ -14,6 +14,8 @@ import com.example.onlineelectronicgadget.models.SmartTv;
 import com.example.onlineelectronicgadget.models.SmartWatches;
 import com.example.onlineelectronicgadget.models.Tablets;
 import com.example.onlineelectronicgadget.models.User;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -24,6 +26,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.model.Document;
 
 import java.text.SimpleDateFormat;
@@ -883,6 +886,46 @@ public class DatabaseHelper {
                     }
                 }).addOnFailureListener(e -> {
                     Log.d("myTag", " " + e.getMessage());
+                });
+    }
+
+    public void search(String[] keywords, Callback callback) {
+        List<Task<QuerySnapshot>> tasks = new ArrayList<>();
+
+        for (String keyword : keywords) {
+            Query query = firestore.collection("products")
+                    .whereArrayContains("keywords", keyword);
+            tasks.add(query.get());
+        }
+
+        Tasks.whenAllComplete(tasks)
+                .addOnCompleteListener(taskSnapshots -> {
+                    if (taskSnapshots.isSuccessful()) {
+                        List<Product> products = new ArrayList<>();
+                        List<QueryDocumentSnapshot> combinedResults = new ArrayList<>();
+
+                        for (Task<QuerySnapshot> task : tasks) {
+                            QuerySnapshot snapshot = task.getResult();
+                            if (snapshot != null) {
+                                for (QueryDocumentSnapshot document : snapshot) {
+                                    combinedResults.add(document);
+                                }
+
+                            }
+                        }
+
+                        for (QueryDocumentSnapshot document : combinedResults) {
+                            Product product = documentToProduct(document);
+                            if (product != null) products.add(product);
+                        }
+
+                        callback.onComplete(products, 0);
+                        Log.d("myTag", "keywords search => " + products);
+                    } else {
+                        Log.d("myTag", "Error getting document" + taskSnapshots.getException());
+                        callback.onComplete(new ArrayList<>(), 0);
+                    }
+
                 });
     }
 
