@@ -73,6 +73,7 @@ public class ProductViewFragment extends Fragment {
     }
 
     public ProductViewFragment(Product product) {
+        Log.d("myTag", "in productViewFragment");
         this.product = product;
     }
 

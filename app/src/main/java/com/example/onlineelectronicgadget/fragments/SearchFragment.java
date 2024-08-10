@@ -151,6 +151,7 @@ public class SearchFragment extends Fragment {
             Log.d("myTag", "you selected: " + suggestion);
         });
 
+        Log.d("myTag", "before productView");
         productListAdapter = new ProductListAdapter(productList, product -> loadFragment(new ProductViewFragment(product)));
 
         search_recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));

@@ -77,7 +77,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
             Log.d("myTag",product.getBrand());
             productName.setText(product.getBrand());
-            productPrice.setText("₹ " + String.valueOf(product.getPrice()));
+            productPrice.setText("₹ " + product.getPrice());
             productDescription.setText(product.getDescription());
             if (product.getImagesId() != null && !product.getImagesId().isEmpty()) {
                 Glide.with(itemView.getContext())
